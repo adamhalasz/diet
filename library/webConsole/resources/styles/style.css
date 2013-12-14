@@ -1,0 +1,122 @@
+/* style.css */
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	font-family: Monaco, monospace;
+	font-size: 14px;
+	color: #444;
+}
+#head{
+	background: #435770;
+	box-shadow: inset 0 10px 10px rgba(255, 255, 255, 0.1);
+	border-bottom: 1px solid #000;
+	padding: 7px 30px;
+}
+#head h1{
+	font-size: 19px;
+	letter-spacing: -1px;
+	text-shadow: 0 -1px 0 #254868;
+	color: #FFF;
+	text-transform: capitalize;
+	font-weight: normal;
+}
+#console{
+	border-top: 1px solid #ddd;
+}
+.log{
+	border-bottom: 1px solid #DDE1E6;
+	padding: 15px 0;
+	float: left;
+	width: 100%;
+	word-wrap: break-word;
+}
+.log:nth-child(even){
+	background: #F2F6FA;	
+}
+
+.log .stackOpener{
+	padding: 0 5px;
+	background: #eee;
+	border: 1px solid #ddd;
+	border-radius: 50px;
+	float: left;
+	margin-right: 10px;
+}
+
+.log .info:first-child{
+	margin-left: 30px;
+}
+
+.log .stackOpener:hover{
+	background: #E8F4FF;
+	cursor: pointer;
+}
+
+.log .hostname{
+	color: #999;
+	float: left;
+	margin-right: 10px;
+}
+
+.log .message{
+}
+
+.log .message .dash{
+	color: #aaa;
+}
+
+.log .stack.open{
+	margin-top: 10px;
+	float: left;
+	clear: both;
+}
+
+.log .event{
+	font-family: montserrat;
+	border-radius: 2px;
+	text-transform: uppercase;
+	font-size: 11px;
+	background: #C4D8EB;
+	padding: 0px 6px;
+	margin-right: 15px;
+	margin-left: 10px;
+	float: right;
+	margin-top: 3px;
+}
+.log .event.event-trace{
+	background: #C3E7B7;
+	color: #3A6B24;
+}
+.log .event.event-error{
+	background: tomato;
+	color: #FFF;
+}
+
+.log .event.event-warn{
+	background: #fe9;
+	color: #444;
+}
+
+.log .stack .line{
+	clear: both;
+	float: left;
+	margin-left: 40px;
+	margin-top: 5px;
+	color: #AFAFAF;
+	font-size: 12px;
+}
+
+.log .stack .line .function {
+	color: #3A689B;
+}
+
+.log .stack .line .location {
+	color: #249707;
+}
+
+.json-inner-object .json-format {
+	padding: 0 !important;
+	margin: 0 !important;
+}

@@ -1,0 +1,38 @@
+{
+	"name" 			: "diet",
+	"version"		: "v0.0.22",
+	"description"	: "Diet is a minimal node.js web server framework.",
+	"keywords"		: ["framework", "routing", "http", "router", "rest", "restful", "web", "web server", "account", "mysql", "database", "email", "file uploads", "upload", "async handler", "page routing", "from handling", "diet", "dietjs", "diet.js"],
+	"bugs" 			: { 
+		"url" 		: "http://github.com/adamhalasz/dietjs/issues", 
+		"email" 	: "mail@adamhalasz.com"
+	},
+	"license"		: "MIT",
+	"author" 		: {
+		"name"		: "Halász Ádám",
+		"email"		: "mail@adamhalasz.com",
+		"url"		: "http://adamhalasz.com/"
+	},
+	"dependencies":{
+		"diet-request"		: ">=0.0.1",
+		"diet-upload"		: ">=0.0.1",
+		"diet-accounts"		: ">=0.0.1",
+		"diet-comet"		: ">=0.0.1",
+		"diet-cookies"		: ">=0.0.1",
+		"demand"			: ">=0.0.1",
+		"diet-dictionary"	: ">=0.0.1",
+		"diet-use"			: ">=0.0.1",
+		"diet-tasks"		: ">=0.0.1",
+		"diet-mysql"		: ">=0.0.1",
+		"nextjs"			: ">=0.0.1",
+		"secureftp"			: ">=0.0.1",
+		"nodemailer"		: ">=0.3.20",
+		"gravatar"			: ">=1.0.6",
+		"oauth"				: ">=0.9.7",
+		"geoip-lite"		: ">=1.1.1",
+		"ect"				: ">=0.5.2",
+		"useragent"			: ">=2.0.4"
+	},
+	"main" : "index.js",
+	"engines" : { "node" : ">=0.8.21" }
+}

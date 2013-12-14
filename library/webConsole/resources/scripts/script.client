@@ -1,0 +1,197 @@
+/* script.js */
+$(function(){
+	comet.controller();             // start the controller
+	setTimeout(comet.worker, 1000); // starts the worker 1 second later for safety
+	
+	// message received
+	comet.ping.message = function(data){
+		if(isset(data.stack)){
+			var stack = stackParse(data.stack);
+			var stackOpener = '<span class="info stackOpener" onclick="openStack(this)">&#x25BE;</span>'
+		} else{
+			var stack = '';
+			var stackOpener = '';
+		}
+		$('#console').prepend(
+			'<div class="log">'
+			+	stackOpener
+			+	'<span class="info hostname">'	+ time(new Date().getTime())	+ ':</span> '
+			+ 	'<span class="info event event-'+ data.event+'">'	+ data.event+ '</span>'
+			+ 	'<span class="info message">'	+ formatMessage(data.message)	+ '</span>'
+			+ 	'<span class="info stack" style="display:none;">'	+ stack	+ '</span>'
+			+'</div>');
+		prettyPrint();
+		$('.pun').each(function(index, item){
+			if(item.innerHTML == ':'){ 
+				$(item).prev().css('color', '#3A689B');
+				$(item).next().next().css('fontWeight', 'bold');
+			}
+		})
+	}
+	
+	$(comet.ping.message({message: 'Welcome to App.js Console', event: 'log'}))
+	prettyPrint();
+});
+
+function formatMessage(message){
+	var parts = message.split(' <span class="dash">—</span> ');
+	var final = '';
+	for(var i = 0; i < parts.length; i++){
+		try {
+			final += log(JSON.parse(parts[i]));
+		} catch (error) {
+			final += parts[i];
+		}
+	}
+	return final;
+};
+function openStack(object){
+	var stack = $(object).next().next().next().next();
+	if($(stack).hasClass('open')){
+		$(object).html('&#x25BE;');
+		$(stack).hide();
+		$(stack).removeClass('open');
+	} else {
+		$(object).html('&#x25B4;');
+		$(stack).show();
+		$(stack).addClass('open');
+	}
+}
+function stackParse(string){
+	var final = '';
+	var parse = string.split('\n');
+	for(var i = 2; i < parse.length; i++){
+		var parts = parse[i].split(/(at)\s([^:]+)\s+(\(.+\))/gi);
+		var location = (isset(parts[3])) ? parts[3].substr(1, parts[3].length-2) : parts[0] ;
+		final += '<span class="line">'
+		+	'<span class="at">at</span> '
+		+ 	'<span class="function">'	+ parts[2]	+ '</span>'
+		+	'<span class="in"> in </span> '
+		+ 	'<span class="location">"'	+ location	+ '"</span>'
+		+'</span>';
+	}
+	return final;
+}
+function echo(s){ return s; }
+
+function log(object){
+	if(typeof object == 'object'){
+		var value = JSON.stringify(object, null, 4).replace(/</gi, '&lt;').replace(/>/gi, '&gt;');
+		return '<pre class="prettyprint lang-js">'+value.substr(1, value.length-2)+'</pre>';
+	} else {
+		return object;
+	}
+}
+
+/* LOG */
+/*
+var styles = {
+	format : 'clear: both;'
+		+'display: block;'
+		+'float: left;'
+		+'padding: 10px 15px;'
+		+'margin: 10px;',
+	title : 'background: #FFF;'
+		+'float: left;'
+		+'clear: both;'
+		+'font-size: 16px;'
+		+'border-bottom: 1px dotted #ddd;'
+		+'width: 100%;'
+		+'padding: 0 0 5px;'
+		+'margin-bottom: 10px;',
+	pair : 'float: left;'
+		+'clear: both;',
+	key : 'color: green;'
+		+'padding: 0 3px;'
+		+'float: left;',
+	contents : 'float: left;'
+		+'clear: both;'
+		+'margin-left: 20px;',
+	quote : 'color: #669266;',
+	dot : 'color: silver;',
+	value : 'padding: 0 7px;'
+		+'position: relative;',
+	brace : 'float: left;'
+		+'clear: both;'
+		+'color: purple;',
+	string 		: 'color: #7035c1;',
+	stringQuote : 'color: #936ec6;',
+	function 	: 'color: #0047e8;',
+	number 		: 'color: #cb1616;',
+	boolean 	: 'color: #cb1616;',
+	
+}
+
+var typeset = {
+	'string' : function(v){
+		return '<span class="json-string" style="'+styles.string+'">'
+			+	'<span class="json-string-quote" style="'+styles.stringQuote+'">"</span>'
+			+		v
+			+	'<span class="json-string-quote" style="'+styles.stringQuote+'">"</span>'
+			+'</span>'
+	},
+	'object' : function(current){		
+		console.log(current);		
+		return '<span class="json-object"><span class="json-inner-object">'+JSON.stringify(current)+'</span></span>'
+	},
+	'function' : function(v){
+		return '<span class="json-function" style="'+styles.functions+'">Function(..)</span>'
+	},
+	'number' : function(v){
+		return '<span class="json-number" style="'+styles.number+'">'+v+'</span>'
+	},
+	'boolean' : function(v){
+		return '<span class="json-boolean" style="'+styles.number+'">'+v+'</span>'
+	},
+};
+
+function generateLog(object, title){
+	title = (title) ? '<span class="json-title" style="'+styles.title+'">'+title+'</span>' : '' ;
+	return  '<span class="json-format" style="'+styles.format+'">'
+			+ title
+			+ '<span class="json-pair" style="'+styles.pair+'">'
+			+ 	'<span class="json-key" style="'+styles.key+'">'
+			+		'<span class="json-quote" style="'+styles.quote+'">"</span>'
+			+		typeof object
+			+		'<span class="json-quote" style="'+styles.quote+'">"</span>'
+			+	'</span>'
+			+	'<span class="json-dot" style="'+styles.dot+'">:</span>'
+			+ 	'<span class="json-value" style="'+styles.value+'">'
+			+	'<span class="json-'+typeof object+'" style="'+styles[typeof object]+'">'
+			+		'<span class="json-string-quote">"</span>'
+			+			object
+			+		'<span class="json-string-quote">"</span>'
+			+	'</span>'
+			+'</span>'
+}
+
+log = function(object, title){
+	if(typeof object == 'object'){
+		//object = JSON.stringify(object);
+		content = '<span class="json-format" style="'+styles.format+'">';
+		if(isset(title)) { 
+			content += '<span class="json-title" style="'+styles.title+'">'+title+'</span>'; 
+		}
+		//content += '<span class="json-start" style="'+styles.brace+'">{</span>';
+		content += '<span class="json-contents" style="'+styles.contents+'">'
+		for(var key in object){
+			var value = object[key];
+			value = typeset[typeof value](value, key, object);
+			content +='<span class="json-pair" style="'+styles.pair+'">'
+					+ 	'<span class="json-key" style="'+styles.key+'">'
+					+		'<span class="json-quote" style="'+styles.quote+'">"</span>'
+					+		key
+					+		'<span class="json-quote" style="'+styles.quote+'">"</span>'
+					+	'</span>'
+					+	'<span class="json-dot" style="'+styles.dot+'">:</span>'
+					+ 	'<span class="json-value" style="'+styles.value+'">'+value+'</span>'
+					+ '</span>';
+		}
+		content += '</span>'
+		//content += '<span class="json-end" style="'+styles.brace+'">}</span>';
+		content += '</span>'
+		return content;
+	} else {
+		return generateLog(object, title);
+	}
+}*/

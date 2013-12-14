@@ -1,0 +1,117 @@
+/* COMET Client v.0.5 - Adam Halasz - 2011-2013 */
+/* jquery version */
+
+new Class('Comet');
+
+Comet.prototype.stamps = [];
+Comet.prototype.controller = function(){
+	setTimeout(function(){
+		$.ajax({
+			url 	: '/comet/controller?cid='+window.cid,
+			type 	: 'POST',
+			success : function(response){
+				Comet.prototype.controller();
+			},
+			error: function(xhr){
+				if(Comet.prototype.onControllerEnd && xhr.readyState == 4) {
+					Comet.prototype.onControllerEnd(xhr, 'error');
+				}
+			}
+		});
+	}, 200);	
+};
+
+Comet.prototype.controllerEnd = function(callback){
+	Comet.prototype.onControllerEnd = callback;
+}
+
+Comet.prototype.workerEnd = function(callback){
+	Comet.prototype.onWorkerEnd = callback;
+}
+
+Comet.prototype.worker = function(){
+	setTimeout(function(){
+		$.ajax({
+			url 	: '/comet/worker?cid='+window.cid,
+			type 	: 'POST',
+			success : function(response){
+				//console.log('END comet.worker', response);
+				comet.worker();
+				var response = JSON.parse(response); // Parse JSON Response
+			
+				//console.log('COMET.WORKER EMITTED: ' + response.type);
+				//console.log(response);
+				if(isset(comet.ping[response.type])){
+					var listener_type = (isNumber(response.listener)) ? 'user' : response.listener ;
+					
+					// IF message was not already received
+					// mostly iOS fix
+					// console.log(response._stamp, Comet.prototype.stamps);
+					//if(!inArray(response._stamp, Comet.prototype.stamps)){
+						// SAVE stamp
+						Comet.prototype.stamps.push(response._stamp);
+						
+						if(!isset(comet.ping[response.type][listener_type])){
+							comet.ping[response.type](response);
+						} else {
+							comet.ping[response.type][listener_type](response);
+						}
+					//} else {
+						//console.log('$$IIISSSSETTT');
+						//console.log(response._stamp, Comet.prototype.stamps);
+						//console.log('\n');
+					//}
+				}
+			},
+			error : function(xhr){
+				if(Comet.prototype.onWorkerEnd && xhr.readyState == 4) {
+					Comet.prototype.onWorkerEnd(xhr, 'error');
+				}
+			}
+		});
+	}, 200);
+}
+
+// Comet Push Handler
+// object:
+// 	- type 		: type of message
+//	- listener 	: where to send [it can be a single username or `friends` or in future 'room_name']
+// 'message' type :
+//  	- message 	: what to send 
+
+Comet.prototype.push = function(object, callback){
+	object.cid = window.cid;
+	var data = 'query=' + uri(JSON.stringify(object));
+	
+	// Check if the request is asynchronous or synchronous
+	var assync = (object.assync == 'false') ? false : true ;
+	
+	// SEND ajax request
+	$.ajax({
+		url 	: '/comet/push?cid='+window.cid, 
+		type 	: 'POST',
+		data  	: data,
+		assync  : assync,
+		success : function(response){
+			if(callback){
+				callback(object, response);
+			}	
+		}
+	});
+};
+
+// Comet simple emitter
+Comet.prototype.emit = function(type, listener, options){
+	options.type 	 = type;
+	options.listener = listener;
+	options.cid = window.cid;
+	var data = 'query=' + uri(JSON.stringify(options)) + '&cid='+window.cid;
+	$.ajax({
+		url		: '/comet/emit',
+		type	: 'POST',
+		data	: data
+	});
+}
+
+var comet = new Comet();
+comet.ping = {};

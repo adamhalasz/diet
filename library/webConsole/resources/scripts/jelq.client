@@ -1,0 +1,696 @@
+// Toogle Object
+	
+	// Options:
+	// target 		: Object to Show
+	// holder 		: Parent of Object
+	// effect		: OnShow and OnHide Effect Speed (number)
+	// noClickOut 	: True or False : Hide the Object on Clickout or not
+	// onShow 		: Function to run on Show
+	// onHide 		: Function to run on Hide
+	// margin 		: Array of Margins you use for you app from the document corners
+	//			   this is important for the toggle'ed element to not exceed the document dimensions
+	//			  defaults are 40
+	/*			  ex: margin : { top: 20, right: 10, bottom: 5, left: 1 }
+	*/
+	
+	var last = {};
+	
+	// Toggle Functions
+	
+	function toggleShow(target, options){
+		if(!isset(options.effect)){
+			show(target);
+		} else {
+			show(target, options.effect);
+		}
+	}
+	
+	function toggleHide(target, options){
+		if(!isset(options.effect)){
+			hide(target);
+		} else {
+			hide(target, options.effect);
+		}
+	}
+	
+	function toggle(options){
+		
+		// Save Safe Object Reference for Document Dimensions
+		var docWidth  = window.innerWidth;
+		var docHeight = window.innerHeight;
+		
+		var docWidthOffset = documentWidth() - docWidth;
+		var docHeighOffset = documentHeight() - docHeight;
+		
+		// Create Safe Target Object Reference
+		var target = toObject(options.target);
+		
+		
+		// If Target is Hidden
+		if(target.style.display == "none"){
+
+			options.holder = ( isset(options.holder) ) ? options.holder : target.parentNode ;
+			
+			// Hide Last Toggle
+			if(isset(last.toggle)){
+				hide(last.toggle.target);
+				/*if(isset(window.toggle.onHide)){
+					window.toggle.onHide();
+				}*/
+				if(isset(last.toggle.onHide)){
+					last.toggle.onHide();
+				}
+			}
+			// Show Target
+			toggleShow(target, options);
+				
+			function setTargetPos(){
+				var targetPosition 	= positions(target);
+				target.left		= targetPosition.left;
+				target.right	= target.left+target.offsetWidth;
+				target.top 		= targetPosition.top;
+				target.bottom 	= targetPosition.top+target.offsetHeight;
+			}
+			
+			setTargetPos();
+
+			var margin = getMargins();			
+			
+			margin.right -= window.pageXOffset;
+			
+			// FIX Right 
+			if(docWidth < target.right){ 
+				target.style.removeProperty("left");
+				target.style.right = margin.right + 'px'; 
+				setTargetPos(); 
+			}
+			
+			// FIX Bottom 
+			if(docHeight <= target.bottom && target.top >= 0){
+				target.style.removeProperty("top");
+				target.style.bottom = margin.bottom + 'px';
+				setTargetPos();
+				//echo([margin.top,target.top]);
+				if(margin.top == target.top){ 
+					target.style.bottom = 'inherit';
+				}
+			}
+
+			// Fix Top
+			if(target.top <= 0){ 
+				target.style.removeProperty("bottom");
+				target.style.top = margin.top + 'px'; 
+				setTargetPos();
+				target.style.bottom = 'inherit';
+
+			}
+			
+			// Fix Left
+			if(target.left < 0){ 
+				target.style.removeProperty("right");
+				target.style.left = margin.left + 'px'; 
+				setTargetPos(); 
+			}
+			
+			// Run onShow Event
+			if(isset(options.onShow)){ options.onShow(); }
+			
+			// Stop Target Holder OnClick Event Bubbling
+			stopEvent("onclick", options.holder); 
+			
+			if(options.noClickOut != true){
+				
+				function onClickOut(){
+					if(!isset(target.noClickOut)){
+						resetAbsolutePositions();
+						toggleHide(target, options);  					  // Hide Target
+						if(isset(options.onHide)){ options.onHide(); } // Run onHide Event
+					}
+				}
+				
+				// Add On Click Event to Document
+				addEvent(document.documentElement, "onclick", onClickOut, true);
+
+			}
+			
+			target.hide = function(){
+				resetAbsolutePositions();
+				toggleHide(target, options);
+				if(isset(options.onHide)){ options.onHide(); } // Run onHide Event
+			}
+			
+		// If Target is Visible
+		} else {
+			resetAbsolutePositions();
+			toggleHide(target, options);
+			if(isset(options.onHide)){ options.onHide(); } // Run onHide Event
+		}
+
+		last.toggle = options; // Save Last Toggled Element
+		
+		function resetAbsolutePositions(){
+			target.style.top = '';
+			target.style.right = '';
+			target.style.left = '';
+			target.style.bottom = '';
+		}
+		
+		function getMargins(){
+			// Default Margins
+			if(isset(options.margin)){
+				if(!isset(options.margin.top)){ options.margin.top = 40; }
+				if(!isset(options.margin.right)){ options.margin.right = 40; }
+				if(!isset(options.margin.bottom)){ options.margin.bottom = 40; }
+				if(!isset(options.margin.left)){ options.margin.left = 40; }
+			} else {
+				options.margin = {};
+				options.margin.top = 40;
+				options.margin.right = 40;
+				options.margin.bottom = 40;
+				options.margin.left = 40;
+			}
+			
+			return options.margin;
+		}
+	}
+	
+	// Show Element
+	function show(id, opacityRate, display, opacityGrade){ 
+		if(!isset(display)) { var display = 'block'; } 
+		var target = toObject(id);
+
+		if(isset(opacityRate)){	
+			var opacity = getOpacity(target);
+			target.style.display = display;
+			if(!isset(opacityGrade)) { var opacityGrade = 1; } 
+			var pipeOpacity = setInterval(function(){
+				if(opacity < 10){
+					opacity = opacity + opacityGrade;
+					setOpacity(target, opacity);
+				} else {	 
+					clearInterval(pipeOpacity);
+				}
+			}, opacityRate);
+		} else {
+			target.style.display = display; 
+		}
+	}
+	
+	// Hide Element
+ 	function hide(id, opacityRate, opacityGrade, then){ 
+		var target = toObject(id);
+		
+		if(isset(opacityRate)){	
+			if(isset(opacityGrade)){
+				if(typeof opacityGrade == 'function') {
+					var grade = 2;
+				} else {
+					var grade = 1;
+				}
+			} else {
+				var grade = 0;
+			}
+			var opacity = getOpacity(target);
+			
+			if(grade == 0 ) 		{ var og = 1; } 
+			else if (grade == 1)	{ og = opacityGrade; } 
+			else 					{ og = 1; }
+			
+			var pipeOpacity = setInterval(function(){
+				if(opacity > 0){
+					opacity = opacity - og;
+					setOpacity(target, opacity);
+				} else {
+					target.style.display = "none";
+					clearInterval(pipeOpacity);
+					if(grade == 2) {  opacityGrade(target); } 
+					else if(isset(then)) { then(target); }
+				}
+			}, opacityRate);
+		} else {
+			target.style.display = "none"; 
+		}
+	}
+	
+	function setOpacity(object, value) {
+		object = toObject(object);
+		object.style.opacity = value/10;
+		object.style.filter = 'alpha(opacity=' + value*10 + ')';
+	}
+	
+	// Safe Object Creation
+	// Checks if the target is string then creates an object from it
+	// or if its already an object then just return
+	function toObject(t){
+		return (typeof(t) == "string") ? $('#'+t)[0] : t ;
+	}
+	
+	function isset(value, def){
+		if(value != null && value != "undefined" && value != "" && value != "NaN" && value != NaN && value != def){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	// Returns The Document Height
+	function documentHeight(doc){
+		if(isset(doc) == false){ var doc = document; }
+
+		return Math.max(
+			Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight),
+			Math.max(doc.body.offsetHeight, doc.documentElement.offsetHeight),
+			Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+		);
+	}
+	
+	// Returns the Document Width
+	function documentWidth(doc){
+		if(isset(doc) == false){ var doc = document; }
+		return Math.max(
+			Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth),
+			Math.max(doc.body.offsetWidth, doc.documentElement.offsetWidth),
+			Math.max(doc.body.clientWidth, doc.documentElement.clientWidth)
+		);
+	}
+	
+	/* Get Object Positions
+		Description: Get an Objects Position from Window Left and Window Top
+		Parameters: 
+			- object
+	*/
+	
+	function positions(object) {
+		var left = 0;
+		var top = 0;
+		var width = object.offsetWidth;
+		var height = object.offsetHeight;
+		if (object.offsetParent) {
+			do { 
+				 left += object.offsetLeft;
+				 top += object.offsetTop;
+			} while (object = object.offsetParent);
+		}
+		
+		return {
+			left	: left, 
+			top		: top, 
+			right	: width + left, 
+			bottom	: height + top
+		};
+	}
+	
+	// Advanced Event Handler TO DOM OBJECT
+	
+	// Parameters:
+		/*	object	: the object to track
+	 		event	: the event to track on the object
+	 		func	: the function to run the when event is fired
+	 		option	: Parameters: 
+	    		null  - keep both functions
+	     		true  - remove the added function and keep the old function
+	    		false - replace old function with the new function
+	    		just  - (string) fire just the added function then return to the old function
+		*/
+	
+	function addEvent(object, event, func, option){
+		// Remember the Old Event
+		var oldevent = object[event];
+		object[event] = function(e){
+			// Run Old Function
+			if(oldevent){ 
+				if(option != false && option != "just"){
+					oldevent(e); 
+				}
+			}
+			// Run Added Function
+			func();
+			// If Option is Not Null
+			if(isset(option)){
+				// Remove the added Function 
+				if(option == true || option == "just"){
+					object[event] = oldevent;
+				// Replace with the added Function	
+				} else if( option == false){
+					object[event] = func;
+				}
+			}
+		}
+	}
+	
+	// Stop Event Bubbling
+	
+	// Description : Stop Event Bubbling on an Object
+	// Parameters  : - Event	: Event to Stop
+	//   			 - Object	: Stop Event on this Object
+	
+	function stopEvent(event, object){
+		if(event.preventDefault){
+			event.preventDefault();
+		}
+		
+		// If Object is Set
+		if(isset(object)){
+			// Create Safe Object Reference
+			object = toObject(object);
+			
+			object[event] = function(childEvent){
+				if(childEvent && childEvent.stopPropagation) {
+					childEvent.stopPropagation();
+				} else {
+					childEvent = window.event;
+					childEvent.cancelBubble = true;
+				}
+			}
+		} else {
+			if(event && event.stopPropagation) {
+				event.stopPropagation();
+			} else {
+				event = window.event;
+				event.cancelBubble = true;
+			}
+		}
+	}
+	
+	// Capitalize First Letter of a String
+	function capitalize(string){
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+	
+	// Check if Someting is in Array
+	function inArray(match, array){
+		for(var i = 0; i < array.length; i++){
+			if(match == array[i]){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// Autofocus on Fields
+	
+	// Parameters:
+		// field 		: autofocus on this field
+		// customType 	: Set a Custom type (useful for password fields)	
+	function autoFocus(field, customType){
+		var element = toObject(field);
+		var type = (isset(customType)) ? customType : element.type;
+		element.onfocus = function(){ iFocus(element, type); };
+		element.onblur  = function(){ iBlur(element, type); };
+	}
+	
+	// Input Focus & Blur
+	
+	// e = element to focus/blur
+	// t = custom type 
+	
+	// Input Focus
+	var focus = [];
+	function iFocus(e, t, valueHolder){
+		var value_holder = isset(valueHolder) ? valueHolder : 'value' ; 
+		if(focus[e.id] == null){
+			if(t == true){
+				e.type = "password";
+			}
+			focus[e.id] = e[value_holder];
+			e[value_holder] = "";		
+		}
+	}
+	
+	// Input Blue
+	function iBlur(e, t, valueHolder){
+		var value_holder = isset(valueHolder) ? valueHolder : 'value' ; 
+		if(e[value_holder] == ""){
+			e[value_holder] = focus[e.id];
+			focus[e.id] = null;
+			if(t == true){
+				e.type = "text";
+			}
+		}
+	}
+	
+	function numify(value){
+	    var nStr = value + '';
+	    nStr = nStr.replace( /\,/g, "");
+	    var x = nStr.split( '.' );
+	    var x1 = x[0];
+	    var x2 = x.length > 1 ? '.' + x[1] : '';
+	    var rgx = /(\d+)(\d{3})/;
+	    while ( rgx.test(x1) ) {
+	        x1 = x1.replace( rgx, '$1' + ',' + '$2' );
+	    }
+	    return x1 + x2;
+	}
+	
+	function plural(text, object){
+		if(isset(object)){
+			return (object.length > 1) ? text.pluralize() : text.singularize() ;
+		} else {
+			return text;
+		}
+	}	
+	
+	function merge(obj1, obj2){
+		return $.extend({}, obj1, obj2);
+	}
+	
+	function ampm(date, echo){
+		if(date.getHours() < 12){
+			return date.getHours() +':'+ addZeros(date.getMinutes()) +  echo('am');
+		} else {
+			var hours = (date.getHours() - 12);
+			if(hours == 0){ hours = 12; }
+			return hours +':'+ addZeros(date.getMinutes())+  echo('pm');
+		}
+	}
+	
+	dates = {
+		months: {
+			0: 'January',
+			1: 'February',
+			2: 'March',
+			3: 'April',
+			4: 'May',
+			5: 'June',
+			6: 'July',
+			7: 'August',
+			8: 'September',
+			9: 'October',
+			10: 'November',
+			11: 'December'
+		},
+		days: {
+			0: 'Sunday',
+			1: 'Monday',
+			2: 'Tuesday',
+			3: 'Wednesday',
+			4: 'Thursday',
+			5: 'Friday',
+			6: 'Saturday'
+		},
+		days2: [ 'Monday','Tuesday', 'Wednesday','Thursday', 'Friday','Saturday','Sunday']
+	}
+	
+	function time(timestamp){
+		var today = new Date();
+		var date = new Date(parseInt(timestamp));
+		if(date.getDate() != today.getDate()){
+			if(today.getDate() - date.getDate() == 1){ 
+				var the_date = echo('Yesterday'); 
+			} else {
+				var the_date = echo(dates.months[date.getMonth()].substr(0,3)) + ' ' + date.getDate();
+			}
+			return ampm(date, echo) + ', ' + the_date ;
+		} else {
+			return ampm(date, echo);
+		}
+	};
+	
+	nl2br = function(string){
+		return string.replace(/\n|\r|\n\r|\r\n/gi, '<br>');
+	}
+	
+	function price(number, currency){
+		var number = numify(number);
+		
+		if(currency == 'HUF'){
+			return number + 'Ft';
+		} 
+		
+		if(currency == 'EUR'){
+			return '&euro;' + number;
+		}
+		
+		if(currency == 'GBP'){
+			return '&pound;' + number;
+		}
+		
+		if(currency == 'USD'){
+			return '$' + number;
+		}
+		
+		return '&curren;' + number;
+	}
+	
+	addZeros = function(int){
+		return (int < 10) ? '0'+int : int ;
+	}
+	
+	if(!JSON){ JSON = {}; }
+	JSON.htmlify = function(string){
+		return JSON.stringify(string).replace(/\"/gi, '&quot;');
+	}
+	
+	function uri(s){ return encodeURIComponent(s); }
+	function dri(s){ return decodeURIComponent(s); }
+	
+	// Check if string is a Number
+	function isNumber(string){
+		if( parseInt(string) == string ){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function Class(name){
+		window[name] = function(){};
+		for(var prop in Class.prototype) {
+		    window[name].prototype[prop] = Class.prototype[prop];
+		}
+		window[name].prototype._ClassName = name;
+	}
+	
+	// DISABLE LOG function
+	Class.prototype.disableLog = function(){
+		Object.prototype.disabledLog = true;
+	}
+	
+	// LOG function
+	Class.prototype.log = function(arg1, arg2, arg3, arg4){
+		if(!Object.prototype.disabledLog){ 
+			var args = Array.prototype.slice.call( arguments );
+			args[0]  = '#' + this._ClassName+':// ' + capitalize(args[0]);
+			console.log.apply(console, args);
+		}
+	}
+	
+	// WARN function
+	Class.prototype.warn = function(arg1, arg2, arg3, arg4){
+		if(!Object.prototype.disabledLog){ 
+			var args = Array.prototype.slice.call( arguments );
+			args[0]  = '#' + this._ClassName+':// ' + capitalize(args[0]);
+			console.warn.apply(console, args);
+		}
+	}
+	
+	// ERROR function
+	Class.prototype.error = function(text){
+		if(!Object.prototype.disabledLog){ 
+			var args = Array.prototype.slice.call( arguments );
+			args[0]  = '#' + this._ClassName+':// ' + capitalize(args[0]);
+			console.error.apply(console, args);
+		}
+	}
+	
+	var template_cache = {};
+	function template(str, data){
+		// Figure out if we're getting a template, or if we need to
+		// load the template - and be sure to cache the result.
+		var fn = !/\W/.test(str) ?
+		  template_cache[str] = template_cache[str] ||
+		    template(document.getElementById(str).innerHTML) :
+		 
+		  // Generate a reusable function that will serve as a template
+		  // generator (and which will be cached).
+		  new Function("obj",
+		    "var p=[],print=function(){p.push.apply(p,arguments);};" +
+		   
+		    // Introduce the data as local variables using with(){}
+		    "with(obj){p.push('" +
+		   
+			  // Convert the template into pure JavaScript
+			  str
+			    .replace(/[\r\t\n]/g, " ")
+			    .split("[[").join("\t")
+			    .replace(/((^|]])[^\t]*)'/g, "$1\r")
+			    .replace(/\t-(.*?)]]/g, "',$1,'")
+			    .split("\t").join("');")
+			    .split("]]").join("p.push('")
+			    .split("\r").join("\\'")
+			+ "');}return p.join('');");
+		
+		// Provide some basic currying to the user
+		return data ? fn( data ) : fn;
+	};
+	
+	// Cookie Module
+	function Cookie(global_name){ 
+		// Cookie Constants
+		Cookie.prototype.length = 0;
+		
+		// Please note that you cannot call or modify HttpOnly Cookies
+		Cookie.prototype.set = function(name, value, days, hours, minutes, milliseconds){
+			days 			= (isset(days)) 		? 1000*60*60*24*days	: 0 ;
+			hours 			= (isset(hours)) 		? 1000*60*60*hours 		: 0 ;
+			minutes 		= (isset(minutes)) 		? 1000*60*minutes 		: 0 ;
+			milliseconds 	= (isset(milliseconds)) ? 1000*milliseconds 	: 0 ;
+			
+			var date 			= new Date();
+			var time 			= date.getTime() + (days * hours * minutes * milliseconds) ;
+			document.cookie 	= name + '=' + value +'; expires=' + time + ';' ;
+			if(!isset(window[global_name][name])){
+				++Cookie.prototype.length;
+			}
+			window[global_name][name] = value;
+		};
+		
+		// To delete multiple cookies use multiple arguments
+		Cookie.prototype.clear = function(){
+			// DELETE cookies
+			for(var i = 0; i < arguments.length; i++){
+				var name = arguments[i];
+				document.cookie = name+'=null; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+				delete window[global_name][name];
+				--Cookie.prototype.length;
+			}
+			//window[global_name].init();
+		};
+		
+		Cookie.prototype.init = function(){
+			document.cookie += ' ';
+			var cookies = document.cookie.split('; ');
+			if(isset(cookies)){
+				for(var i = 0; i < cookies.length; i++){
+					var cookie 	= cookies[i];
+					var pair 	= cookie.split('=');
+					var name 	= pair[0];
+					var value 	= pair[1];
+					window[global_name][name] = value;
+				}
+				window[global_name][name].length = cookies.length;
+			}
+		};
+		
+		/*
+			ITERATE trough each cookies
+			ex:
+			cookie.each(function(property, value){ 
+				console.log(property +': '+ value); 
+			})
+		*/
+		Cookie.prototype.each = function(callback){
+			for(property in window[global_name]){
+				if(window[global_name].hasOwnProperty(property)){
+					callback(property, window[global_name][property]);
+				}
+			}
+		}
+		
+		return this;
+	}
+	
+	cookies = new Cookie('cookies');
+	cookies.init();
+	
+	
