@@ -14,8 +14,7 @@ npm install diet
 var Application = require('diet');
 
 // Setup Application
-
-app = new Application({
+app = Application.setup({
 	'domain'	: 'localhost',
 	'port'		: 80,
 	'path'      : __dirname,
@@ -34,11 +33,7 @@ app.get('/', function(request, response, mysql){
 });
 ```
 
-### Create a new app (NOT IMPLEMENTED YET)
-```
-diet create newApp
-```
-### Folder Structure
+### Recommended Folder Structure
 ```
 /comet
 	index.js
@@ -60,18 +55,30 @@ diet create newApp
 server.js
 ```	
 
-### Running the app	
+### Running the app
+I recommend using `nodemon` to run the app so every time you save a file the server restars. It makes the development much faster. 
+
+Install nodemon with 
 ```
-cd newApp
-nodemon server.js
+npm install nodemon -g
+```
+Then start it with
+```
+	nodemon server.js
 ```
 
 ### Running the app as a service
+I recommend using `forever` to keep your app running all the time.
+```
+	npm install forever -g
+```
+Then start your app with
 ```
 	forever start -c nodemon server.js
 ```
 
-### Diet Modules
+
+### Diet Modules (Documentation and website coming soon)
 - html
 - accounts
 - mysql

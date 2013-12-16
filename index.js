@@ -220,7 +220,7 @@
 			
 			// Create Non-secure Server
 			var server = http.createServer(function(request, response){
-					httpHandler(request, response, 'http');
+				httpHandler(request, response, 'http');
 			}).listen(app.options.port, app.options.proxy);
 			
 			registerServerEvents(server);
@@ -288,15 +288,15 @@
 			// Forms: Check & Sanitize
 			request.passed		= true;
 			request.errors		= {};
-			request.demand 		= Demand(request, response, domainApp.app);
+			
 			request.cid 		= uniqid();
 			
 			if(isset(domain_registry)){
-				domainApp = merge(domainApp, domain_registry.options);
-				domainApp.options = merge(domainApp.options, domain_registry.options);
-				domainApp.ect = domainApp.app.ect;
-				
-				request.domainApp = domainApp;
+				domainApp 			= merge(domainApp, domain_registry.options);
+				domainApp.options 	= merge(domainApp.options, domain_registry.options);
+				domainApp.ect 		= domainApp.app.ect;
+				request.domainApp 	= domainApp;
+				request.demand 		= Demand(request, response, domainApp.app);
 				if(!isset(domain_registry.all)){ 
 					next() 
 				} else { 
@@ -486,6 +486,9 @@
 						callback(wrapper);
 					}, db);
 				}
+				
+				// Setup Accounts API
+				App = Accounts(App);
 				
 				// START header function
 				if(isset(install_options.mysql)){
@@ -951,7 +954,7 @@
 		return function(path, locals){
 			
 			var htmlParserOptions = (!isset(request.extent)) ? app.options : request.extent ;
-			var path = (path) ? path : 'index.html';
+			var path = (path) ? path : 'html/index.html';
 			if(app.renderer != 'ect'){
 				app.ect.render(path, response.head, function (error, html) {
 					if(!isset(error)){ 
