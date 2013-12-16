@@ -1,4 +1,4 @@
-# Dietjs 
+# Diet
 #### (Dec 16 - STATUS: **Alpha**, under heavy development)
 
 ### Warning
