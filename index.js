@@ -250,11 +250,18 @@
 		function httpHandler(request, response, http_type){
 			
 			// Print Errors to Browser
-			process.on('uncaughtException', function(err) { 
-				response.end(
-					'<!doctype html/><html><head><title>Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px;">'
-				+		err.stack.replace(/\n/gi, '<div style=""> </div>').replace(/\s\s\s\s/gi, '<div style="margin-left:40px; float:left; height:18px; clear:both;"> </div>')
-				+	'</div></body></html>');
+			process.on('uncaughtException', function(error) { 
+				response.end('<!doctype html/><html><head><title>Node Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px; padding:20px;">'
+				+	'<div style="clear:both;">'
+				+		error.stack
+				.replace(/\</gi, '&lt;')
+				.replace(/\>/gi, '&gt;')
+				.replace(/at\s([^\(\)]+)((:[0-9]+))/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1$2</span>')
+				.replace(/at\s([^\(\)]+)\s/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1</span> ')
+				.replace(/\n/gi, '<div class="newLine"> </div>')
+				.replace(/\s\s\s\s/gi, '<div style="margin-left:40px; float:left; height:18px; clear:both;"> </div>').replace(/\(([^\)]+)\)/gi, '<span style="color:#A0A0A0;">(</span><span style="color:#007F1F;">"$1"</span><span style="color:#A0A0A0;">)</span>')
+				
+				+	'</div></div></body></html>');
 			});
 			
 			// URL
@@ -974,7 +981,7 @@
 						if(isset(error.stack)){
 							var regex = new RegExp(''+path+':([0-9]):([0-9])','gi');
 							var m = error.stack.match(regex);
-							var stack_trace = '<div id="html-error-stack"><h2>Stack trace</h2>'+error.stack+'</div>';
+							var stack_trace = error.stack;
 						} else {
 							var stack_trace = '';
 						}
@@ -992,6 +999,21 @@
 							var lines = '';
 						}
 						
+						response.end(
+							'<!doctype html/><html><head><title>HTML Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px; padding:20px;">'
+						+		'<div style="width:100%; float:left; font-weight:bold; font-size:14px; border-bottom:1px solid #eee; padding-bottom:20px; margin-bottom:20px;">HTML Error in <span style="color:#007F1F">"'+path+'"</span> '+ lineMessage + '</div>'
+						+	'<div style="clear:both;">'
+						+		stack_trace
+						.replace(/\</gi, '&lt;')
+						.replace(/\>/gi, '&gt;')
+						.replace(/at\s([^\(\)]+)((:[0-9]+))/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1$2</span>')
+						.replace(/at\s([^\(\)]+)\s/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1</span> ')
+						.replace(/\n/gi, '<div class="newLine"> </div>')
+						.replace(/\s\s\s\s/gi, '<div style="margin-left:40px; float:left; height:18px; clear:both;"> </div>').replace(/\(([^\)]+)\)/gi, '<span style="color:#A0A0A0;">(</span><span style="color:#007F1F;">"$1"</span><span style="color:#A0A0A0;">)</span>')
+						
+						+	'</div></div></body></html>');
+						
+						/*
 						response.end('<!doctype html>'
 								+'<html>'
 								+	'<head><title>ERROR</title></head>'
@@ -1011,6 +1033,7 @@
 								+		'</div>'
 								+	'</body>'
 								+'</html>');
+								*/
 				    }
 				});
 			} else {
