@@ -249,8 +249,13 @@
 		
 		function httpHandler(request, response, http_type){
 			
-			// Print Errors to Browswer if found
-			process.on('uncaughtException', function(err) { response.end(err.stack); });
+			// Print Errors to Browser
+			process.on('uncaughtException', function(err) { 
+				response.end(
+					'<!doctype html/><html><head><title>Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px;">'
+				+		err.stack.replace(/\n/gi, '<div style=""> </div>').replace(/\s\s\s\s/gi, '<div style="margin-left:40px; float:left; height:18px; clear:both;"> </div>')
+				+	'</div></body></html>');
+			});
 			
 			// URL
 			request.url = url.parse(http_type + '://' + request.headers.host + request.url);
@@ -653,37 +658,80 @@
 				}
 			}
 			
+			/*
+				subdomain options:
+				- domain : subdomain ex: http://custom_domain.mes.io
+				- path	 : system path to the root path ex: /root/mes/
+				- public : system path to the public files, ex: /root/mes/public
+				- init	 : the init script, ex: server.js (optional)
+				- mysql	 : mysql connection informations
+			*/
+			App.subdomain = function(application, domain_options){
+				
+				//subdomains[domain_options.domain] = domain_options;
+				var custom_app = merge(application, {});
+				custom_app = app.install(custom_app, domain_options);
+				custom_app.spawn = function(){
+					if(!domain_options.init){
+						require(domain_options.path + '/server.js');
+					} else {
+						require(domain_options.path + '/' + domain_options.init);
+					}
+				};
+				custom_app.options = domain_options;
+				return custom_app;
+			};
+			
+			
+			
 			// RETURN App Object
 			return App;
 		}
 		app = app.install(app, options);
 		
+		// WebConsole
+		
+		if(isset(app.options.webConsole)){
+			/*
+			app.webConsole = webConsole(app);
+			
+			function NewError(event){
+				
+				return function(){
+					if(arguments.length > 1){
+						var message = '';
+						for(index in arguments){ 
+							if(index > 0) message += ' <span class="dash">—</span> ';
+							var value = (typeof arguments[index] == 'object') ? JSON.stringify(arguments[index]) : arguments[index] ;
+							message += value; 
+						}
+					} else {
+						var message = (typeof arguments[0] == 'object') ? JSON.stringify(arguments[0]) : arguments[0];
+					}
+					var error = new Error(message);
+					console.info('\n', app.webConsole.comet);
+					
+					app.webConsole.comet.push({}, {}, {}, { 
+						type 		: 'message', 
+						listeners	: 'home', 
+						event		: event,
+						message		: message,
+						stack		: error.stack,
+						private		: { noSubmit: true }
+					});
+				}
+			}
+			global.console.log 		= new NewError('log');
+			global.console.trace 	= new NewError('trace');
+			global.console.error 	= new NewError('error');
+			global.console.warn 	= new NewError('warn');
+			*/
+		}
+		
 		use = new Use(options.path);
 		
 		
-		/*
-			subdomain options:
-			- domain : subdomain ex: http://custom_domain.mes.io
-			- path	 : system path to the root path ex: /root/mes/
-			- public : system path to the public files, ex: /root/mes/public
-			- init	 : the init script, ex: server.js (optional)
-			- mysql	 : mysql connection informations
-		*/
-		app.subdomain = function(application, domain_options){
-			
-			//subdomains[domain_options.domain] = domain_options;
-			var custom_app = hook(application, {});
-			custom_app = app.install(custom_app, domain_options);
-			custom_app.spawn = function(){
-				if(!domain_options.init){
-					require(domain_options.path + '/server.js');
-				} else {
-					require(domain_options.path + '/' + domain_options.init);
-				}
-			};
-			custom_app.options = domain_options;
-			return custom_app;
-		};
+		
 			
 		/*
 			extend_options:
@@ -838,45 +886,7 @@
 				response.redirect(domain_to+request.params[1]);
 			});
 		}
-		
-		
-		// WebConsole
-		if(isset(options.webConsole)){
-			app.webConsole = webConsole(app);
 			
-			function NewError(event){
-				
-				return function(){
-					if(arguments.length > 1){
-						var message = '';
-						for(index in arguments){ 
-							if(index > 0) message += ' <span class="dash">—</span> ';
-							var value = (typeof arguments[index] == 'object') ? JSON.stringify(arguments[index]) : arguments[index] ;
-							message += value; 
-						}
-					} else {
-						var message = (typeof arguments[0] == 'object') ? JSON.stringify(arguments[0]) : arguments[0];
-					}
-					var error 	= new Error(message);
-					console.info(error.message, error.stack);
-					app.webConsole.comet.push({}, {}, {}, { 
-						type 		: 'message', 
-						listeners	: 'home', 
-						event		: event,
-						message		: message,
-						stack		: error.stack,
-						private		: { noSubmit: true }
-					});
-				}
-			}
-			
-			global.console.log 		= new NewError('log');
-			global.console.trace 	= new NewError('trace');
-			global.console.error 	= new NewError('error');
-			global.console.warn 	= new NewError('warn');
-			
-		}
-		
 		// RETURN Module
 		return app;
 		
@@ -955,7 +965,7 @@
 			
 			var htmlParserOptions = (!isset(request.extent)) ? app.options : request.extent ;
 			var path = (path) ? path : 'html/index.html';
-			if(app.renderer != 'ect'){
+			if(!app.renderer != 'ect'){
 				app.ect.render(path, response.head, function (error, html) {
 					if(!isset(error)){ 
 						finish(html);
