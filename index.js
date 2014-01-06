@@ -163,6 +163,9 @@
 		function registerServerEvents(server){}
 		
 		function matchWithARegex(request, response){
+			
+			
+			
 			// !!! Do not use [g] operator for the regex because match can't 
 			// parse it into multiple parts with [g] set [i] is enough!
 			
@@ -201,7 +204,15 @@
 								return mysql_instance(regex_registry[0], request, response, regex_registry[2], regex_registry[3], domain_registry);
 							};
 						} else {
-							request.matchedRegexFunction = regex_registry[2];
+							if(regex_registry[5]){
+								setupHead(request, response, install_domain, install_domain, 
+									function(request, response){
+										request.matchedRegexFunction = regex_registry[2];
+								});
+							} else {
+								request.matchedRegexFunction = regex_registry[2];
+							}
+							
 						}
 						return true;
 						break;
@@ -532,16 +543,19 @@
 					install_domain.regexes.GET.push([App, path, callback, custom_db, install_domain]);
 				}
 			}
-			
+						
 			// Get Module WITHOUT MySQL
 			App.get.simple = function(path, callback){
+				
 				if(typeof path == 'string'){
 					install_domain.reg.GET[path] = function(request, response){
-						response.html = new ResponseHtml(request, response, App);
-						callback(request, response);
+						setupHead(request, response, App, install_domain, function(request, response){
+							response.html = new ResponseHtml(request, response, App);
+							callback(request, response);
+						});
 					}
 				} else {
-					install_domain.regexes.GET.push([App, path, callback, -1, install_domain]);
+					install_domain.regexes.GET.push([App, path, callback, -1, install_domain, true]);
 				}
 			}
 			
@@ -573,25 +587,27 @@
 			App.post.simple = function(path, callback, disableBodyParsing){
 				if(typeof path == 'string'){
 					install_domain.reg.POST[path] = function(request, response){
-						response.html = new ResponseHtml(request, response, App);
-						if(!isset(disableBodyParsing)){
-							request.body = '';
-							request.on('data', function(data){
-								request.body += data;
-							});
-							request.on('end', function(){
-								request.body = query.parse(request.body);
-								if(isset(request.body.json)){
-									request.body = hook(request.body, duri(JSON.parse(request.body.json)));
-								}
+						setupHead(request, response, App, install_domain, function(request, response){
+							response.html = new ResponseHtml(request, response, App);
+							if(!isset(disableBodyParsing)){
+								request.body = '';
+								request.on('data', function(data){
+									request.body += data;
+								});
+								request.on('end', function(){
+									request.body = query.parse(request.body);
+									if(isset(request.body.json)){
+										request.body = hook(request.body, duri(JSON.parse(request.body.json)));
+									}
+									callback(request, response);
+								});
+							} else {
 								callback(request, response);
-							});
-						} else {
-							callback(request, response);
-						}
+							}
+						});
 					}
 				} else {
-					install_domain.regexes.POST.push([App, path, callback, -1, install_domain]);
+					install_domain.regexes.POST.push([App, path, callback, -1, install_domain, true]);
 				}
 			}
 			
@@ -961,8 +977,25 @@
 		} else {
 			console.trace('Warning! mysql instance was called without mysql_options in application.js');
 		}
-		
-		
+	}
+	
+	function setupHead(request, response, APP, install_domain, callback){
+		new Head({
+			// basic
+			app				: install_domain,
+			headFunction	: APP.headFunction,
+			options			: install_domain.options,
+			request			: request,
+			response		: response,
+			// defaults
+			default_home	: install_domain.default_home,
+			language		: install_domain.options.language,
+			callback: function(locals, echo){
+				response.head = locals;
+				response.echo = echo;
+				callback(request, response);
+			}
+		});
 	}
 
 	

@@ -19,7 +19,7 @@
 */
 
 module.exports = function(options){
-	var dictionary  = options.dictionary;
+	var dictionary  = options.dictionary || {};
 	var cookies		= options.request.cookies || {};
 	var requester 	= visitor(options.request);
 	
@@ -67,8 +67,10 @@ module.exports = function(options){
 	locals.account = false;
 	
 	// DICTIONARY printer
-	if(isset(dictionary)){
+	if(isset(dictionary.length)){
 		locals.echo = dictionary.echo(locals.language);
+	} else {
+		locals.echo = function(s) { return s; }
 	}
 	
 	// ADD more options to the local html scope
@@ -92,7 +94,7 @@ module.exports = function(options){
 				options.callback(locals, locals.echo);
 
 			// RESOLVE language
-			} else if(!isset(locals.language) && !isset(account[0])){
+			} else if(!isset(locals.language) && !isset(account[0]) && options.mysql){
 				
 				languageByCountryCode(options.mysql, locals.countryCode, function(language){
 					locals.language = language;
@@ -100,6 +102,8 @@ module.exports = function(options){
 					options.callback(locals, locals.echo);
 				});
 			} else if (!isset(account[0])) {
+				options.callback(locals, locals.echo);
+			} else {
 				options.callback(locals, locals.echo);
 			}
 		});
@@ -109,12 +113,14 @@ module.exports = function(options){
 		// RESOLVE language
 		if(isset(locals.language)){
 			options.callback(locals, locals.echo);
-		} else {
+		} else if (options.mysql) {
 			languageByCountryCode(options.mysql, locals.countryCode, function(language){
 				locals.language = language;
 				locals.echo = dictionary.echo(locals.language);
 				options.callback(locals, locals.echo);
 			});
+		} else {
+			options.callback(locals, locals.echo);
 		}
 	}
 }
