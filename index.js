@@ -204,6 +204,7 @@
 								return mysql_instance(regex_registry[0], request, response, regex_registry[2], regex_registry[3], domain_registry);
 							};
 						} else {
+							
 							if(regex_registry[5]){
 								setupHead(request, response, install_domain, install_domain, 
 									function(request, response){
@@ -261,6 +262,7 @@
 		function httpHandler(request, response, http_type){
 			
 			// Print Errors to Browser
+			process.setMaxListeners(0);
 			process.on('uncaughtException', function(error) { 
 				response.end('<!doctype html/><html><head><title>Node Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px; padding:20px;">'
 				+	'<div style="clear:both;">'
@@ -283,6 +285,7 @@
 			
 			// Queries
 			request.query = parse.Queries(request);
+			
 			
 			// GET mime type from url IF it's a file request not a page request
 			var mime_type = path.extname(request.url.pathname).substr(1).toLowerCase();
@@ -311,14 +314,16 @@
 			// Forms: Check & Sanitize
 			request.passed		= true;
 			request.errors		= {};
-			
 			request.cid 		= uniqid();
+			
 			
 			if(isset(domain_registry)){
 				domainApp 			= merge(domainApp, domain_registry.options);
 				domainApp.options 	= merge(domainApp.options, domain_registry.options);
 				domainApp.ect 		= domainApp.app.ect;
 				request.domainApp 	= domainApp;
+				
+				response.head		= {};
 				request.demand 		= Demand(request, response, domainApp.app);
 				if(!isset(domain_registry.all)){ 
 					next() 
@@ -434,6 +439,7 @@
 							if(isset(request.body.json)){
 								request.body = hook(request.body, duri(JSON.parse(request.body.json)));
 							}
+							if(response.head) response.head.body = request.body || {};
 							request.matchedRegexFunction(request, response);
 						});
 						
@@ -532,9 +538,7 @@
 				
 				if(typeof path == 'string'){
 					install_domain.reg.GET[path] = function(request, response){
-						
 						response.html = new ResponseHtml(request, response, App);
-						
 						mysql_instance(App, request, response, callback, custom_db, domains[request.url.host]);
 					}
 				} else {
@@ -546,7 +550,6 @@
 						
 			// Get Module WITHOUT MySQL
 			App.get.simple = function(path, callback){
-				
 				if(typeof path == 'string'){
 					install_domain.reg.GET[path] = function(request, response){
 						setupHead(request, response, App, install_domain, function(request, response){
@@ -599,6 +602,7 @@
 									if(isset(request.body.json)){
 										request.body = hook(request.body, duri(JSON.parse(request.body.json)));
 									}
+									response.head.body = request.body || {};
 									callback(request, response);
 								});
 							} else {
@@ -640,12 +644,21 @@
 					// this is required because static files like images don't have cookies
 					if(!isset(request.cookies)){ setup_cookies(request, response) }
 					
-					mysql_instance(App, request, response, function(req, res, mysql){
-						response.statusCode = 404;
-						response.message = message;
-						response.html = new ResponseHtml(req, res, App);
-						App.notFoundCallback(req, res, mysql, message);
-					}, false, domains[request.url.host]);
+					if(install_domain.mysql){
+						mysql_instance(App, request, response, function(req, res, mysql){
+							response.statusCode 	= 404;
+							response.message 		= response.head.message = message;
+							response.head.message 	= message;
+							response.html 			= new ResponseHtml(req, res, App);
+							App.notFoundCallback(req, res, mysql, message);
+						}, false, domains[request.url.host]);
+					} else {
+						response.statusCode 	= 404;
+						response.message  		= message;
+						response.head.message 	= message;
+						response.html 			= new ResponseHtml(request, response, App);
+						App.notFoundCallback(request, response, false, message);
+					}
 					
 				} else {
 					response.statusCode = 404;
@@ -967,8 +980,9 @@
 					default_home	: install_domain.default_home,
 					language		: install_domain.options.language,
 					callback: function(locals, echo){
-						response.head = locals;
+						response.head = merge(response.head, locals);
 						response.echo = echo;
+						response.head.body = request.body || {};
 						callback(request, response, mysql_object);
 					}
 				});
@@ -982,7 +996,7 @@
 	function setupHead(request, response, APP, install_domain, callback){
 		new Head({
 			// basic
-			app				: install_domain,
+			app				: APP,
 			headFunction	: APP.headFunction,
 			options			: install_domain.options,
 			request			: request,
@@ -991,7 +1005,7 @@
 			default_home	: install_domain.default_home,
 			language		: install_domain.options.language,
 			callback: function(locals, echo){
-				response.head = locals;
+				response.head = merge(response.head, locals);
 				response.echo = echo;
 				callback(request, response);
 			}
@@ -1010,42 +1024,45 @@
 					if(!isset(error)){ 
 						finish(html);
 					} else {
-						console.log(error);
-						if(isset(error.stack)){
-							var regex = new RegExp(''+path+':([0-9]):([0-9])','gi');
-							var m = error.stack.match(regex);
-							var stack_trace = error.stack;
+						console.log(error.message)
+						if(error.message.indexOf('Failed to load template') != -1){
+							request.domainApp.app.notFoundHandler(request, response, error.message.replace('Failed to load template', 'Template not found').replace(/(in\s+)+(.+)/gi, ''));
 						} else {
-							var stack_trace = '';
+							if(isset(error.stack)){
+								var regex = new RegExp(''+path+':([0-9]):([0-9])','gi');
+								var m = error.stack.match(regex);
+								var stack_trace = error.stack;
+							} else {
+								var stack_trace = '';
+							}
+							
+							try { 
+								var inScriptLine = m[0].split(':')[1]-1; 
+								var lineMessage = '';
+							} catch (error) { 
+								var lineMessage = '';
+							}
+							
+							if(isset(error.location)){
+								var lines = ' starting at  line '+error.location.first_line + ' and ending at line '+ error.location.last_line;
+							} else {
+								var lines = '';
+							}
+							
+							response.end(
+								'<!doctype html/><html><head><title>HTML Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px; padding:20px;">'
+							+		'<div style="width:100%; float:left; font-weight:bold; font-size:14px; border-bottom:1px solid #eee; padding-bottom:20px; margin-bottom:20px;">HTML Error in <span style="color:#007F1F">"'+path+'"</span> '+ lineMessage + '</div>'
+							+	'<div style="clear:both;">'
+							+		stack_trace
+							.replace(/\</gi, '&lt;')
+							.replace(/\>/gi, '&gt;')
+							.replace(/at\s([^\(\)]+)((:[0-9]+))/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1$2</span>')
+							.replace(/at\s([^\(\)]+)\s/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1</span> ')
+							.replace(/\n/gi, '<div class="newLine"> </div>')
+							.replace(/\s\s\s\s/gi, '<div style="margin-left:40px; float:left; height:18px; clear:both;"> </div>').replace(/\(([^\)]+)\)/gi, '<span style="color:#A0A0A0;">(</span><span style="color:#007F1F;">"$1"</span><span style="color:#A0A0A0;">)</span>')
+							
+							+	'</div></div></body></html>');
 						}
-						
-						try { 
-							var inScriptLine = m[0].split(':')[1]-1; 
-							var lineMessage = '';
-						} catch (error) { 
-							var lineMessage = '';
-						}
-						
-						if(isset(error.location)){
-							var lines = ' starting at  line '+error.location.first_line + ' and ending at line '+ error.location.last_line;
-						} else {
-							var lines = '';
-						}
-						
-						response.end(
-							'<!doctype html/><html><head><title>HTML Error</title></head><body><div style="font-family:monaco; font-size:13px; line-height:18px; padding:20px;">'
-						+		'<div style="width:100%; float:left; font-weight:bold; font-size:14px; border-bottom:1px solid #eee; padding-bottom:20px; margin-bottom:20px;">HTML Error in <span style="color:#007F1F">"'+path+'"</span> '+ lineMessage + '</div>'
-						+	'<div style="clear:both;">'
-						+		stack_trace
-						.replace(/\</gi, '&lt;')
-						.replace(/\>/gi, '&gt;')
-						.replace(/at\s([^\(\)]+)((:[0-9]+))/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1$2</span>')
-						.replace(/at\s([^\(\)]+)\s/gi, '<span style="color:#A0A0A0;">at</span> <span style="color:#575FB6;">$1</span> ')
-						.replace(/\n/gi, '<div class="newLine"> </div>')
-						.replace(/\s\s\s\s/gi, '<div style="margin-left:40px; float:left; height:18px; clear:both;"> </div>').replace(/\(([^\)]+)\)/gi, '<span style="color:#A0A0A0;">(</span><span style="color:#007F1F;">"$1"</span><span style="color:#A0A0A0;">)</span>')
-						
-						+	'</div></div></body></html>');
-						
 						/*
 						response.end('<!doctype html>'
 								+'<html>'

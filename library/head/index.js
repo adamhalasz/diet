@@ -50,6 +50,9 @@ module.exports = function(options){
 		cid			: options.request.cid,
 		url			: options.request.url,
 		cookies		: options.request.cookies,
+		query		: options.request.query,
+		ip			: options.request.ip,
+		body		: options.request.body || {},
 	};
 	
 	if(isset(options.headFunction)){
@@ -80,8 +83,8 @@ module.exports = function(options){
 	    }
 	}
 	
-	// LOGGED IN
-	if(isset(cookies[locals.userCookie])){
+	// LOGGED IN && mysql set
+	if(isset(cookies[locals.userCookie]) && options.mysql){
 		options.mysql[locals.getUserFrom].get(
 			locals.getUserBy, 
 			locals.getUserWith(options.request, options.response), 
@@ -103,13 +106,11 @@ module.exports = function(options){
 				});
 			} else if (!isset(account[0])) {
 				options.callback(locals, locals.echo);
-			} else {
-				options.callback(locals, locals.echo);
 			}
 		});
 		
-	// LOGGED OUT
-	} else {
+	// LOGGED OUT && mysql set
+	} else if (options.mysql) {
 		// RESOLVE language
 		if(isset(locals.language)){
 			options.callback(locals, locals.echo);
@@ -119,9 +120,10 @@ module.exports = function(options){
 				locals.echo = dictionary.echo(locals.language);
 				options.callback(locals, locals.echo);
 			});
-		} else {
-			options.callback(locals, locals.echo);
 		}
+	} else {
+		locals.language = 'english';
+		options.callback(locals, locals.echo);
 	}
 }
 
