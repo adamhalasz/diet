@@ -497,7 +497,7 @@
 			
 			function finished_mysql_mapping(){
 				// SETUP application dictionary
-				App.dictionary = Dictionary.setup(app);
+				App.dictionary = Dictionary.setup(App.options);
 				
 				// CREATE new mysql connection
 				App.db = function(callback, req, res, custom_db){
@@ -999,6 +999,7 @@
 			app				: APP,
 			headFunction	: APP.headFunction,
 			options			: install_domain.options,
+			dictionary		: APP.dictionary,
 			request			: request,
 			response		: response,
 			// defaults
@@ -1019,6 +1020,8 @@
 			
 			var htmlParserOptions = (!isset(request.extent)) ? app.options : request.extent ;
 			var path = (path) ? path : 'html/index.html';
+			response.head.echo = app.dictionary.echo(response.head.language);
+			
 			if(!app.renderer != 'ect'){
 				app.ect.render(path, response.head, function (error, html) {
 					if(!isset(error)){ 

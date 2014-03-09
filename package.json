@@ -1,6 +1,6 @@
 {
 	"name" 			: "diet",
-	"version"		: "v0.0.37",
+	"version"		: "v0.0.39",
 	"description"	: "Diet is a minimal node.js web server framework.",
 	"homepage"		: "http://dietjs.com/",
 	"keywords"		: ["framework", "routing", "http", "router", "rest", "restful", "web", "web server", "account", "mysql", "database", "email", "file uploads", "upload", "async handler", "page routing", "from handling", "diet", "dietjs", "diet.js"],
@@ -34,7 +34,7 @@
 		"nodemailer"		: ">=0.3.20",
 		"gravatar"			: ">=1.0.6",
 		"oauth"				: ">=0.9.7",
-		"geoip-lite"		: ">=1.1.1",
+		"geoip-lite"		: "1.1.1",
 		"ect"				: ">=0.5.2",
 		"useragent"			: ">=2.0.4"
 	},
