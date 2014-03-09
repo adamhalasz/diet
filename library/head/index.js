@@ -37,7 +37,7 @@ module.exports = function(options){
 		subpage		: '',
 		
 		// user 
-		language 	: cookies.language 		|| options.language || 'english',
+		language 	: cookies.language 		|| options.response.language || options.language || 'english',
 		getUserBy	: options.getUserBy 	|| 'session',
 		getUserFrom	: options.getUserFrom 	|| 'users',
 		getUserWith	: options.getUserWith 	|| function(){ return cookies.id },
@@ -63,6 +63,8 @@ module.exports = function(options){
 				originalCallback(locals, locals.echo);
 			});
 		}
+	} else {
+		
 	}
 	
 	// Default Anonymous User
@@ -70,10 +72,12 @@ module.exports = function(options){
 	locals.account = false;
 	
 	// DICTIONARY printer
-	if(isset(dictionary.length)){
+	if(isset(objectLength(dictionary.dictionary))){
+		
 		locals.echo = dictionary.echo(locals.language);
 	} else {
 		locals.echo = function(s) { return s; }
+		
 	}
 	
 	// ADD more options to the local html scope
