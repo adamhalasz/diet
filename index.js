@@ -488,11 +488,11 @@
 					var mysql_namespace = install_options.mysql.namespace || 'mysql';
 					MySQL.map(function(map){
 						global[mysql_namespace] = MySQLMap = map;
-						finished_mysql_mapping();
+						finished_mysql_mapping(App);
 					});
 				}
 			} else {
-				finished_mysql_mapping();
+				finished_mysql_mapping(App);
 			}
 			
 			function finished_mysql_mapping(){
@@ -516,9 +516,6 @@
 					}, db);
 				}
 				
-				// Setup Accounts API
-				App = Accounts(App);
-				
 				// START header function
 				if(isset(install_options.mysql)){
 					if(isset(install_options.header)) {
@@ -526,6 +523,9 @@
 					};
 				}
 			}
+		
+			// Run Function when the app finished loading asynchronous functions
+			App.ready = function(callback){ install_options.header = callback;  }
 			
 			// Server Listeners (connection, upgrade, close etc...)	
 			App.update = function(callback){ server.on('upgrade', callback); }
@@ -718,7 +718,8 @@
 				return custom_app;
 			};
 			
-			
+			// Setup Accounts API
+			App = Accounts(App);
 			
 			// RETURN App Object
 			return App;
@@ -980,6 +981,7 @@
 					default_home	: install_domain.default_home,
 					language		: install_domain.options.language,
 					callback: function(locals, echo){
+						response.mysql = mysql_object;
 						response.head = merge(response.head, locals);
 						response.echo = echo;
 						response.head.body = request.body || {};
@@ -1016,6 +1018,41 @@
 	
 	
 	ResponseHtml = function(request, response, app){
+		// Default data holder
+		response.data = {};
+		
+		// response end unifier
+		response.finish = function(data){	
+			// construct output data
+			var responseData = response.data || {};
+			var customData = data || {};
+			var output = merge(responseData, customData);
+			
+			// if the request is for output data only
+			if(request.query.dataOnly){
+				// meta
+				output.meta = {};	
+				output.meta.title = response.head.title ? response.head.title : '' ;
+				output.meta.description = response.head.description ? response.head.description : '' ;
+				output.meta.keywords = response.head.keywords ? response.head.keywords : '';
+				
+				var responseMessage = JSON.stringify(output);
+				if(request.query.callback) responseMessage = request.query.callback +'('+responseMessage+');';
+				
+				response.setHeader('Content-Type', 'application/json');
+				response.end(responseMessage);
+			
+			// if it's a regular request
+			} else {
+				response.head.data = output;
+				response.head = merge(response.head, response.head.data);
+				response.html();
+			}
+			
+			// end mysql
+			if(response.mysql) response.mysql.end();
+		}
+		
 		return function(path, locals){
 			
 			var htmlParserOptions = (!isset(request.extent)) ? app.options : request.extent ;

@@ -63,8 +63,6 @@ module.exports = function(options){
 				originalCallback(locals, locals.echo);
 			});
 		}
-	} else {
-		
 	}
 	
 	// Default Anonymous User
@@ -88,7 +86,7 @@ module.exports = function(options){
 	}
 	
 	// LOGGED IN && mysql set
-	if(isset(cookies[locals.userCookie]) && options.mysql){
+	if(isset(cookies[locals.userCookie]) && options.mysql[locals.getUserFrom] && options.mysql){
 		options.mysql[locals.getUserFrom].get(
 			locals.getUserBy, 
 			locals.getUserWith(options.request, options.response), 
