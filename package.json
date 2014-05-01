@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Diet is a minimal node.js web server framework.",
   "homepage": "http://dietjs.com/",
   "keywords": [
