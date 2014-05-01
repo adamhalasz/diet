@@ -39,7 +39,7 @@ module.exports = function(options){
 		// user 
 		language 	: cookies.language 		|| options.response.language || options.language || 'english',
 		getUserBy	: options.getUserBy 	|| 'session',
-		getUserFrom	: options.getUserFrom 	|| 'users',
+		getUserFrom	: options.getUserFrom 	|| 'accounts',
 		getUserWith	: options.getUserWith 	|| function(){ return cookies.id },
 		userCookie	: options.userCookie 	|| 'id',
 		
@@ -129,7 +129,7 @@ module.exports = function(options){
 	}
 }
 
-User = function(user, full){
+var User = function(user, full){
 	// CONSTRUCT full name from first and last name
 	user.full_name = user.first_name + ' ' + user.last_name;
 	

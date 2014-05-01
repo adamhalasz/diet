@@ -1,43 +1,74 @@
 {
-	"name" 			: "diet",
-	"version"		: "v0.0.41",
-	"description"	: "Diet is a minimal node.js web server framework.",
-	"homepage"		: "http://dietjs.com/",
-	"keywords"		: ["framework", "routing", "http", "router", "rest", "restful", "web", "web server", "account", "mysql", "database", "email", "file uploads", "upload", "async handler", "page routing", "from handling", "diet", "dietjs", "diet.js"],
-	"bugs" 			: { 
-		"url" 		: "http://github.com/adamhalasz/dietjs/issues", 
-		"email" 	: "mail@adamhalasz.com"
-	},
-	"repository"	: {
-		 "type" : "git", 
-		 "url" : "https://github.com/adamhalasz/diet.git"
-	},
-	"license"		: "MIT",
-	"author" 		: {
-		"name"		: "Halász Ádám",
-		"email"		: "mail@adamhalasz.com",
-		"url"		: "http://adamhalasz.com/"
-	},
-	"dependencies":{
-		"diet-request"		: ">=0.0.1",
-		"diet-upload"		: ">=0.0.1",
-		"diet-accounts"		: ">=0.0.1",
-		"diet-comet"		: ">=0.0.1",
-		"diet-cookies"		: ">=0.0.1",
-		"demand"			: ">=0.0.1",
-		"diet-dictionary"	: ">=0.0.1",
-		"diet-use"			: ">=0.0.1",
-		"diet-tasks"		: ">=0.0.1",
-		"diet-mysql"		: ">=0.0.1",
-		"nextjs"			: ">=0.0.1",
-		"secureftp"			: ">=0.0.1",
-		"nodemailer"		: ">=0.3.20",
-		"gravatar"			: ">=1.0.6",
-		"oauth"				: ">=0.9.7",
-		"geoip-lite"		: "1.1.1",
-		"ect"				: ">=0.5.2",
-		"useragent"			: ">=2.0.4"
-	},
-	"main" : "index.js",
-	"engines" : { "node" : ">=0.8.21" }
+  "name": "diet",
+  "version": "0.0.42",
+  "description": "Diet is a minimal node.js web server framework.",
+  "homepage": "http://dietjs.com/",
+  "keywords": [
+    "framework",
+    "routing",
+    "http",
+    "router",
+    "rest",
+    "restful",
+    "web",
+    "web server",
+    "account",
+    "mysql",
+    "database",
+    "email",
+    "file uploads",
+    "upload",
+    "async handler",
+    "page routing",
+    "from handling",
+    "diet",
+    "dietjs",
+    "diet.js"
+  ],
+  "bugs": {
+    "url": "http://github.com/adamhalasz/dietjs/issues",
+    "email": "mail@adamhalasz.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adamhalasz/diet.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Halász Ádám",
+    "email": "mail@adamhalasz.com",
+    "url": "http://adamhalasz.com/"
+  },
+  "dependencies": {
+    "diet-request": ">=0.0.1",
+    "diet-upload": ">=0.0.1",
+    "diet-accounts": ">=0.0.1",
+    "diet-comet": ">=0.0.1",
+    "diet-cookies": ">=0.0.1",
+    "demand": ">=0.0.1",
+    "diet-dictionary": ">=0.0.1",
+    "diet-use": ">=0.0.1",
+    "diet-tasks": ">=0.0.1",
+    "diet-mysql": ">=0.0.1",
+    "nextjs": ">=0.0.1",
+    "secureftp": ">=0.0.1",
+    "nodemailer": ">=0.3.20",
+    "gravatar": ">=1.0.6",
+    "oauth": ">=0.9.7",
+    "geoip-lite": "1.1.1",
+    "ect": ">=0.5.2",
+    "useragent": ">=2.0.4"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.8.21"
+  },
+  "readme": "# Diet\n#### (Dec 16 - STATUS: **Alpha**, under heavy development)\n\n### Warning\nI need a few days to make the framework work smoothly with the sub-modules in it's new environment. If it works for you then awesome! But please don't rely on it until the status is **Stable**.\n\n### Install\n```\nnpm install diet\n```\n\n### How to create a simple \"Hello World!\" website?\n```javascript\n// Require Framework\nvar Application = require('diet');\n\n// Setup Application\napp = Application.setup({\n\t'domain'\t: 'localhost',\n\t'port'\t\t: 80,\n\t'path'      : __dirname,\n\t'public'    : __dirname + '/resources',\n\t'mysql' \t: {\n\t\thost \t : 'localhost',\n\t\tuser \t : 'your_username',\n\t\tpassword : 'your_password',\n\t\tdatabase : 'your_database'\n\t}\n});\n\napp.get('/', function(request, response, mysql){\n\tresponse.end('Hello World!');\n\tmysql.end();\n});\n```\n\n### Recommended Folder Structure\n```\n/comet\n\tindex.js\n/email\n\tindex.js\n\t/templates\n\t\tsignup.txt\n\t\tsignup.html\n/resources\n\t/html\n\t\tindex.html\n\t/images\n\t/styles\n\t/scripts\n\t/fonts\n/paths\n\tpages.js\n\taccount.js\nserver.js\n```\t\n\n### Running the app\nI recommend using `nodemon` to run the app so every time you save a file the server restarts. It makes the development much faster. \n\nInstall nodemon with :\n```\nnpm install nodemon -g\n```\nThen start with:\n```\n\tnodemon server.js\n```\n\n### Running the app as a service\nI recommend using `forever` to keep your app running all the time:\n```\n\tnpm install forever -g\n```\nThen start with:\n```\n\tforever start -c nodemon server.js\n```\n\n### Diet Codex (Documentation and website coming soon...)\n- Installation\n- Concepts\n- Syntax\n- HTML Templates\n- Page Routing\n- Database\n- Accounts\n- Files\n- Dictionary\n- Notifications\n- Email\n- Tasks\n- Misceleneous\n\t",
+  "readmeFilename": "Readme.md",
+  "_id": "diet@0.0.41",
+  "_from": "diet@0.0.41",
+  "dist": {
+    "shasum": "76e1a69fe82ac6eed97fc2b00dd996112bbd948b"
+  },
+  "_resolved": "https://registry.npmjs.org/diet/-/diet-0.0.41.tgz"
 }

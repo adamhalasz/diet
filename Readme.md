@@ -1,5 +1,5 @@
 # Diet
-#### (Dec 16 - STATUS: **Alpha**, under heavy development)
+[http://dietjs.com/](http://dietjs.com/)
 
 ### Warning
 I need a few days to make the framework work smoothly with the sub-modules in it's new environment. If it works for you then awesome! But please don't rely on it until the status is **Stable**.

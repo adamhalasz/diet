@@ -1,5 +1,7 @@
 // Dietjs Application Framework v0.2.5
 
+//cssmin  		= require('cssmin').cssmin;
+
 // ## DESCRIPTION: 
 /* ================================================================
 	A stable environment for node.js to create feature rich 
@@ -134,8 +136,8 @@
 	require('./library/date');
 	require('./library/parse');
 	require('./library/inflection');
-	//cssmin  		= require('cssmin').cssmin;
-		
+	
+	
 	exports.setup = function(options, parent){
 		 var app 		= this;
 		 app.options 	= options;
@@ -286,7 +288,6 @@
 			// Queries
 			request.query = parse.Queries(request);
 			
-			
 			// GET mime type from url IF it's a file request not a page request
 			var mime_type = path.extname(request.url.pathname).substr(1).toLowerCase();
 			
@@ -299,7 +300,8 @@
 			response.redirect = function(path, statusCode){
 				if(path == 'back') { path = request.headers.referer || '/'; }
 				if(path == 'home') { path = '/'; }
-				response.statusCode = (!statusCode) ? 303 : statusCode;
+				response.statusCode = (!statusCode) ? 302 : statusCode;
+				console.log('response.setHeader', path);
 				response.setHeader('Location', path);
 				response.end();
 			}
@@ -532,6 +534,7 @@
 			
 			// All - Run function on all requests
 			App.all = function(callback){ domains[install_options.domain].all = callback; }
+			App.allAfter = function(callback){ domains[install_options.domain].allAfterCB = callback; }
 			
 			// Get Module with MySQL and Head
 			App.get = function(path, callback, custom_db){
@@ -672,7 +675,8 @@
 				ext : '.html', 
 				open: '{{', 
 				close: '}}', 
-				watch: true 
+				watch: false,
+				cache: false,
 			});
 			
 			App.dictionary = Dictionary.setup(App.options);
@@ -1028,29 +1032,42 @@
 			var customData = data || {};
 			var output = merge(responseData, customData);
 			
-			// if the request is for output data only
-			if(request.query.dataOnly){
-				// meta
-				output.meta = {};	
-				output.meta.title = response.head.title ? response.head.title : '' ;
-				output.meta.description = response.head.description ? response.head.description : '' ;
-				output.meta.keywords = response.head.keywords ? response.head.keywords : '';
-				
-				var responseMessage = JSON.stringify(output);
-				if(request.query.callback) responseMessage = request.query.callback +'('+responseMessage+');';
-				
-				response.setHeader('Content-Type', 'application/json');
-				response.end(responseMessage);
-			
-			// if it's a regular request
-			} else {
-				response.head.data = output;
-				response.head = merge(response.head, response.head.data);
-				response.html();
+			if(request.domainApp.allAfterCB) { 
+				request.domainApp.allAfterCB(request, response, response.mysql, endRequest); 
+			} else { 
+				endRequest();
 			}
 			
-			// end mysql
-			if(response.mysql) response.mysql.end();
+			function endRequest(){
+				// construct output data
+				var responseData = response.data || {};
+				var customData = data || {};
+				var output = merge(responseData, customData);
+				
+				// if the request is for output data only
+				if(request.query.dataOnly){
+					// meta
+					output.meta = {};	
+					output.meta.title = response.head.title ? response.head.title : '' ;
+					output.meta.description = response.head.description ? response.head.description : '' ;
+					output.meta.keywords = response.head.keywords ? response.head.keywords : '';
+					
+					var responseMessage = JSON.stringify(output);
+					if(request.query.callback) responseMessage = request.query.callback +'('+responseMessage+');';
+					
+					response.setHeader('Content-Type', 'application/json');
+					response.end(responseMessage);
+				
+				// if it's a regular request
+				} else {
+					response.head.data = output;
+					response.head = merge(response.head, response.head.data);
+					response.html();
+				}
+				
+				// end mysql
+				if(response.mysql) response.mysql.end();
+			}
 		}
 		
 		return function(path, locals){
@@ -1131,12 +1148,20 @@
 			}
 			
 			function finish(data){
-				response.setHeader('Content-encoding', 'gzip');
-				response.setHeader('Content-Type', 'text/html; charset=utf-8');
-				zlib.gzip(data, function(error, result){
-					response.setHeader('Content-Length', result.length);
-					response.end(result);
-				});
+				if(request.domainApp.allAfterCB) { 
+					request.domainApp.allAfterCB(request, response, response.mysql, endRequest); 
+				} else { 
+					endRequest();
+				}
+				
+				function endRequest(){
+					response.setHeader('Content-encoding', 'gzip');
+					response.setHeader('Content-Type', 'text/html; charset=utf-8');
+					zlib.gzip(data, function(error, result){
+						response.setHeader('Content-Length', result.length);
+						response.end(result);
+					});
+				}
 			}
 		}
 	};
