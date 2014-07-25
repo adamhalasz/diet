@@ -1,7 +1,7 @@
 {
   "name": "diet",
-  "version": "0.5.0",
-  "description": "Diet is a beautiful, minimalistic, extensible HTTP framework for node.js. When you’re code is on diet, your apps become skinny, fast, organized & healthy!",
+  "version": "0.5.1",
+  "description": "Diet is a beautiful, minimalistic, extensible web application framework for node.",
   "homepage": "http://dietjs.com/",
   "keywords": [
   	"http",
@@ -39,10 +39,10 @@
     "url": "http://adamhalasz.com/"
   },
   "dependencies": {
-    "nextjs": ">=0.0.1",
-    "exec-sync": ">=0.0.1",
-    "colors": ">=0.0.1",
-    "path-to-regexp": ">=0.0.1"
+    "nextjs": ">=0.0.3",
+    "exec-sync": ">=0.1.6",
+    "colors": ">=0.6.2",
+    "path-to-regexp": ">=0.2.3"
   },
   "main": "index.js",
   "engines": {
