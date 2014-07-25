@@ -21,6 +21,44 @@ app.get('/', function($){
 });
 ```
 
+## **Hello HTML!**
+![Real World - Hello World with diet][2]
+
+Setup a new project in **/project/index.js**
+```js
+// Require diet
+require('diet');
+
+// New Domain
+app = new Domain('http://local.com');
+
+// Load HTML Parser
+// you'll need to install diet-ect to use it:
+// npm instal diet-ect
+app.plugin('diet-ect', { alias: 'html' }); 
+
+// Start App
+app.start();
+
+// Listen on http://local.com/
+app.get('/', function($){
+	$.data.car = 'Tesla';
+	$.html();
+});
+```
+And write an HTML view in **/project/static/index.html**
+```ect
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Hello World</title>
+	</head>
+	<body>
+		<h1>Hello World</h1>
+		<p><b>{{-this.car}}</b> is an awesome car.</p>
+	</body>
+</html>    
+```
 ## **Install**
 `npm install diet `
 
@@ -154,7 +192,7 @@ app.get('/ ', function($){  // <-- the `$` sign is the signal argument
 ```
 
 # **Routing**
-Diet has a very easy way to route pages.
+The global signal is a Function Object. As a function you can use it to setup your applications routes. 
 
 ## **Simple Routing**
 Diet supports `get` and `post` methods.
@@ -294,3 +332,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
   [1]: http://i.imgur.com/qdhj18p.png
+  [2]: http://i.imgur.com/BvYne1Z.png
