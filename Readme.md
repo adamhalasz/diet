@@ -47,7 +47,7 @@ app.get('/', function($){
 });
 ```
 And write an HTML view in **/project/static/index.html**
-```ect
+```html
 <!DOCTYPE html>
 <html>
 	<head>
