@@ -30,14 +30,21 @@ var url = require('url');
 var pathToRegexp = require('path-to-regexp');
 var execSync = require("exec-sync");
 var colors = require('colors');
+var callsite = require('callsite');
+var path = require('path');
+var fs = require('fs');
+var version = JSON.parse(fs.readFileSync(__dirname+'/package.json').toString()).version;
 
+// Log Header
 console.log(execSync('clear'));
-console.log(' Diet v0.5.0 '.inverse);
+console.log((' Diet v'+version+' ').inverse);
 console.log(' http://dietjs.com/');
 
 // Domain Class
 Domain = function(domainName, certificates){
 	console.log('\n'+' Loading Domain '.inverse+' - '+domainName.underline+'\n-----------------------------------------------------------------');
+	
+
 	var domain = this;
 	
 	// Domain Name
@@ -52,7 +59,9 @@ Domain = function(domainName, certificates){
 	domain.certifications = certificates;
 	
 	// Process Path
-	domain.path = process.cwd();
+	var stack = callsite();
+	var requester = stack[1].getFileName();
+	domain.path = path.dirname(requester);
 	
 	// Diet Router Listeners
 	domain.routes = { GET:{}, POST: {} };
@@ -63,8 +72,35 @@ Domain = function(domainName, certificates){
 	// Use Diet Plugin
 	domain.plugin = function(name, options){
 		console.log('   -> Plugin ' + name.cyan + ' registered'.yellow);
-		var plugin = require(name);
-	
+		
+		var lines = arguments.callee.caller.toString().split('\n');
+		
+		var trace = printStackTrace({e: new Error()});
+		var lineNumber = trace[1].split(':')[1];
+		var args = lines[lineNumber-1].split(',');
+		
+		function _getCallerFile() {
+		    try {
+		        var err = new Error();
+		        var callerfile;
+		        var currentfile;
+		
+		        Error.prepareStackTrace = function (err, stack) { return stack; };
+				console.log(err.stack.shift());
+		        currentfile = err.stack.shift().getFileName();
+		
+		        while (err.stack.length) {
+		            callerfile = err.stack.shift().getFileName();
+		
+		            if(currentfile !== callerfile) return callerfile;
+		        }
+		    } catch (err) {}
+		    return undefined;
+		}
+		
+		var resolvedModule = require.resolve(domain.path+'/node_modules/'+name);
+		var plugin = require(resolvedModule);
+		
 		domain.plugin[name] = {
 			name: name,
 			options: options,
@@ -216,5 +252,3 @@ log = function(){
 		console.log.apply(this, arguments);
 	}
 }
-
-
