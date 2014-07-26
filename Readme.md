@@ -191,6 +191,87 @@ app.get('/ ', function($){  // <-- the `$` sign is the signal argument
 });
 ```
 
+## **Signal Methods**
+
+**$.url**
+JSON Parsed `request.url`
+```js
+$.url = { 
+    protocol: 'http:',
+    slashes: true,
+    host: 'local.com',
+    hostname: 'local.com',
+    href: 'http://local.com/',
+    pathname: '/',
+    path: '/' };
+```
+
+**$.query**
+JSON Parsed querystring
+```js
+// http://local.com/?query=value
+$.query = { query: 'value' };
+```
+
+**$.params**
+URL params from dynamic page routes like `/user/:id`
+```js
+// GET http://local.com/user/eddie
+$.params = { id: 'eddie' };
+```
+
+**$.data**
+an object used in html templates and `$.json()` responses
+```js
+$.data = {};
+```
+
+**$.body**
+JSON Parsed POST body data
+```js
+// POST http://local.com/?message=hello
+$.body = { message: 'hello' };
+```
+
+**$.headers**
+An array of all headers.
+```js
+$.headers = { host: 'local.com',
+  connection: 'keep-alive',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
+  'accept-encoding': 'gzip,deflate,sdch',
+  'accept-language': 'en-US,en;q=0.8,da;q=0.6,hu;q=0.4',
+  cookie: 'id=999' };
+```
+
+**$.header**
+Get or Set Headers. The second argument is for SET, if left empty it's GET. 
+```js
+$.header('cookie')                    // GET `cookie` -> 'id=999'
+$.header('content-type', 'text/html') // SET `content-type` to `text/html`
+```
+
+**$.method**
+A string that you can use to check the method of the request. It's either GET or POST.
+```js
+// GET http://local.com/
+$.method // -> GET
+
+// POST http://local.com/publish
+$.method // -> POST
+```
+
+**$.end**
+A function that ends the response and send back data to the requesting device.
+```js
+app.get('/', function($){
+    $.end('end response');
+});
+```
+
+
+
 # **Routing**
 The global signal is a Function Object. As a function you can use it to setup your applications routes. 
 
@@ -282,7 +363,7 @@ other.get('/', function($){
 });
 ```
 
-## **Domain Attributes**
+## **Domain Methods**
 Each domain inherits these methods:
 ```js
 // include a plugin
