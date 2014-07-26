@@ -118,7 +118,7 @@ Domain = function(domainName, certificates){
 			}));
 		};
 		
-		return domain.plugin[name] || false;
+		return plugin;
 	}
 	
 	return domain;
