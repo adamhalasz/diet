@@ -14,8 +14,8 @@ Diet is a beautiful, minimalistic, extensible web application framework for node
 ```js
 require('diet');
 
-app = new Domain('http://localhost:8000/');
-app.start();
+app = new App();
+app.start('http://localhost:8000/');
 app.get('/', function($){ 
     $.end('Hello World!'); 
 });
@@ -30,7 +30,7 @@ Setup a new project in **/project/index.js**
 require('diet');
 
 // New Domain
-app = new Domain('http://local.com');
+app = new App();
 
 // Load HTML Parser
 // you'll need to install diet-ect to use it:
@@ -38,7 +38,7 @@ app = new Domain('http://local.com');
 app.plugin('diet-ect', { alias: 'html' }); 
 
 // Start App
-app.start();
+app.start('http://local.com');
 
 // Listen on http://local.com/
 app.get('/', function($){
@@ -79,18 +79,17 @@ Onload plugins *run code right away after the plugin was initialized*. The use c
 ```js  
 // project/example.js
 module.exports.onload = function($){ 
-    $.message = 'hello world!';
+    console.log('hello world!');
     $.return();
 }
 ```
 ```js
 // project/index.js
 require('diet');
-app = new Domain('http://localhost:8000/');
-app.plugin('example.js');
-app.start();
+app = new App();
+app.plugin('example.js'); // -> hello world!
+app.start('http://localhost:8000/');
 
-console.log(app.message); // -> hello world!
 ```
 ## **Global Plugins**
 Global plugins run on all incoming HTTP requests/routes. Global plugins can be handy when you need certain functionalities in all or a specific type of routes for example sessions & static file handling.
@@ -108,9 +107,9 @@ module.exports.global = function($){
 // project/index.js
 require('diet');
 
-app = new Domain('http://localhost:8000/');
+app = new App();
 app.plugin('example.js');
-app.start();
+app.start('http://localhost:8000/');
 
 app.get('/', function($){
     $.end('Extension is ' + $.example.extension);
@@ -144,9 +143,9 @@ module.exports.local = function($){
 ```js
 // project/index.js
 require('diet');
-app = new Domain('http://localhost:8000/');
+app = new App();
 var person = app.plugin('example.js');
-app.start();
+app.start('http://localhost:8000/');
 
 app.get('/', person, function($){
     $.end('Hi I am ' + $.person.name + ', '  + $.person.age + ' old.');
@@ -160,15 +159,20 @@ Local plugins can also be created as functions
 // project/index.js
 require('diet');
 
-app = new Domain('http://localhost:8000/');
-app.start();
+// Create New App
+app = new App();
 
+// Start App
+app.start('http://localhost:8000/');
+
+// Define Local Plugin
 function person($){
     this.name = 'Adam';
     this.age = 20;
     $.return(this);
 }
 
+// Use person in GET / route
 app.get('/', person, function($){
     $.end('Hi I am, ' + $.person.name + ', '  + $.person.age + ' old');
     // -> Hi I am Adam, 20 years old.
@@ -182,10 +186,10 @@ The signal argument is used in the context of *Routes* and *Plugins*.
 ```js
 require('diet');
 
-app = new Domain('http://localhost:8000/');
-app.start(); 
+app = new App();
 app.plugin('plugin_name');
-    
+app.start('http://localhost:8000/');   
+
 app.get('/ ', function($){  // <-- the `$` sign is the signal argument
     $.end('hello world');
 });
@@ -329,12 +333,13 @@ app.get('/list/:view?', function($){
 ```
 
 # **Domains**
-In some cases you might want to serve multiple domains/sub-domains from the same node.js application. Diet handles this beautifully with the `Domain()` function. 
+In some cases you might want to serve multiple domains/sub-domains from the same node.js application. Diet handles this beautifully by calling a new instance of `App` and setting a domain upon starting it with `app.start(yourDomain)`
 
 
 ## **Example Usage:**
 ```js
-var yourApp = new Domain('http://yourDomain.com/');
+app = new App();
+app.start('http://yourDomain.com/'); // <-- ! full url required
 ```
 ## **More Examples:**
 ```js
@@ -342,22 +347,22 @@ var yourApp = new Domain('http://yourDomain.com/');
 require('diet');
 
 // Main Domain
-app = new Domain('http://example.com/');
-app.start();
+app = new App();
+app.start('http://example.com/');
 app.get('/', function($){
 	$.end('hello world ');
 });
 
 // Sub Domain
-sub = new Domain('http://subdomain.example.com/');
-sub.start();
+sub = new App();
+sub.start('http://subdomain.example.com/');
 sub.get('/', function($){
 	$.end('hello world at sub domain!');
 });
 
 // Other Domain
-other = new Domain('http://other.com/');
-other.start();
+other = new App();
+other.start('http://other.com/');
 other.get('/', function($){
 	$.end('hello world at other domain');
 });
