@@ -1,7 +1,7 @@
 # **Diet**
 Diet is a beautiful, minimalistic, extensible web application framework for node.
 
-![Diet.js in action][1]
+![Diet.js on launch][1]
 ## **What does diet do?**
 
  - **Plugins** that extend your apps functionality.
@@ -22,27 +22,25 @@ app.get('/', function($){
 ```
 
 ## **Hello HTML!**
-![Real World - Hello World with diet][2]
+![Complete Hello World example with HTML Template][2]
 
 Setup a new project in **/project/index.js**
 ```js
-// Require diet
+// Require Diet
 require('diet');
 
-// New Domain
+// New App
 app = new App();
 
-// Load HTML Parser
-// you'll need to install diet-ect to use it:
-// npm instal diet-ect
-app.plugin('diet-ect', { alias: 'html' }); 
+// Load HTML Parser Plugin
+app.plugin('diet-ect', { alias: 'html' });
 
-// Start App
-app.start('http://local.com');
+// Start the App
+app.start('http://localhost:8000/');
 
-// Listen on http://local.com/
+// Listen on GET /
 app.get('/', function($){
-	$.data.car = 'Tesla';
+	$.data.page = 'home';
 	$.html();
 });
 ```
@@ -55,9 +53,9 @@ And write an HTML view in **/project/static/index.html**
 	</head>
 	<body>
 		<h1>Hello World</h1>
-		<p><b>{{-this.car}}</b> is an awesome car.</p>
+		Welcome to the <b>{{-this.page}}</b> page.
 	</body>
-</html>    
+</html> 
 ```
 ## **Install**
 `npm install diet `
@@ -203,9 +201,9 @@ JSON Parsed `request.url`
 $.url = { 
     protocol: 'http:',
     slashes: true,
-    host: 'local.com',
-    hostname: 'local.com',
-    href: 'http://local.com/',
+    host: 'example.com',
+    hostname: 'example.com',
+    href: 'http://example.com/',
     pathname: '/',
     path: '/' };
 ```
@@ -213,14 +211,14 @@ $.url = {
 **$.query**
 JSON Parsed querystring
 ```js
-// http://local.com/?query=value
+// http://example.com/?query=value
 $.query = { query: 'value' };
 ```
 
 **$.params**
 URL params from dynamic page routes like `/user/:id`
 ```js
-// GET http://local.com/user/eddie
+// GET http://example.com/user/eddie
 $.params = { id: 'eddie' };
 ```
 
@@ -233,14 +231,14 @@ $.data = {};
 **$.body**
 JSON Parsed POST body data
 ```js
-// POST http://local.com/?message=hello
+// POST http://example.com/?message=hello
 $.body = { message: 'hello' };
 ```
 
 **$.headers**
 An array of all headers.
 ```js
-$.headers = { host: 'local.com',
+$.headers = { host: 'example.com',
   connection: 'keep-alive',
   accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
@@ -259,10 +257,10 @@ $.header('content-type', 'text/html') // SET `content-type` to `text/html`
 **$.method**
 A string that you can use to check the method of the request. It's either GET or POST.
 ```js
-// GET http://local.com/
+// GET http://example.com/
 $.method // -> GET
 
-// POST http://local.com/publish
+// POST http://example.com/publish
 $.method // -> POST
 ```
 
@@ -417,5 +415,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-  [1]: http://i.imgur.com/qdhj18p.png
-  [2]: http://i.imgur.com/BvYne1Z.png
+  [1]: http://i.imgur.com/9dGfAgM.png
+  [2]: http://i.imgur.com/PFUM2E5.png
