@@ -34,6 +34,7 @@ var callsite = require('callsite');
 var path = require('path');
 var fs = require('fs');
 var version = JSON.parse(fs.readFileSync(__dirname+'/package.json').toString()).version;
+var util = require('util');
 
 // Init Log
 console.log(execSync('clear'));
@@ -121,10 +122,22 @@ function MethodRouter(method){
 		var app = this;
 		var action = arguments[0];
 		
-		var lines = arguments.callee.caller.toString().split('\n');
-		
+		// Create Stack Trace
 		var trace = printStackTrace({e: new Error()});
+		
+		// Parse out the Line Number from the Second Trace Line
 		var lineNumber = trace[1].split(':')[1];
+		
+		// Parse out the File Name from the Second Trace Line
+		var file_name = trace[1].split('@')[1].split(':')[0];
+		
+		// Read the File from the file_name
+		var file_contents = fs.readFileSync(file_name).toString('utf8');
+		
+		// Split file_contents into an Array of it's lines
+		var lines = file_contents.split('\n');
+		
+		// Parse out the arguments at the lineNumber from the lines
 		var args = lines[lineNumber-1].split(',');
 		
 		// Construct Local Plugins

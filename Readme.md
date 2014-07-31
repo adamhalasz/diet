@@ -60,122 +60,9 @@ And write an HTML view in **/project/static/index.html**
 ## **Install**
 `npm install diet `
 
-# **Diet Plugins**
-Plugins are middlewares that act as a bridge between modules and help write much more efficient Object Oriented code. Plugins are essentially regular node.js functions or modules that follow a standard based on diet's `$` *(signal)* argument.
-
-#### **The 3 Types of Plugins**
-Plugins may be all or at least one of these types:
-
-- **Onload** plugin
-- **Global** plugin
-- **Local** plugin
-	
-## **Onload Plugins**
-Onload plugins *run code right away after the plugin was initialized*. The use cases of onload plugins are very handy when you want to alter the configure the plugin, preprocess some data, load/update caches, schedule/execute background tasks etc.
-
-**An Example Plugin:**
-```js  
-// project/example.js
-module.exports.onload = function($){ 
-    console.log('hello world!');
-    $.return();
-}
-```
-```js
-// project/index.js
-require('diet');
-app = new App();
-app.plugin('example.js'); // -> hello world!
-app.start('http://localhost:8000/');
-
-```
-## **Global Plugins**
-Global plugins run on all incoming HTTP requests/routes. Global plugins can be handy when you need certain functionalities in all or a specific type of routes for example sessions & static file handling.
-
-**Example Plugin:**
-```js
-// project/example.js
-var path = require('path');
-module.exports.global = function($){
-    this.extension = path.extname($.url.href);
-    $.return(this);
-}
-```
-```js
-// project/index.js
-require('diet');
-
-app = new App();
-app.plugin('example.js');
-app.start('http://localhost:8000/');
-
-app.get('/', function($){
-    $.end('Extension is ' + $.example.extension);
-});
-
-app.get('/image.jpg', function($){
-    $.end('Extension is ' + $.example.extension);
-});
-```
-```
-// terminal
-curl 'http://localhost:8000/'
--> Extension is undefined
-
-curl 'http://localhost:8000/image.jpg'
--> Extension is .jpg
-```
-
-## **Local Plugins**
-Local plugins run on specified routes. Local plugins are handy for organizing your code for optimization, so each plugin is required only when it is actually needed.
-
-**Example Local Plugin as a Module:**
-```js
-// project/example.js
-module.exports.local = function($){
-    this.name = 'Adam';
-    this.age = 20;
-    $.return(this);
-}
-```
-```js
-// project/index.js
-require('diet');
-app = new App();
-var person = app.plugin('example.js');
-app.start('http://localhost:8000/');
-
-app.get('/', person, function($){
-    $.end('Hi I am ' + $.person.name + ', '  + $.person.age + ' old.');
-    // -> Hi I am Adam, 20 years old.
-});
-```
-
-**Example Local Plugin as a Function:**
-Local plugins can also be created as functions
-```js
-// project/index.js
-require('diet');
-
-// Create New App
-app = new App();
-
-// Start App
-app.start('http://localhost:8000/');
-
-// Define Local Plugin
-function person($){
-    this.name = 'Adam';
-    this.age = 20;
-    $.return(this);
-}
-
-// Use person in GET / route
-app.get('/', person, function($){
-    $.end('Hi I am, ' + $.person.name + ', '  + $.person.age + ' old');
-    // -> Hi I am Adam, 20 years old.
-});
-```
+# **Plugin Directory**
+We have a list of plugins categorized by their purpose in the wiki: 
+https://github.com/adamhalasz/diet/wiki/Plugins
 
 # **Signal ($)**
 The signal argument is used in the context of *Routes* and *Plugins*.
@@ -394,7 +281,130 @@ app.post('/path', pluginA, pluginB .., function($){ ... });
 // any argument between the first and last is a local plugin
 ```
 
-# License
+# **Writing Diet Plugins**
+Plugins are middlewares that act as a bridge between modules and help write much more efficient Object Oriented code. Plugins are essentially regular node.js functions or modules that follow a standard mostly based on diet's `$` *(signal)* argument.
+
+#### **The 3 Types of Plugins**
+Plugins may be all or at least one of these types:
+
+- **Onload** plugin
+- **Global** plugin
+- **Local** plugin
+	
+## **Onload Plugins**
+Onload plugins *run code right away after the plugin was initialized*. The use cases of onload plugins are very handy when you want to configure your plugin, preprocess some data, load/update caches, schedule/execute background tasks etc.
+
+**An Example Plugin:**
+```js  
+// project/example.js
+module.exports.onload = function($){ 
+    console.log('hello world!');
+    $.return();
+}
+```
+```js
+// project/index.js
+require('diet');
+app = new App();
+app.plugin('example.js'); // -> hello world!
+app.start('http://localhost:8000/');
+
+```
+## **Global Plugins**
+Global plugins run on all incoming HTTP requests/routes. Global plugins can be handy when you need certain functionalities in all or a specific type of routes for example sessions & static file handling.
+
+**Example Plugin:**
+```js
+// project/example.js
+var path = require('path');
+module.exports.global = function($){
+    this.extension = path.extname($.url.href);
+    $.return(this);
+}
+```
+```js
+// project/index.js
+require('diet');
+
+app = new App();
+app.plugin('example.js');
+app.start('http://localhost:8000/');
+
+app.get('/', function($){
+    $.end('Extension is ' + $.example.extension);
+});
+
+app.get('/image.jpg', function($){
+    $.end('Extension is ' + $.example.extension);
+});
+```
+```
+// terminal
+curl 'http://localhost:8000/'
+-> Extension is undefined
+
+curl 'http://localhost:8000/image.jpg'
+-> Extension is .jpg
+```
+
+## **Local Plugins**
+Local plugins run on specified routes. Local plugins are handy for organizing your code for optimization, so each plugin is required only when it is actually needed.
+
+**Example Local Plugin as a Module:**
+```js
+// project/example.js
+module.exports.local = function($){
+    this.name = 'Adam';
+    this.age = 20;
+    $.return(this);
+}
+```
+```js
+// project/index.js
+require('diet');
+app = new App();
+var person = app.plugin('example.js');
+app.start('http://localhost:8000/');
+
+app.get('/', person, function($){
+    $.end('Hi I am ' + $.person.name + ', '  + $.person.age + ' old.');
+    // -> Hi I am Adam, 20 years old.
+});
+```
+
+**Example Local Plugin as a Function:**
+Local plugins can also be created as functions
+```js
+// project/index.js
+require('diet');
+
+// Create New App
+app = new App();
+
+// Start App
+app.start('http://localhost:8000/');
+
+// Define Local Plugin
+function person($){
+    this.name = 'Adam';
+    this.age = 20;
+    $.return(this);
+}
+
+// Use person in GET / route
+app.get('/', person, function($){
+    $.end('Hi I am, ' + $.person.name + ', '  + $.person.age + ' old');
+    // -> Hi I am Adam, 20 years old.
+});
+```
+
+# **Todos**
+Check out the upcoming features:
+https://github.com/adamhalasz/diet/wiki/Todos
+
+# **License**
+(The MIT License)
+
 Copyright (c) 2014 Halász Ádám <mail@adamhalasz.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
