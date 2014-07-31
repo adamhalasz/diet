@@ -9,6 +9,10 @@ Diet is a beautiful, minimalistic, extensible web application framework for node
  - **Domain Routing**.
  - The **`$` Signal Argument**  is a combination of the request and response object. You can access the signal argument in every route and plugin. The signal helps to connect and send data between plugins/modules.
 
+## **Install**
+```
+npm install diet 
+```
 
 ## **Hello World!**
 ```js
@@ -57,8 +61,6 @@ And write an HTML view in **/project/static/index.html**
 	</body>
 </html> 
 ```
-## **Install**
-`npm install diet `
 
 # **Plugin Directory**
 We have a list of plugins categorized by their purpose in the wiki: 
