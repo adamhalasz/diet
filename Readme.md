@@ -82,7 +82,7 @@ app.get('/ ', function($){  // <-- the `$` sign is the signal argument
 
 ## **Signal Methods**
 
-**$.url**
+#### **$.url** - *object*
 JSON Parsed `request.url`
 ```js
 $.url = { 
@@ -95,34 +95,34 @@ $.url = {
     path: '/' };
 ```
 
-**$.query**
+#### **$.query** - *object*
 JSON Parsed querystring
 ```js
 // http://example.com/?query=value
 $.query = { query: 'value' };
 ```
 
-**$.params**
+#### **$.params** - *object*
 URL params from dynamic page routes like `/user/:id`
 ```js
 // GET http://example.com/user/eddie
 $.params = { id: 'eddie' };
 ```
 
-**$.data**
+#### **$.data** - *object*
 an object used in html templates and `$.json()` responses
 ```js
 $.data = {};
 ```
 
-**$.body**
+#### **$.body** - *object*
 JSON Parsed POST body data
 ```js
 // POST http://example.com/?message=hello
 $.body = { message: 'hello' };
 ```
 
-**$.headers**
+#### **$.headers** - *object*
 An array of all headers.
 ```js
 $.headers = { host: 'example.com',
@@ -134,14 +134,44 @@ $.headers = { host: 'example.com',
   cookie: 'id=999' };
 ```
 
-**$.header**
+#### **$.header** - *function*
 Get or Set Headers. The second argument is for SET, if left empty it's GET. 
 ```js
 $.header('cookie')                    // GET `cookie` -> 'id=999'
 $.header('content-type', 'text/html') // SET `content-type` to `text/html`
 ```
 
-**$.method**
+#### **$.redirect** - *function*
+Redirect the request to a different path. `path` is requried, `statusCode` is optional.
+```js
+// api
+$.redirect(path, statusCode);
+```
+**Redirect to a Path**
+```js
+$.redirect('/to/some/path');        // internal redirect 
+$.redirect('http://google.com/');   // external redirect
+```
+**Redirect Home**
+```js
+// redirect to home
+$.redirect('home');
+```
+```js
+// is the same as
+$.redirect('/');
+```
+**Redirect Back**
+```js
+// redirect back
+$.redirect('back');
+```
+```js
+// is the same as
+$.redirect($.request.headers.referer);
+```
+
+#### **$.method** - *string*
 A string that you can use to check the method of the request. It's either GET or POST.
 ```js
 // GET http://example.com/
@@ -151,13 +181,19 @@ $.method // -> GET
 $.method // -> POST
 ```
 
-**$.end**
+#### **$.end** - *function*
 A function that ends the response and send back data to the requesting device.
 ```js
 app.get('/', function($){
     $.end('end response');
 });
 ```
+
+#### **$.multipart** - *boolean*
+Check if a POST request's enctype is is multipart or not. The value is a boolean: `true` or `false`.
+
+#### **$.noRoute** - *boolean*
+Check if a request has a matching registered route from `app.get` or `app.post`. The value is a boolean: `true` or `false`.
 
 
 
