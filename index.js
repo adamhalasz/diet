@@ -21,8 +21,9 @@ THE SOFTWARE.
 */
 
 // Dependencies
-require('./lib/extensions/index.js');
-require('./lib/extensions/stacktrace.js');
+require('./lib/http.js');
+require('./lib/stacktrace.js');
+require('./lib/include.js');
 
 var http = require('./lib/http');
 var Next = require('nextjs');
@@ -42,8 +43,9 @@ console.log((' Diet v'+version+' ').inverse);
 console.log(' http://dietjs.com/');
 
 // Domain Class
-App = function(){
+App = function(level){
 	var app = this;
+	this.level = app.level = level || 0;
 	
 	// Process Path
 	var stack = callsite();
@@ -51,9 +53,18 @@ App = function(){
 	app.path = path.dirname(requester);
 	app.dirName = app.path.match(/([^\/]*)\/*$/)[1]
 	
-	console.log('\n'+' app '.yellow.inverse+(' '+app.dirName+' ').inverse
-	+ ' at '.grey + app.path.grey
-	+ '\n-----------------------------------------------------------------');
+	var homeDir = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+
+	if(app.path.substring(0, homeDir.length) == homeDir){
+		var displayPath = '~'+app.path.slice(homeDir.length);
+	} else {
+		var displayPath = app.path;
+	}
+	
+	app.log('');
+	app.log(' app '.yellow.inverse+(' '+app.dirName+' ').inverse
+	+ ' at '.grey + displayPath.grey);
+	app.log('-----------------------------------------------------------------');
 
 	
 	// Diet Router Listeners
@@ -61,10 +72,10 @@ App = function(){
 	
 	// Diet Plugins
 	app.plugins = { onload: [], global: [], local: [], all: [] };
-	
+
 	// Use Diet Plugin
 	app.plugin = function(name, options){
-		console.log('   -> Plugin ' + name.cyan + ' registered'.yellow);
+		app.log('   -> Plugin ' + name.cyan + ' registered'.yellow);
 		
 		var lines = arguments.callee.caller.toString().split('\n');
 		
@@ -79,7 +90,7 @@ App = function(){
 		        var currentfile;
 		
 		        Error.prepareStackTrace = function (err, stack) { return stack; };
-				console.log(err.stack.shift());
+				app.log(err.stack.shift());
 		        currentfile = err.stack.shift().getFileName();
 		
 		        while (err.stack.length) {
@@ -193,10 +204,10 @@ App.prototype.loaded = function(callback){
 		var plugin_name = plugin.name;
 		var plugin_context = merge(app, {
 			return: function(plugin_return){
-				//console.log('app.prototype.'+plugin_name);
+				//app.log('app.prototype.'+plugin_name);
 				app[plugin_name] = plugin_return;
-				console.log('   -> Plugin ' + plugin_name.cyan + ' onload'.yellow);
-				//console.log(current_plugin, '<', total_plugins);
+				
+				//app.log(current_plugin, '<', total_plugins);
 				if(current_plugin < total_plugins){
 					current_plugin++;
 					patch_plugin(current_plugin);
@@ -208,7 +219,7 @@ App.prototype.loaded = function(callback){
 		});
 		plugin.module.onload.apply({}, [plugin_context, plugin.options]);
 	}
-	//console.log(App.name, 'total_plugins', total_plugins, App.plugins);
+	//app.log(App.name, 'total_plugins', total_plugins, App.plugins);
 	if(total_plugins > -1){
 		patch_plugin(0);
 	} else {
@@ -216,7 +227,7 @@ App.prototype.loaded = function(callback){
 	}
 	
 	function finish(){
-		console.log('   -> Plugins are ready'.yellow);
+		app.log('   -> Plugins are ready'.yellow);
 		if(callback) callback();
 	}
 }
@@ -249,20 +260,26 @@ App.prototype.start = function(domainName, callback){
 				http.default(app);
 			}
 		} else {
-			console.log('   -> HTTP Server is '+'listening'.yellow+' on ' + (app.domain).underline);
+			app.log('   -> HTTP Server is '+'listening'.yellow+' on ' + (app.domain).underline);
 		}
 		
-		console.log('-----------------------------------------------------------------\n');
+		app.log('-----------------------------------------------------------------\n');
 		
 		app.domains[app.location.hostname] = app;
 		if(callback) callback();
 	});
 }
 
-// Logger
-var log;
-log = function(){
-	if(App.prototype.debug){
-		console.log.apply(this, arguments);
+App.prototype.log = function(){
+	var array = Array.apply(null, arguments);
+	if(this.level > 0){
+		var gap = '';
+		for(i=0; i <= this.level; i++){
+			gap += '  ';
+		}
+		array.unshift(gap);
 	}
+	
+	
+	console.log.apply(this, array);
 }
