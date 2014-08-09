@@ -23,7 +23,7 @@ THE SOFTWARE.
 // Dependencies
 require('./lib/http.js');
 require('./lib/stacktrace.js');
-require('./lib/include.js');
+require('sugar');
 
 var http = require('./lib/http');
 var Next = require('nextjs');
@@ -116,7 +116,7 @@ App = function(level){
 		};
 		
 		if(plugin.global){
-			app.plugins.global.push(merge(app.plugin[name], {
+			app.plugins.global.push(Object.merge(app.plugin[name], {
 				type: 'global',
 				argumentName: name
 			}));
@@ -157,7 +157,7 @@ function MethodRouter(method){
 			var argument = arguments[index];
 			var argumentName = args[index].trim();
 			if(typeof argument == 'object'){
-				plugins.push(merge(argument, {
+				plugins.push(Object.merge(argument, {
 					type: 'local_module',
 					argumentName: argumentName,
 				}));
@@ -202,7 +202,7 @@ App.prototype.loaded = function(callback){
 		
 		var plugin = app.plugins.onload[ID];
 		var plugin_name = plugin.name;
-		var plugin_context = merge(app, {
+		var plugin_context = Object.merge(app, {
 			return: function(plugin_return){
 				//app.log('app.prototype.'+plugin_name);
 				app[plugin_name] = plugin_return;
