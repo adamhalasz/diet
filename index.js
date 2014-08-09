@@ -279,7 +279,14 @@ App.prototype.log = function(){
 		}
 		array.unshift(gap);
 	}
-	
-	
 	console.log.apply(this, array);
+}
+
+// Isset
+isset = function(object){
+	if(object != "undefined" && object != undefined && object != null && object != "" && typeof(object) != 'undefined'){
+		return true;
+	} else {
+		return false;
+	}
 }
