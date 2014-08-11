@@ -36,8 +36,8 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 
 ### **Officially Supported Diet Plugins**
 
-| Title              | Category           | Github & Docs       | Install |
-|:-------------------|-------------------:|:-------------------:|
+| Title | Category | Github & Docs | Install |
+|:-------------------|:-------------------|:-------------------|
 | **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     
 | **diet-static**    | Static Files         |       http://git.io/TMliZw | npm install diet-static
 | **diet-mysql**     | Database             |       http://git.io/qDgntw | npm install diet-mysql
