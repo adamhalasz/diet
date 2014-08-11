@@ -83,26 +83,8 @@ App = function(level){
 		var lineNumber = trace[1].split(':')[1];
 		var args = lines[lineNumber-1].split(',');
 		
-		function _getCallerFile() {
-		    try {
-		        var err = new Error();
-		        var callerfile;
-		        var currentfile;
-		
-		        Error.prepareStackTrace = function (err, stack) { return stack; };
-				app.log(err.stack.shift());
-		        currentfile = err.stack.shift().getFileName();
-		
-		        while (err.stack.length) {
-		            callerfile = err.stack.shift().getFileName();
-		
-		            if(currentfile !== callerfile) return callerfile;
-		        }
-		    } catch (err) {}
-		    return undefined;
-		}
-		
 		var resolvedModule = require.resolve(app.path+'/node_modules/'+name);
+		module.app = app;
 		var plugin = require(resolvedModule);
 		
 		app.plugin[name] = {
@@ -128,11 +110,79 @@ App = function(level){
 	return app;
 }
 
-function MethodRouter(method){
+App.route = function(){
+	// First Argument is the action
+	var action = arguments[0];
+	
+	// Create Stack Trace
+	var trace = printStackTrace({e: new Error()});
+
+	// Parse out the Line Number from the Second Trace Line
+	var lineNumber = trace[2].split(':')[1];
+	
+	// Parse out the File Name from the Second Trace Line
+	var file_name = trace[2].split('@')[1].split(':')[0];
+	
+	// Read the File from the file_name
+	var file_contents = fs.readFileSync(file_name).toString('utf8');
+	
+	// Split file_contents into an Array of it's lines
+	var lines = file_contents.split('\n');
+	
+	// Parse out the arguments at the lineNumber from the lines
+	var args = lines[lineNumber-1].split(',');
+
+	// Construct Local Plugins
+	var plugins = [];
+	for(index in arguments){
+		var argument = arguments[index];
+		
+		var argumentName = args[index].trim();
+		if(typeof argument == 'object'){
+			plugins.push(Object.merge(argument, {
+				type: 'local_module',
+				argumentName: argumentName,
+			}));
+		} else if (typeof argument == 'function') {
+			plugins.push({
+				type: 'local',
+				module: { local: argument },
+				argumentName: argumentName,
+			});
+		}
+	}
+	return {
+		action 		: action,
+		plugins		: plugins,
+		arguments	: arguments,
+		fileContents: file_contents,
+		lineNumber	: lineNumber,
+		fileName	: file_name
+	}
+}
+App.prototype.router = function(method){
 	return function(){
 		var app = this;
-		var action = arguments[0];
+		var route = App.route.apply(app, arguments);
+		var keys = [];
+		var regex = pathToRegexp(route.action, keys);
 		
+		if(!app.routes[method][route.action]){
+			
+			app.routes[method][route.action] = {
+				function: arguments[arguments.length-1],
+				plugins: route.plugins,
+				regex: regex,
+				keys: keys
+			}
+		} else {
+			app.routes[method][route.action].plugins = app.routes[method][route.action].plugins.concat(route.plugins);
+			app.routes[method][route.action].function = arguments[arguments.length-1];
+			
+			//console.log('merge ->', app.routes[method][route.action]);
+		}
+		
+		/*
 		// Create Stack Trace
 		var trace = printStackTrace({e: new Error()});
 		
@@ -168,20 +218,12 @@ function MethodRouter(method){
 					argumentName: argumentName,
 				});
 			}
-		}
-		var keys = [];
-		var regex = pathToRegexp(action, keys);
-		app.routes[method][action] = {
-			function: arguments[arguments.length-1],
-			plugins: plugins,
-			regex: regex,
-			keys: keys,
-		}
+		}*/
 	}
 }
 
-App.prototype.get = MethodRouter('GET')
-App.prototype.post = MethodRouter('POST');
+App.prototype.get = App.prototype.router('GET');
+App.prototype.post = App.prototype.router('POST');
 
 
 // Diet Options
@@ -219,6 +261,7 @@ App.prototype.loaded = function(callback){
 		});
 		plugin.module.onload.apply({}, [plugin_context, plugin.options]);
 	}
+	
 	//app.log(App.name, 'total_plugins', total_plugins, App.plugins);
 	if(total_plugins > -1){
 		patch_plugin(0);
@@ -232,17 +275,35 @@ App.prototype.loaded = function(callback){
 	}
 }
 App.prototype.domains = {};
-App.prototype.start = function(domainName, callback){
+App.prototype.domain = function(domainName){
 	var app = this;
 	
-	// Domain Name
-	app.domain = domainName;
+	if(typeof domainName == 'string'){
+		// Domain Name
+		app.domain = domainName;
+		
+		// Location
+		app.location = url.parse(app.domain);
+		app.protocol = app.location.protocol.split(':')[0];
+		app.port = app.location.port || 80;
+		
+	} else if (typeof domainName == 'object') {
+		domainName = url.format(domainName);
+		
+		// Domain Name
+		app.domain = domainName;
+		
+		// Location
+		app.location = url.parse(app.domain);
+		app.protocol = app.location.protocol.split(':')[0];
+		app.port = app.location.port || 80;
 	
-	// Location
-	app.location = url.parse(app.domain);
-	app.protocol = app.location.protocol.split(':')[0];
-	app.port = app.location.port || 80;
-	
+	} else {
+		app.log('Error Domain must be a URL String or an URL Object.');
+	}
+}
+App.prototype.start = function(callback){
+	var app = this;
 	app.loaded(function(){
 		var port_used = false;
 		for(index in app.domains){
@@ -259,13 +320,18 @@ App.prototype.start = function(domainName, callback){
 			} else {
 				http.default(app);
 			}
+			
 		} else {
 			app.log('   -> HTTP Server is '+'listening'.yellow+' on ' + (app.domain).underline);
 		}
 		
+		// Reference All Domains in app.domains
+		app.domains[app.location.hostname] = app;
+		
+		
 		app.log('-----------------------------------------------------------------\n');
 		
-		app.domains[app.location.hostname] = app;
+		
 		if(callback) callback();
 	});
 }

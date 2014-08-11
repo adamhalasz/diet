@@ -1,13 +1,18 @@
 # **Diet**
-Diet is a beautiful, minimalistic, extensible web application framework for node.
+Diet is a tiny, fast, beautiful and extensible web application framework for node.js
 
 ![Diet.js on launch][1]
+
+## **Why another framework?**
+I believe most of frameworks for node.js (and other languages as well) are not straight forward when it comes to learn and extend them. Diet has a long way to go as well, but I believe it will help many developers to understand and design more complex server architectures with much less effort which is the goal of node.js after all.
+
 ## **What does diet do?**
 
- - **Plugins** that extend your apps functionality.
- - **URL Routing**.
- - **Domain Routing**.
+ - **The Plugin Framework** helps to write more reusable middlewares.
  - The **`$` Signal Argument**  is a combination of the request and response object. You can access the signal argument in every route and plugin. The signal helps to connect and send data between plugins/modules.
+ - **URL Routing** - Simple & Dynamic.
+ - **Domain Routing** - Supports subdomains & any domain
+ - Includes **[Sugar.js][2]** that extends native objects with helpful methods.  
 
 ## **Install**
 ```
@@ -17,16 +22,33 @@ npm install diet
 ## **Hello World!**
 ```js
 require('diet');
-
-app = new App();
-app.start('http://localhost:8000/');
+var app = new App();
+app.domain('http://localhost:8000/');
+app.start();
 app.get('/', function($){ 
     $.end('Hello World!'); 
 });
 ```
 
+# **Plugin Directory**
+We have a list of plugins categorized by their purpose in the wiki: 
+https://github.com/adamhalasz/diet/wiki/Plugins
+
+### **Officially Supported Diet Plugins**
+| Title              | Category           | Github & Docs       | Install |
+|:-------------------|-------------------:|:-------------------:|
+| **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     
+| **diet-static**    | Static Files         |       http://git.io/TMliZw | npm install diet-static
+| **diet-mysql**     | Database             |       http://git.io/qDgntw | npm install diet-mysql
+| **diet-mongo**     | Database             |       http://git.io/7nrOOA | npm install diet-mongo
+| **diet-mongoose**  | Database             |       http://git.io/XG95jA | npm install diet-mongoose
+| **diet-mail**      | Email                |       http://git.io/_Ymgkg | npm install diet-mail
+| **diet-cookies**   | Cookies              |       http://git.io/0FIk4A | npm install diet-cookies
+
+*Work in progress: diet-auth, diet-mysql-accounts, diet-mongo-accounts*
+
 ## **Hello HTML!**
-![Complete Hello World example with HTML Template][2]
+![Complete Hello World example with HTML Template][3]
 
 Setup a new project in **/project/index.js**
 ```js
@@ -34,13 +56,16 @@ Setup a new project in **/project/index.js**
 require('diet');
 
 // New App
-app = new App();
+var app = new App();
+
+// Domain
+app.domain('http://localhost:8000/');
 
 // Load HTML Parser Plugin
 app.plugin('diet-ect', { alias: 'html' });
 
 // Start the App
-app.start('http://localhost:8000/');
+app.start();
 
 // Listen on GET /
 app.get('/', function($){
@@ -62,12 +87,8 @@ And write an HTML view in **/project/static/index.html**
 </html> 
 ```
 
-# **Plugin Directory**
-We have a list of plugins categorized by their purpose in the wiki: 
-https://github.com/adamhalasz/diet/wiki/Plugins
-
 # **Signal ($)**
-The signal argument is used in the context of *Routes* and *Plugins*.
+The signal argument is used in the context of *Routes* and *Plugins*. It's an object containing important methods that help to serve requests. The signal argument also allows easy data transmission between plugins.
 
 ## **Example**
 ```js
@@ -256,13 +277,14 @@ app.get('/list/:view?', function($){
 ```
 
 # **Domains**
-In some cases you might want to serve multiple domains/sub-domains from the same node.js application. Diet handles this beautifully by calling a new instance of `App` and setting a domain upon starting it with `app.start(yourDomain)`
+In some cases you might want to serve multiple domains/sub-domains from the same node.js application. Diet handles this beautifully by calling a new instance of `App` and setting a domain upon starting it with `app.domain(yourDomain)`
 
 
 ## **Example Usage:**
 ```js
-app = new App();
-app.start('http://yourDomain.com/'); // <-- ! full url required
+var app = new App();
+app.domain('http://yourDomain.com/'); // <-- ! full url required
+app.start();
 ```
 ## **More Examples:**
 ```js
@@ -270,22 +292,25 @@ app.start('http://yourDomain.com/'); // <-- ! full url required
 require('diet');
 
 // Main Domain
-app = new App();
-app.start('http://example.com/');
+var app = new App();
+app.domain('http://example.com/');
+app.start();
 app.get('/', function($){
 	$.end('hello world ');
 });
 
 // Sub Domain
-sub = new App();
-sub.start('http://subdomain.example.com/');
+var sub = new App();
+sub.domain('http://subdomain.example.com/');
+sub.start();
 sub.get('/', function($){
 	$.end('hello world at sub domain!');
 });
 
 // Other Domain
-other = new App();
-other.start('http://other.com/');
+var other = new App();
+other.domain('http://other.com/');
+other.start();
 other.get('/', function($){
 	$.end('hello world at other domain');
 });
@@ -308,6 +333,22 @@ app.path;
 ```js
 // Start App
 app.start(async_callback); // callback is optional
+```
+```js
+// Set Domain
+app.domain(domainURL); 
+
+// domainURL should be a full url containing the protocol http or https 
+// and the / at the end like "http://example.com/"
+
+// domainURL can also be a Node.js URL Object such as
+{
+    host: "nodejs.org"
+    hostname: "nodejs.org"
+    origin: "http://nodejs.org"
+    port: 80,
+    protocol: "http:"
+}
 ```
 ```js
 // route http(s) requests
@@ -437,7 +478,7 @@ app.get('/', person, function($){
 ```
 
 # **Todos**
-Check out the upcoming features:
+Upcoming updates and features:
 https://github.com/adamhalasz/diet/wiki/Todos
 
 # **License**
@@ -463,5 +504,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-  [1]: http://i.imgur.com/9dGfAgM.png
-  [2]: http://i.imgur.com/PFUM2E5.png
+
+  [1]: http://i.imgur.com/YHq0HmY.png
+  [2]: http://sugarjs.com/
+  [3]: http://i.imgur.com/M8I3Dp0.png
