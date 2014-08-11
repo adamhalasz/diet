@@ -36,7 +36,6 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 
 ### **Officially Supported Diet Plugins**
 
-<<<<<<< HEAD
 | Plugin | Category | Github Docs | Install |
 | :------------ | :------------ | :------------ | :------------ |
 | **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     	|
@@ -47,19 +46,6 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 | **diet-mail**      | Email                |       http://git.io/_Ymgkg | npm install diet-mail 	|
 | **diet-cookies**   | Cookies              |       http://git.io/0FIk4A | npm install diet-cookies 	|
 
-=======
-| Title | Category | Github & Docs | Install |
-|:-------------------|:-------------------|:-------------------|
-| **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     
-| **diet-static**    | Static Files         |       http://git.io/TMliZw | npm install diet-static
-| **diet-mysql**     | Database             |       http://git.io/qDgntw | npm install diet-mysql
-| **diet-mongo**     | Database             |       http://git.io/7nrOOA | npm install diet-mongo
-| **diet-mongoose**  | Database             |       http://git.io/XG95jA | npm install diet-mongoose
-| **diet-mail**      | Email                |       http://git.io/_Ymgkg | npm install diet-mail
-| **diet-cookies**   | Cookies              |       http://git.io/0FIk4A | npm install diet-cookies
-
-*Work in progress: diet-auth, diet-mysql-accounts, diet-mongo-accounts*
->>>>>>> 6854746dc73594bb90ebbfa29b13f6b481292937
 
 ## **Hello HTML!**
 ![Complete Hello World example with HTML Template][3]
@@ -522,4 +508,3 @@ THE SOFTWARE.
   [1]: http://i.imgur.com/rTAMJF0.png
   [2]: http://sugarjs.com/
   [3]: http://i.imgur.com/M8I3Dp0.png
-
