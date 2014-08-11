@@ -60,10 +60,10 @@ require('diet');
 // New App
 var app = new App();
 
-// Domain
+// Set Domain
 app.domain('http://localhost:8000/');
 
-// Load HTML Parser Plugin
+// Load the HTML Template Engine
 app.plugin('diet-ect', { alias: 'html' });
 
 // Start the App
@@ -83,10 +83,9 @@ And write an HTML view in **/project/static/index.html**
 		<title>Hello World</title>
 	</head>
 	<body>
-		<h1>Hello World</h1>
-		Welcome to the <b>{{-this.page}}</b> page.
+		<h1>Hello World at the <u>{{-this.page}}</u> page!</h1>
 	</body>
-</html> 
+</html>
 ```
 
 # **Signal ($)**
