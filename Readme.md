@@ -35,6 +35,7 @@ We have a list of plugins categorized by their purpose in the wiki:
 https://github.com/adamhalasz/diet/wiki/Plugins
 
 ### **Officially Supported Diet Plugins**
+
 | Title              | Category           | Github & Docs       | Install |
 |:-------------------|-------------------:|:-------------------:|
 | **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     
