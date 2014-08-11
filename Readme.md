@@ -505,6 +505,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-  [1]: http://i.imgur.com/YHq0HmY.png
+  [1]: http://i.imgur.com/291wq8o.png
   [2]: http://sugarjs.com/
   [3]: http://i.imgur.com/M8I3Dp0.png
