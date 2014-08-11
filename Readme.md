@@ -35,17 +35,17 @@ We have a list of plugins categorized by their purpose in the wiki:
 https://github.com/adamhalasz/diet/wiki/Plugins
 
 ### **Officially Supported Diet Plugins**
-| Title              | Category           | Github & Docs       | Install |
-|:-------------------|-------------------:|:-------------------:|
-| **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     
-| **diet-static**    | Static Files         |       http://git.io/TMliZw | npm install diet-static
-| **diet-mysql**     | Database             |       http://git.io/qDgntw | npm install diet-mysql
-| **diet-mongo**     | Database             |       http://git.io/7nrOOA | npm install diet-mongo
-| **diet-mongoose**  | Database             |       http://git.io/XG95jA | npm install diet-mongoose
-| **diet-mail**      | Email                |       http://git.io/_Ymgkg | npm install diet-mail
-| **diet-cookies**   | Cookies              |       http://git.io/0FIk4A | npm install diet-cookies
 
-*Work in progress: diet-auth, diet-mysql-accounts, diet-mongo-accounts*
+| Plugin | Category | Github Docs | Install |
+| :------------ | :------------ | :------------ | :------------ |
+| **diet-ect**       | HTML Templates       |       http://git.io/q4rxng | npm install diet-ect     	|
+| **diet-static**    | Static Files         |       http://git.io/TMliZw | npm install diet-static	|
+| **diet-mysql**     | Database             |       http://git.io/qDgntw | npm install diet-mysql	|
+| **diet-mongo**     | Database             |       http://git.io/7nrOOA | npm install diet-mongo	|
+| **diet-mongoose**  | Database             |       http://git.io/XG95jA | npm install diet-mongoose	|
+| **diet-mail**      | Email                |       http://git.io/_Ymgkg | npm install diet-mail 	|
+| **diet-cookies**   | Cookies              |       http://git.io/0FIk4A | npm install diet-cookies 	|
+
 
 ## **Hello HTML!**
 ![Complete Hello World example with HTML Template][3]
