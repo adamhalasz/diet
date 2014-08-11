@@ -45,6 +45,8 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 | **diet-mongoose**  | Database             |       http://git.io/XG95jA | npm install diet-mongoose	|
 | **diet-mail**      | Email                |       http://git.io/_Ymgkg | npm install diet-mail 	|
 | **diet-cookies**   | Cookies              |       http://git.io/0FIk4A | npm install diet-cookies 	|
+| **diet-auth**   | Authentication              |       http://git.io/HDwgJg | npm install diet-auth 	|
+
 
 
 ## **Hello HTML!**
