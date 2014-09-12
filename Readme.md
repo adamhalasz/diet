@@ -30,17 +30,6 @@ I believe most of frameworks for node.js (and other languages as well) are not s
 npm install diet 
 ```
 
-## **Hello World!**
-```js
-require('diet');
-var app = new App();
-app.domain('http://localhost:8000/');
-app.start();
-app.get('/', function($){ 
-    $.end('Hello World!'); 
-});
-```
-
 # **Plugin Directory**
 We have a list of plugins categorized by their purpose in the wiki: 
 https://github.com/adamhalasz/diet/wiki/Plugins
