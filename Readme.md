@@ -41,7 +41,7 @@ app.get('/settings', db, session, protected, function($){
 ```
 
 #### **URL Routing**
-Smart express/synatra like routing.
+Smart express/sinatra like routing.
 ```js 
 app.get('/page/about' ...)
 app.get('/users/:id/'...)
