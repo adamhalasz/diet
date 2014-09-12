@@ -29,7 +29,6 @@ var http = require('./lib/http');
 var Next = require('nextjs');
 var url = require('url');
 var pathToRegexp = require('path-to-regexp');
-var execSync = require("exec-sync");
 var colors = require('colors');
 var callsite = require('callsite');
 var path = require('path');
@@ -38,7 +37,7 @@ var version = JSON.parse(fs.readFileSync(__dirname+'/package.json').toString()).
 var util = require('util');
 
 // Init Log
-console.log(execSync('clear'));
+process.stdout.write('\u001B[2J\u001B[0;0f');
 console.log((' Diet v'+version+' ').inverse + ' ☺'.grey);
 console.log(' http://dietjs.com/'.grey);
 
