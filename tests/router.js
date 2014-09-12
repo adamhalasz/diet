@@ -12,6 +12,7 @@ describe('Test: App Router', function(){
 		, function(done){
 			
 			app.get('/', function($){
+				console.log($.end);
 				$.end('Hello World!');
 			});
 			
