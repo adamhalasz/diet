@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "Diet is a tiny, fast, beautiful and extensible web application framework for node.js",
   "homepage": "http://dietjs.com/",
   "keywords": [
@@ -45,10 +45,14 @@
     "colors": ">=0.6.2",
     "path-to-regexp": ">=0.2.3",
     "callsite": ">=1.0.0",
-    "sugar": "1.4.1"
+    "sugar": "1.4.1",
+    "request": ">=2.40.0"
   },
   "main": "index.js",
   "engines": {
     "node": ">=0.8.21"
+  },
+  "scripts": {
+  	"test": "mocha tests"
   }
 }

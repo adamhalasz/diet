@@ -39,13 +39,28 @@ var util = require('util');
 
 // Init Log
 console.log(execSync('clear'));
-console.log((' Diet v'+version+' ').inverse);
-console.log(' http://dietjs.com/');
+console.log((' Diet v'+version+' ').inverse + ' ☺'.grey);
+console.log(' http://dietjs.com/'.grey);
 
 // Domain Class
-App = function(level){
+App = function(options){
 	var app = this;
-	this.level = app.level = level || 0;
+	var options = options ? options : {} ;
+	this.level = typeof options.level != undefined ? options.level : 0 ;
+	this.debug = typeof options.debug != 'undefined' ? options.debug : true ;
+	this.log = function(){
+		if(this.debug){
+			var array = Array.apply(null, arguments);
+			if(this.level > 0){
+				var gap = '';
+				for(i=0; i <= this.level; i++){
+					gap += '  ';
+				}
+				array.unshift(gap);
+			}
+			console.log.apply(this, array);
+		}
+	}
 	
 	// Process Path
 	var stack = callsite();
@@ -61,12 +76,6 @@ App = function(level){
 		var displayPath = app.path;
 	}
 	
-	app.log('');
-	app.log(' app '.yellow.inverse+(' '+app.dirName+' ').inverse
-	+ ' at '.grey + displayPath.grey);
-	app.log('-----------------------------------------------------------------');
-
-	
 	// Diet Router Listeners
 	app.routes = { GET:{}, POST: {} };
 	
@@ -75,7 +84,7 @@ App = function(level){
 
 	// Use Diet Plugin
 	app.plugin = function(name, options){
-		app.log('   -> Plugin ' + name.cyan + ' registered'.yellow);
+		app.log('   '+'⚑'.yellow+' Plugin ' + name.cyan + ' registered'.yellow);
 		
 		var lines = arguments.callee.caller.toString().split('\n');
 		
@@ -106,6 +115,11 @@ App = function(level){
 		
 		return plugin;
 	}
+	
+	app.log('');
+	app.log(' app '.yellow.inverse+(' '+app.dirName+' ').inverse
+	+ ' at '.grey + displayPath.grey);
+	app.log('-----------------------------------------------------------------'.grey);
 	
 	return app;
 }
@@ -270,7 +284,7 @@ App.prototype.loaded = function(callback){
 	}
 	
 	function finish(){
-		app.log('   -> Plugins are ready'.yellow);
+		app.log('   '+'✓'.yellow+' All plugins are '+'ready'.yellow);
 		if(callback) callback();
 	}
 }
@@ -326,26 +340,14 @@ App.prototype.start = function(callback){
 		}
 		
 		// Reference All Domains in app.domains
-		app.domains[app.location.hostname] = app;
+		app.domains[app.location.hostname+':'+app.location.port] = app;
 		
 		
-		app.log('-----------------------------------------------------------------\n');
+		app.log('-----------------------------------------------------------------\n'.grey);
 		
 		
 		if(callback) callback();
 	});
-}
-
-App.prototype.log = function(){
-	var array = Array.apply(null, arguments);
-	if(this.level > 0){
-		var gap = '';
-		for(i=0; i <= this.level; i++){
-			gap += '  ';
-		}
-		array.unshift(gap);
-	}
-	console.log.apply(this, array);
 }
 
 // Isset
