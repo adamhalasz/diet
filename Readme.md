@@ -25,7 +25,7 @@ Diet is a project with the goal to create the most powerful web application fram
 Diet has a powerful modular middleware structure for it's router. Middlewares in diet allow a chain of functions to work together by manipulating and passing data towards the chain. 
 
 For example:
-```
+```js
 // the first argument of a route is the path of the route. everything after the path is `plugin` middleware
 
 // `db` instruct this route to create a database connection
