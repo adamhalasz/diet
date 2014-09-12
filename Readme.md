@@ -1,5 +1,16 @@
 # **Diet**
-Diet is a tiny, fast, beautiful and extensible web application framework for node.js
+Fast extensible web framework for node.js
+```js
+require('diet');
+
+var app = new App();
+app.domain('http://localhost:8000/');
+app.start();
+
+app.get('/', function($){ 
+    $.end('Hello World!'); 
+});
+```
 
 ![Diet.js on launch][1]
 
