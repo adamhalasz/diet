@@ -1,5 +1,9 @@
-# **Diet**
-Fast extensible web framework for node.js
+# **Diet.js**
+Fast, plugin based, easy to learn web framework for [node][1]
+
+[![Build Status](http://img.shields.io/travis/adamhalasz/diet.svg?style=flat)](https://travis-ci.org/adamhalasz/diet) [![Build Status](http://img.shields.io/npm/v/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Build Status](http://img.shields.io/npm/dm/diet.svg?style=flat)](https://www.npmjs.org/package/diet)
+
+
 ```js
 require('diet');
 
@@ -12,18 +16,42 @@ app.get('/', function($){
 });
 ```
 
-![Diet.js on launch][1]
 
 ## **Why another framework?**
-I believe most of frameworks for node.js (and other languages as well) are not straight forward when it comes to learn and extend them. Diet has a long way to go as well, but I believe it will help many developers to understand and design more complex server architectures with much less effort which is the goal of node.js after all.
+Diet is a project with the goal to create the most powerful web application framework for node.js with the smallest learning curve. 
 
-## **What does diet do?**
+## **Features**
+#### **Plugins** 
+Diet has a powerful modular middleware structure for it's router. Middlewares in diet allow a chain of functions to work together by manipulating and passing data towards the chain. 
 
- - **The Plugin Framework** helps to write more reusable middlewares.
- - The **`$` Signal Argument**  is a combination of the request and response object. You can access the signal argument in every route and plugin. The signal helps to connect and send data between plugins/modules.
- - **URL Routing** - Simple & Dynamic.
- - **Domain Routing** - Supports subdomains & any domain
- - Includes **[Sugar.js][2]** that extends native objects with helpful methods.  
+For example:
+```
+// the first argument of a route is the path of the route. everything after the path is `plugin` middleware
+
+// `db` instruct this route to create a database connection
+// `session` grabs the account from the database with the session cookie
+// `protected` makes sure the user is logged in. if not redirects the user to `GET /accounts/login`
+
+//  if everything is ok. the last function terminates the request
+//  by sending back the `settings` html page.
+app.get('/settings', db, session, protected, function($){
+    $.data.page = 'settings';
+    $.html();
+});
+```
+
+#### **URL Routing**
+Smart express/synatra like routing.
+```js 
+app.get('/page/about' ...)
+app.get('/users/:id/'...)
+```
+
+#### **Multiple Domain Support**
+Diet supports hosting multiple websites/domains from the same node.js server.
+
+#### **Helpers**
+Includes **[Sugar.js][3]** that extends native objects with helpful methods.  
 
 ## **Install**
 ```
@@ -50,7 +78,7 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 
 
 ## **Hello HTML!**
-![Complete Hello World example with HTML Template][3]
+![Complete Hello World example with HTML Template][4]
 
 Setup a new project in **/project/index.js**
 ```js
@@ -506,6 +534,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-  [1]: http://i.imgur.com/rTAMJF0.png
-  [2]: http://sugarjs.com/
-  [3]: http://i.imgur.com/M8I3Dp0.png
+  [1]: http://nodejs.org/
+  [2]: http://i.imgur.com/rTAMJF0.png
+  [3]: http://sugarjs.com/
+  [4]: http://i.imgur.com/M8I3Dp0.png
