@@ -1,4 +1,4 @@
-require('diet');
+require('../');
 require('colors')
 
 describe('Test: App', function(){	

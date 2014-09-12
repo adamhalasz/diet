@@ -1,4 +1,4 @@
-require('diet');
+require('../');
 require('colors');
 var assert = require('assert');
 var request = require('request');

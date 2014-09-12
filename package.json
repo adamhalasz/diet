@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Diet is a tiny, fast, beautiful and extensible web application framework for node.js",
   "homepage": "http://dietjs.com/",
   "keywords": [
