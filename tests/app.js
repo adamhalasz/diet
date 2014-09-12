@@ -1,5 +1,6 @@
 require('../');
 require('colors')
+require('sugar');
 
 describe('Test: App', function(){	
 	it('new App()'.white+' - should create new App Instance listening on http://localhost:3000/'.grey, function(){

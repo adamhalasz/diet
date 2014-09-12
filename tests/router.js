@@ -1,5 +1,6 @@
 require('../');
 require('colors');
+require('sugar');
 var assert = require('assert');
 var request = require('request');
 
