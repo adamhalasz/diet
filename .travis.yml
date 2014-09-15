@@ -5,5 +5,5 @@ node_js:
   - "0.9"
   - "0.8"
 after_success:
-  - ./node_modules/.bin/jscoverage lib lib-cov
+  - ./node_modules/.bin/jscoverage tests tests-cov
   - ./node_modules/.bin/mocha tests/**.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
