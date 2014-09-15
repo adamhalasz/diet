@@ -150,7 +150,27 @@ App.route = function(){
 	for(index in arguments){
 		var argument = arguments[index];
 		
+		// object.hello.world -> world
 		var argumentName = args[index].trim();
+		if(argumentName.indexOf('.') != -1){
+			argumentName = argumentName.substr(argumentName.lastIndexOf('.')).split('.')[1];
+		}
+		
+		// object['hello']['yolo'] -> yolo
+		if(argumentName.indexOf('[\'') != -1){
+			console.log(argumentName);
+			argumentName = argumentName.substr(argumentName.lastIndexOf('[\''));
+			argumentName = argumentName.split('[\'')[1].split('\']')[0];
+		}
+		
+		// object["hello"]["you"] -> you
+		if(argumentName.indexOf('[\"') != -1){
+			console.log(argumentName);
+			argumentName = argumentName.substr(argumentName.lastIndexOf('[\"'));
+			argumentName = argumentName.split('[\"')[1].split('\"]')[0];
+			console.log(argumentName);
+		}
+		
 		if(typeof argument == 'object'){
 			plugins.push(Object.merge(argument, {
 				type: 'local_module',

@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "Fast, plugin based, easy to learn web framework for node",
   "homepage": "http://dietjs.com/",
   "keywords": [
@@ -47,6 +47,11 @@
     "sugar": "1.4.1",
     "request": ">=2.40.0",
     "mocha": "~1.21.4"
+  },
+  "devDependencies": {
+     "mocha": "~1.21.4",
+     "istanbul": "~0.3.2",
+     "coveralls": "~2.11.1"
   },
   "main": "index.js",
   "engines": {
