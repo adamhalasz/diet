@@ -360,13 +360,13 @@ app.get('/list/:view?', function($){
 In some cases you might want to serve multiple domains/sub-domains from the same node.js application. Diet handles this beautifully by calling a new instance of `App` and setting a domain upon starting it with `app.domain(yourDomain)`
 
 
-## **Example Usage:**
+## **Simple Single Domain:**
 ```js
 var app = new server()
 app.domain('http://yourDomain.com/') // <-- ! full url required
 app.start()
 ```
-## **More Examples:**
+## **Multiple Domains on the same and different Ports:**
 ```js
 // Diet
 var server = require('diet')
