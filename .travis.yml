@@ -5,9 +5,7 @@ node_js:
   - "0.9"
   - "0.8"
 before_install:
-  - npm install n
-  - sudo ./node_modules/.bin/n stable
-  - rm -rf ~/.nvm
+  - npm install mocha -g
 after_success:
   - ./node_modules/.bin/jscoverage tests tests-cov
   - ./node_modules/.bin/mocha tests/**.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
