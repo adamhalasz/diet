@@ -30,7 +30,7 @@ Diet is a project with the goal to create the most powerful web application fram
 
 ## **Features**
 #### **Plugins** 
-Diet has a powerful modular middleware structure for it's router. Middlewares in diet allow a chain of functions to work together by manipulating and passing data towards the chain. 
+Diet has a powerful modular middleware structure for it's router. Middlewares in diet allow a series of modules to work together by manipulating and passing data towards the `plugin chain`. 
 
 For example:
 ```js
@@ -128,9 +128,9 @@ And write an HTML view in **/project/static/index.html**
 # **Signal ($)**
 With standard node.js you would have the `request` and `response` in your callback for `http.createServer()`. Diet combines these two into one object and adds and fixes some commonly used methods in a more meaningful way to make our everyday life easier.
 
-The signal (`$`) of each route is also extendable by `plugins`. Plugins work together beautifully in diet because the signal `$` object allows to pass data between plugins. This helps to write more object oriented modular node.js applications.
+The signal (`$`) of each route can also be extended with `plugins`. Plugins work together seamlessly in diet because the signal `$` object allows to pass data between plugins while keeping plugin namespaces. When multiple plugins are assigned to a route they form a `plugin chain`. The plugin chain is the key to write much less code while still achieve complex tasks. 
 
-This super handy signal comes comes out in your `routes` and `plugins` as the first argument as you can see on the examples.
+The super handy signal object can be accessed in all your `routes` and `plugins` as the first argument as you can see on the examples.
 
 
 
