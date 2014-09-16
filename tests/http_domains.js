@@ -148,3 +148,17 @@ describe(subject + 'Create Multiple Apps on the same HTTP port (9003) with Diffe
 		});
 	})
 });
+
+describe(subject + 'One Line HTTP App', function(){	
+	it('should create a one line app with require(\'diet\').server() on http://localhost:9009/ and ping it to see if the response is `yo!` '.grey
+	, function(done){
+		require('diet').server('http://localhost:9009/').start().get('/', function($){ $.end('yo!'); });
+		request.get('http://localhost:9009/', function(error, response, body){
+			if(error) throw error;
+			assert.equal(body, 'yo!');
+			assert.equal(response.headers['content-type'], 'text/plain');
+			assert.equal(response.statusCode, 200);
+			done();
+		});
+	});
+});

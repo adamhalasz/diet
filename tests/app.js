@@ -21,7 +21,7 @@ describe(subject + 'Debug Option', function(){
 		done();
 	});
 	
-	it('server'.white+' - should create a new empty instance of App with debug: true option'.grey
+	it('server'.white+' - should create a new empty instance of server with debug: true option'.grey
 	, function(done){
 		var app = new server({debug: true});
 		done();
@@ -29,18 +29,18 @@ describe(subject + 'Debug Option', function(){
 });
 
 describe(subject + 'Level Option', function(){	
-	it('server'.white+' - should create a new empty instance of App with debug level 0'.grey
+	it('server'.white+' - should create a new empty instance of server with debug level undefined'.grey
 	, function(done){
-		var app = new server({level: undefined});
+		var app = new server();
 		done();
 	});
-	it('server'.white+' - should create a new empty instance of App with debug level 0'.grey
+	it('server'.white+' - should create a new empty instance of server with debug level 0'.grey
 	, function(done){
 		var app = new server({level: 0});
 		done();
 	});
 	
-	it('server'.white+' - should create a new empty instance of App with debug level 1'.grey
+	it('server'.white+' - should create a new empty instance of server with debug level 1'.grey
 	, function(done){
 		var app = new server({level: 1});
 		done();

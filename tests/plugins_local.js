@@ -44,12 +44,12 @@ describe(subject + 'Multi Level Local Plugins', function(){
 		};
 		
 		app.get('/suite/1', object.suite, function($){
-			$.end('Hi I am '+$.suite.sender+'. You reacher level ' + $.suite.level + '.');
+			$.end('Hi I am '+$.suite.sender+'. You reached level ' + $.suite.level + '.');
 		});		
 		
 		request.get('http://localhost:9003/suite/1', function(error, response, body){
 			if(error) throw error;
-			assert.equal(body, 'Hi I am Steve Wozniak. You reacher level 2.');
+			assert.equal(body, 'Hi I am Steve Wozniak. You reached level 2.');
 			assert.equal(response.headers['content-type'], 'text/plain');
 			assert.equal(response.statusCode, 200);
 			done();
