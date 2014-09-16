@@ -471,7 +471,7 @@ Writing diet plugins are almost identical to writing node.js modules except plug
 To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 coins` when the application starts.
 
 
-#### **1) Lesson 1: Requiring Plugins:**
+#### **1) Lesson 1: Require Plugins:**
 You can register plugins with `app.plugin()`. Plugins are only initialized after `app.start()` was executed. 
 ```js
 // cd ~/yourProject
