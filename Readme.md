@@ -7,8 +7,8 @@ Fast, plugin based, easy to learn web framework for [node][1]
 
 
 ```js
-var App = require('diet')
-var app = new App()
+var server = require('diet')
+var app = new server()
 
 app.domain('http://localhost:8000/').start()
 
