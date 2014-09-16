@@ -8,13 +8,11 @@ Fast, plugin based, easy to learn web framework for [node][1]
 
 ```js
 var server = require('diet')
-var app = new server()
+var app = new server().start();
 
-app.domain('http://localhost:8000/').start()
-
-app.get('/', function($){ 
+app.get('/', function($){
 	$.end('Hello World!')
-})
+});
 ```
 
 
@@ -84,10 +82,10 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 Setup a new project in **/project/index.js**
 ```js
 // Require Diet
-require('diet');
+var server = require('diet');
 
-// New App
-var app = new App();
+// Create an App
+var app = new server();
 
 // Set Domain
 app.domain('http://localhost:8000/');

@@ -53,11 +53,10 @@ describe(subject + 'Setup Domain with a String or a URL Object or Undefined', fu
 		});
 	});
 	
-	it('should create an app and setup the domain with an undefined domain and return the message "Cannot read property \'hostname\' of undefined"'.grey
+	it('should create an app with no domain specified app.domain should return "Error Domain was not specified." and app.start() should listen on http://localhost/"'.grey
 	, function(done){
 		var app = new server();
 		assert.equal(app.domain(undefined), 'Error Domain was not specified.');
-		assert.equal(app.start(), 'Error can\'t start app without specifing a Domain.');
 		done();
 	});
 	
@@ -65,7 +64,6 @@ describe(subject + 'Setup Domain with a String or a URL Object or Undefined', fu
 	, function(done){
 		var app = new server();
 		assert.equal(app.domain(9000), 'Error Domain must be a URL String or an URL Object.');
-		assert.equal(app.start(), 'Error can\'t start app without specifing a Domain.');
 		done();
 	});
 });
