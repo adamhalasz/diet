@@ -48,39 +48,39 @@ describe(subject + 'Create Multiple Apps on Different HTTP Ports', function(){
 	})
 });
 
-describe(subject + 'Create Multiple Apps on the same HTTP port (80) with Different Domains', function(){	
-	it('should create new App Instance listening on http://localhost/'.grey
+describe(subject + 'Create Multiple Apps on the same HTTP port (9003) with Different Domains', function(){	
+	it('should create new App Instance listening on http://test.local.com:9003/'.grey
 	, function(done){
 		var app = new App({debug: false});
-		app.domain('http://localhost/');
+		app.domain('http://test.local.com:9003/');
 		app.start();
 		
 		app.get('/', function($){
-			$.end('hello from localhost');
+			$.end('hello from http://test.local.com:9003/');
 		});
 		
-		request.get('http://localhost/', function(error, response, body){
+		request.get('http://test.local.com:9003/', function(error, response, body){
 			if(error) throw error;
-			assert.equal(body, 'hello from localhost');
+			assert.equal(body, 'hello from http://test.local.com:9003/');
 			assert.equal(response.headers['content-type'], 'text/plain');
 			assert.equal(response.statusCode, 200);
 			done();
 		});
 	});
 	
-	it('should create new App Instance listening on http://127.0.0.1/'.grey
+	it('should create new App Instance listening on http://test2.local.com:9003/'.grey
 	, function(done){
 		var app = new App({debug: false});
-		app.domain('http://127.0.0.1/');
+		app.domain('http://test2.local.com:9003/');
 		app.start();
 		
 		app.get('/', function($){
-			$.end('hello from 127.0.0.1');
+			$.end('hello from http://test2.local.com:9003/');
 		});
 		
-		request.get('http://127.0.0.1/', function(error, response, body){
+		request.get('http://test2.local.com:9003/', function(error, response, body){
 			if(error) throw error;
-			assert.equal(body, 'hello from 127.0.0.1');
+			assert.equal(body, 'hello from http://test2.local.com:9003/');
 			assert.equal(response.headers['content-type'], 'text/plain');
 			assert.equal(response.statusCode, 200);
 			done();

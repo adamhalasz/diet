@@ -5,7 +5,11 @@ node_js:
   - "0.9"
   - "0.8"
 before_install:
-  - npm install mocha -g
+  - echo "127.0.0.1	test.local.com" >> /etc/hosts
+  - echo "127.0.0.1	test2.local.com" >> /etc/hosts
+  - sudo apt-get install nscd
+  - sudo /etc/init.d/nscd restart
+  - sudo /etc/init.d/dns-clean start
 after_success:
   - ./node_modules/.bin/jscoverage tests tests-cov
   - ./node_modules/.bin/mocha tests/**.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
