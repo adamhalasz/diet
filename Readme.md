@@ -150,9 +150,9 @@ app.get('/ ', function($){  // <-- the `$` sign is the signal argument
 | **$.params**  | Object        | URL params from dynamic page routes like `/user/:id`
 | **$.data**    | Object       | used in `html templates` and `$.json()` responses
 | **$.body**    | Object        | JSON Parsed POST body data
-| **$.headers** | Object        | An object of all headers.
+| **$.headers** | Object        | An object of all the headers.
 | **$.header(get, set)**     | Function        | Get or Set Headers. The second argument is for SET, if left empty it's GET.
-| **$.redirect(path)**     | Function        | Redirect the request to a different path. `path` is requried, `statusCode` is optional.
+| **$.redirect(path, statusCode)**     | Function        | Redirect the request to a different path. `path` is requried, `statusCode` is optional.
 | **$.end(message)**     | Function        | End the response with an optional `message` 
 | **$.method**     | String        | The method of the request it's eiher GET or POST
 | **$.multipart**     | Boolean        | Check if a POST request's enctype is is multipart or not. The value is a boolean: `true` or `false`. 
