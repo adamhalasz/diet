@@ -442,10 +442,10 @@ app.start()
 // cd ~/yourProject/node_modules/bank
 exports.onload = function(app, options){
     // let's see how much coins the bank has
-    console.log('   # The "'+options.name+' Bank" '+'has ['+ options.vault +'] coins.') 
+    console.log('   # The "'+ options.name +' Bank"'
+		          + ' has ['+ options.vault +'] coins.') 
     
-    // -> The "John Doe Bank" has [6] coins.
-
+    // prints -> The "John Doe Bank" has [6] coins.
     // then we need to return the plugin
     app.return() 
 }
@@ -454,7 +454,7 @@ exports.onload = function(app, options){
 #### **3) Lesson 3: Create a Global Plugin for all routes:**
 Everyone who visits our site will be able to see and change it's value with the `deposit` and `withdraw` methods.
 
-Let's extend our example plugin with `exports.global` inside `exports.onload`:
+Let's extend our bank plugin with `this.global` inside `exports.onload`:
 ```js
 // cd ~/yourProject/node_modules/bank
 // Note: `app` and `options` are stored in memory
