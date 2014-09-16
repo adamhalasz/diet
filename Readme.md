@@ -419,7 +419,7 @@ app.post('/path', pluginA, pluginB .., function($){ ... })
 # **Writing Diet Plugins**
 Writing diet plugins are almost identical to writing node.js modules except plugins have a different require method and are directly connected to your routes.
 
-To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 coins` when the start applications.
+To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 coins` when the application starts.
 
 
 #### **1) Lesson 1: Requiring Plugins:**
