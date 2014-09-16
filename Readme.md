@@ -19,7 +19,7 @@ app.get('/', function($){
 ```
 
 ```js
-// 1 line server
+// 1 line server app
 require('diet').server().start().get('/', function($){ $.end('yo!'); })
 ```
 
@@ -42,9 +42,9 @@ For example:
 //  if everything is ok. the last function terminates the request
 //  by sending back the `settings` html page.
 app.get('/settings', db, session, protected, function($){
-    $.data.page = 'settings';
-    $.html();
-});
+    $.data.page = 'settings'
+    $.html()
+})
 ```
 
 #### **URL Routing**
