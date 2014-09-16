@@ -26,11 +26,7 @@ require('diet').server().start().get('/', function($){ $.end('yo!') })
 
 
 ## **Why another framework?**
-Diet is a project aiming to create the most powerful web application framework for node.js with the smallest learning curve. 
-
-Diet's long-term approach is reduce the complexity of building application infrastructure with smart inter-connected modules. To do so diet's focus is on building modules in a smarter way.
-
-No other framework is as flexible when it comes to middlewares and 
+Diet is a project aiming to create the most powerful node.js web application framework with the smallest learning curve and the most fun to use. The focus is on making it easier to build more connected & smarter modules to reduce the complexity of building application infrastructure and logic. 
 
 ## **Features**
 #### **Plugins** 
@@ -401,43 +397,33 @@ other.get('/', function($){
 ```
 
 ## **Domain Methods**
-Each domain inherits these methods:
-```js
-// include a plugin
-app.plugin('plugin_name', configObject) // config is optional
-```
-```js
-// path of your application. `process.cwd()` by default
-app.path
-```
-```js
-// Start App
-app.start(async_callback) // callback is optional
-```
+
+| Method | Description |
+| :------------ | :------------  
+| **app.plugin('plugin_name', config)**         | includes a plugin, config is an optional object
+| **app.start(callback)**         | Starts the application by loading plugins and launchung the HTTP(S) Server. callback is optional
+| **app.domain(url)**         | Specifiy the domain your server will listen to. `url` can be a URL string or Node.js URL Object
+| **app.get(path, plugins...)**         | Register a GET Route
+| **app.post(path, plugins...)**         | Register a POST Route
+| **app.path**         | The system path to your application. It is `process.cwd()` by default
+
+
+**Example for app.domain()**
 ```js
 // Set Domain
-app.domain(domainURL) 
+app.domain(url) 
 
-// domainURL should be a full url containing the protocol http or https 
-// and the / at the end like "http://example.com/"
+// `url` should be a full URL containing the protocol http or https 
+// and the / at the end like:
+// "http://example.com/"
 
-// domainURL can also be a Node.js URL Object such as
+// `url` can also be a Node.js URL Object such as
 {
-    host: "nodejs.org"
     hostname: "nodejs.org"
     origin: "http://nodejs.org"
     port: 80,
     protocol: "http:"
 }
-```
-```js
-// route http(s) requests
-app.get('/path', pluginA, pluginB .., function($){ ... })
-app.post('/path', pluginA, pluginB .., function($){ ... })
-
-// the first argument is the path. 
-// the last argument is your custom ending function
-// any argument between the first and last is a local plugin
 ```
 
 # **Writing Diet Plugins**
@@ -565,11 +551,7 @@ Sweet! I admit it's a pretty retarded bank app, but hey I hope at least you've g
 
 ....UNDER CONSTRUCTION....
 
-#### **There are 5 ways to write and use plugins**
-
-| Method | written as a | Description |
-| :------------ | :------------ | :------------  
-| **onload**     | module method        | in your module you can assign a function to `exports.onload` if you need configuration variables from the configOptions `app.plugin('yourPlugin', {..configOptions..})`
+#### **Plugin Types**
 
 Plugins may be all or at least one of these types:
 
@@ -578,114 +560,6 @@ Plugins may be all or at least one of these types:
 - **Custom** module plugin
 - **Local** module plugin
 - **Local ** stand alon function plugin
-	
-## **Onload Plugins**
-The onload 
-
-**An Example Plugin:**
-```js  
-// node_modules/example/index.js
-exports.onload = function($){ 
-    this.
-    $.return()
-}
-```
-```js
-// project/index.js
-var server = require('diet')
-new server()
- .domain('http://localhost:8000/')
- .plugin('example')
- .start()
-
-```
-## **Global Plugins**
-Global plugins run on all incoming HTTP requests/routes. Global plugins can be handy when you need certain functionalities in all or a specific type of routes for example sessions & static file handling.
-
-**Example Plugin:**
-```js
-// project/example.js
-var path = require('path')
-module.exports.global = function($){
-    this.extension = path.extname($.url.href)
-    $.return(this)
-}
-```
-```js
-// project/index.js
-var server = require('diet')
-
-app = new server()
-app.plugin('example.js')
-app.start('http://localhost:8000/')
-
-app.get('/', function($){
-    $.end('Extension is ' + $.example.extension)
-})
-
-app.get('/image.jpg', function($){
-    $.end('Extension is ' + $.example.extension)
-})
-```
-```
-// terminal
-curl 'http://localhost:8000/'
--> Extension is undefined
-
-curl 'http://localhost:8000/image.jpg'
--> Extension is .jpg
-```
-
-## **Local Plugins**
-Local plugins run on specified routes. Local plugins are handy for organizing your code for optimization, so each plugin is required only when it is actually needed.
-
-**Example Local Plugin as a Module:**
-```js
-// project/example.js
-module.exports.local = function($){
-    this.name = 'Adam'
-    this.age = 20
-    $.return(this)
-}
-```
-```js
-// project/index.js
-var server = require('diet')
-app = new server()
-var person = app.plugin('example.js')
-app.start('http://localhost:8000/')
-
-app.get('/', person, function($){
-    $.end('Hi I am ' + $.person.name + ', '  + $.person.age + ' old.')
-    // -> Hi I am Adam, 20 years old.
-})
-```
-
-**Example Local Plugin as a Function:**
-Local plugins can also be created as functions
-```js
-// project/index.js
-var server = require('diet')
-
-// Create New App
-app = new server()
-
-// Start App
-app.start('http://localhost:8000/')
-
-// Define Local Plugin
-function person($){
-    this.name = 'Adam'
-    this.age = 20
-    $.return(this)
-}
-
-// Use person in GET / route
-app.get('/', person, function($){
-    $.end('Hi I am, ' + $.person.name + ', '  + $.person.age + ' old')
-    // -> Hi I am Adam, 20 years old.
-})
-```
 
 # **Todos**
 Upcoming updates and features:
