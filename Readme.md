@@ -417,35 +417,37 @@ app.post('/path', pluginA, pluginB .., function($){ ... })
 ```
 
 # **Writing Diet Plugins**
-Writing diet plugins are almost identical to writing node.js modules except plugins have a different require method and are directly connected to your routes.
+Writing diet plugins are almost identical to writing node.js modules except plugins have a different require method and are directly connected to Routes.
 
 To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 coins` when the application starts.
 
 
 #### **1) Lesson 1: Requiring Plugins:**
+You can register plugins with `app.plugin()`. Plugins are only initialized after `app.start()` was executed. 
 ```js
 // cd ~/yourProject
 var server = require('diet')
 var app = new server()
+app.domain('http://localhost:8000/');
 
 // require the bank plugin from the node_modules folder
 app.plugin('bank', { name: 'John Doe', vault: 6 })
+
+// start the application
+app.start()
 ```
 
 #### **2) Lesson 2: Accessing custom options from the source code of the plugin:**
 ```js
 // cd ~/yourProject/node_modules/bank
 exports.onload = function(app, options){
-	// create some shortcuts
-	var name = options.name
-	var vault = options.vault
-
     // let's see how much coins the bank has
-	console.log('The "'+name+' Bank" '+'has ['+ vault +'] coins.') 
-	// -> The "John Doe Bank" has [6] coins.
-	
-	// then we need to return the plugin
-	app.return() 
+    console.log('   # The "'+options.name+' Bank" '+'has ['+ options.vault +'] coins.') 
+    
+    // -> The "John Doe Bank" has [6] coins.
+
+    // then we need to return the plugin
+    app.return() 
 }
 ```
 
@@ -455,38 +457,28 @@ Everyone who visits our site will be able to see and change it's value with the 
 Let's extend our example plugin with `exports.global` inside `exports.onload`:
 ```js
 // cd ~/yourProject/node_modules/bank
+// Note: `app` and `options` are stored in memory
 
-// let's store the `vault` in memory 
-// until our server is running
-var vault = 6;
-
-exports.onload = function(app, options){
-    // We store these variables in memory
-    // because we want all visitors 
-    // able to see and change it
-	var name = options.name
-	var vault = options.vault
-	
-	exports.global = function($){
+exports.onload = function(app, options){	
+	this.global = function($){
 		// this creates a new instance 
-		// of the $.bank in everyone individual
-		// visitors route
-		this.name = name
-		this.vault = vault
+		// of the $.bank in everyone visitors route
+		this.name = options.name
+		this.vault = options.vault
 		this.deposit = function(amount){
-			vault += amount
+			options.vault += parseInt(amount)
 		}
-		this.widthraw = function(value){
-			vault -= value
+		this.withdraw = function(amount){
+			options.vault -= parseInt(amount)
 		}
 		$.return(this)
 	}
-	app.return()
+	app.return(this)
 }
 ```
-Now let's extend our `index.js` file with `routes` so visitors can `view` the vault and `withdraw`/ `deposit` coins;
+Now that we created the plugin we can access the `$.bank` in all Routes of the application. Let's extend our `index.js` file with some `Routes` so visitors can `view` the vault and `withdraw`/ `deposit` coins;
 ```js
-// cd ~/yourProject
+// cd ~/yourProject/index.js
 var server = require('diet')
 var app = new server()
 
@@ -496,47 +488,54 @@ app.domain('http://localhost:8000/')
 // use the bank plugin
 app.plugin('bank', { name: 'John Doe', vault: 6 })
 
-// On GET / print The "Y Bank" owns X coins"
+// start the application
+app.start()
+
+// instruct our app to
+// print 'The "Y Bank" owns X coins'
+// upon visiting /
 app.get('/', function($){
 	$.end('The "'+ $.bank.name +' Bank" '
-	    + 'owns ['+ $.bank.vault +'] coins.')
-});
-
-// upon visiting /banks/deposit/10 
-// deposit X amount coins into the vault 
-app.get('/banks/deposit/:amount', function($){
-	$.bank.deposit($.params.amount);
-	$.redirect('home');
+	    + 'has ['+ $.bank.vault +'] coins.')
 })
 
-// upon visiting /banks/withdraw/5 
-// withdraw X amount coins from the vault 
-app.get('/banks/withdraw/:amount', function($){
-	$.bank.withdraw($.params.amount);
-	$.redirect('home');
+// instruct our app to
+// deposit X amount coins into the vault 
+// upon visiting /banks/deposit/10 
+app.get('/bank/deposit/:amount', function($){
+	$.bank.deposit($.params.amount)
+	$.redirect('home')
+})
+
+// instruct our app to
+// withdraw X amount coins from the vault
+// upon visiting /banks/withdraw/5  
+app.get('/bank/withdraw/:amount', function($){
+	$.bank.withdraw($.params.amount)
+	$.redirect('home')
 })
 ```
-Look's like we are done! Navigate to your project's folder in your terminal and run the application:
+And we're done! Now navigate to your project's folder in your terminal and run the application:
 ```bash
 # bash screen 1
 cd ~/yourProject/
 node index.js
 ```
 
-Now open another terminal screen and let's test this:
+Now open another terminal screen and let's test the app:
 ```bash
 # bash screen 2
 curl "http://localhost:8000/"
 // The "John Doe Bank" owns [6] coins.
 
-curl "http://localhost:8000/bank/deposit/10"
+curl -L "http://localhost:8000/bank/deposit/10"
 // The "John Doe Bank" owns [16] coins.
 
-curl "http://localhost:8000/bank/widthraw/9"
+curl -L "http://localhost:8000/bank/widthraw/9"
 // The "John Doe Bank" owns [7] coins.
 
 ```
-Sweet! I admit it's a pretty bumb bank yet, but at least I hope you've got the idea behind `global plugins`.
+Sweet! I admit it's a pretty retarded bank app, but hey I hope at least you've got some of the ideas behind the `global plugins`.
 
 #### **3) Lesson 4: Create a Local Plugin:**
 
