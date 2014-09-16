@@ -92,7 +92,7 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 Setup a new project in **/project/index.js**
 ```js
 // Require Diet
-var server = var server = require('diet')
+var server = require('diet')
 
 // Create an App
 var app = new server()
