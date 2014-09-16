@@ -1,7 +1,9 @@
 # **Diet.js**
 Fast, plugin based, easy to learn web framework for [node][1]
 
-[![Build Status](http://img.shields.io/travis/adamhalasz/diet.svg?style=flat)](https://travis-ci.org/adamhalasz/diet) [![Build Status](http://img.shields.io/npm/v/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Build Status](http://img.shields.io/npm/dm/diet.svg?style=flat)](https://www.npmjs.org/package/diet)
+[![Build Status](http://img.shields.io/travis/adamhalasz/diet.svg?style=flat)](https://travis-ci.org/adamhalasz/diet) [![NPM](http://img.shields.io/npm/v/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Downloads](http://img.shields.io/npm/dm/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Coveralls](http://img.shields.io/coveralls/adamhalasz/diet.svg?style=flat)](https://coveralls.io/r/adamhalasz/diet)
+
+
 
 
 ```js
