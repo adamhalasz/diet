@@ -20,13 +20,17 @@ app.get('/', function($){
 ```
 
 ```js
-// 1 line server app
+// 1 line http server
 require('diet').server().start().get('/', function($){ $.end('yo!') })
 ```
 
 
 ## **Why another framework?**
-Diet is a project with the goal to create the most powerful web application framework for node.js with the smallest learning curve. 
+Diet is a project aiming to create the most powerful web application framework for node.js with the smallest learning curve. 
+
+Diet's long-term approach is reduce the complexity of building application infrastructure with smart inter-connected modules. To do so diet's focus is on building modules in a smarter way.
+
+No other framework is as flexible when it comes to middlewares and 
 
 ## **Features**
 #### **Plugins** 
@@ -49,7 +53,7 @@ app.get('/settings', db, session, protected, function($){
 ```
 
 #### **URL Routing**
-Smart express/sinatra like routing.
+Smart & easy to use sinatra like routing.
 ```js 
 app.get('/page/about' ...)
 app.get('/users/:id/'...)
@@ -120,17 +124,19 @@ And write an HTML view in **/project/static/index.html**
 		<title>Hello World</title>
 	</head>
 	<body>
-		<h1>Hello World at the <u>{{-this.page}}</u> page!</h1>
+		<h1>Hello World on the <u>{{-this.page}}</u> page!</h1>
 	</body>
 </html>
 ```
 
 # **Signal ($)**
-With standard node.js you would have the `request` and `response` in your callback for `http.createServer()`. Diet combines these two into one object and adds and fixes some commonly used methods in a more meaningful way to make our everyday life easier.
+With standard node.js you would have the `request` and `response` in your callback when using `http.createServer()`. 
 
-The signal (`$`) of each route can also be extended with `plugins`. Plugins work together seamlessly in diet because the signal `$` object allows to pass data between plugins while keeping plugin namespaces. When multiple plugins are assigned to a route they form a `plugin chain`. The plugin chain is the key to write much less code while still achieve complex tasks. 
+Diet combines these two objects into one then adds and fixes some commonly used methods in a more meaningful way for everyday use.
 
-The super handy signal object can be accessed in all your `routes` and `plugins` as the first argument as you can see on the examples.
+The signal (`$`) of each route can also be extended with `Plugins`. Plugins work together seamlessly in diet because the signal (`$`) object allows to pass data between plugins while keeping plugin namespace references. When multiple plugins are assigned to a route they form a `plugin chain`. The plugin chain is the key to write much less code and still achieve complex tasks. 
+
+The handy signal object can be accessed in all the  `Routes` and `Plugins` as the first argument as you can see on the examples.
 
 
 
@@ -149,6 +155,7 @@ app.get('/ ', yo, function($){  // <-- `$` the dollar sign is the signal object
 ```
 
 ## **Signal Methods**
+This is a list of methods that you can access and use
 
 | Method | Type | Description |
 | :------------ | :------------ | :------------  
@@ -161,6 +168,7 @@ app.get('/ ', yo, function($){  // <-- `$` the dollar sign is the signal object
 | **$.header(get, set)**     | Function        | Get or Set Headers. The second argument is for SET, if left empty it's GET.
 | **$.redirect(path, statusCode)**     | Function        | Redirect the request to a different path. `path` is requried, `statusCode` is optional.
 | **$.end(message)**     | Function        | End the response with an optional `message` 
+| **$.chain()**     | Function        | Create a plugin chain manually on the fly inside a route 
 | **$.method**     | String        | The method of the request it's eiher GET or POST
 | **$.multipart**     | Boolean        | Check if a POST request's enctype is is multipart or not. The value is a boolean: `true` or `false`. 
 | **$.noRoute**     | Boolean        | Check if a request has a matching registered route from `app.get` or `app.post`. The value is a boolean: `true` or `false`.
@@ -217,19 +225,16 @@ $.headers = { host: 'example.com',
   cookie: 'id=999' }
 ```
 
-#### **$.header** - *function*
+#### **$.header(get, set)** - *function*
 Get or Set Headers. The second argument is for SET, if left empty it's GET. 
 ```js
 $.header('cookie')                    // GET `cookie` -> 'id=999'
 $.header('content-type', 'text/html') // SET `content-type` to `text/html`
 ```
 
-#### **$.redirect** - *function*
+#### **$.redirect(path, statusCode)** - *function*
 Redirect the request to a different path. `path` is requried, `statusCode` is optional.
-```js
-// api
-$.redirect(path, statusCode)
-```
+
 **Redirect to a Path**
 ```js
 $.redirect('/to/some/path')        // internal redirect 
@@ -264,11 +269,30 @@ $.method // -> GET
 $.method // -> POST
 ```
 
-#### **$.end** - *function*
+#### **$.end(message)** - *function*
 A function that ends the response and send back data to the requesting device.
 ```js
 app.get('/', function($){
     $.end('end response')
+})
+```
+
+#### **$.chain()** - *function*
+Creates a plugin chain manually on the fly inside a route. This is useuful when you would like a create shortcut plugin that runs several other ones.
+
+##### **Methods**
+| Method | Description |
+| :------------ | :------------  
+| **chain.plugin(pluginName, pluginPath)**         | Add a plugin to the chain
+| **chain.load(readyCallback)**         | Load the plugins into the chain in one-by-one after each other. readyCallback runs when all the plugins are ready. 
+
+```js
+app.get('/', function($){
+	var chain = new $.chain()
+	chain.plugin('session', app.accounts.session);
+	chain.plugin('avatar', app.accounts.avatar);
+	chain.plugin('alerts', app.alerts);
+	chain.load($.return);
 })
 ```
 
