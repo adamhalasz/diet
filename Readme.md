@@ -133,7 +133,7 @@ And write an HTML view in **/project/static/index.html**
 ```
 
 # **Signal ($)**
-With standard node.js you would have the `request` and `response` in your callback when using `http.createServer()`. 
+With the default node.js you would have the `request` and `response` in your callback when using `http.createServer()`. 
 
 Diet combines these two objects into one then adds and fixes some commonly used methods in a more meaningful way for everyday use.
 
