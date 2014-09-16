@@ -1,6 +1,6 @@
 [![Diet.js](http://imgur.com/3LBDJRB.png)](https://dietjs.com/) 
 
-Fast, plugin based, easy to use web framework for [node][1]
+Fast, plugin based, easy to use HTTP(s) framework for [node][1]
 
 [![Build Status](http://img.shields.io/travis/adamhalasz/diet.svg?style=flat)](https://travis-ci.org/adamhalasz/diet) [![NPM](http://img.shields.io/npm/v/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Downloads](http://img.shields.io/npm/dm/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Coveralls](http://img.shields.io/coveralls/adamhalasz/diet.svg?style=flat)](https://coveralls.io/r/adamhalasz/diet)
 
@@ -26,27 +26,34 @@ require('diet').server().start().get('/', function($){ $.end('yo!') })
 
 
 ## **Why another framework?**
-Diet is a project aiming to create the most powerful node.js web application framework with the smallest learning curve and the most fun to use. The focus is on making it easier to build more connected & smarter modules to reduce the complexity of building application infrastructure and logic. 
+
+#### **A framework exclusively for HTTP and HTTPS**
+Diet is solely focusing on being a framework for HTTP(s) to serve Requests with Responses. As such diet has `Plugins` a special module framework designed to reduce the complexity of building application infrastructure and logic by inter-connecting modules with `Plugins` trough the `Router`. **This is all what Diet does** regarding it's functionality.
+
+#### **Standardized but still Expressive**
+What is human readable and if it worths is controversial amongst many people. We are drawing a fine line between keeping the method names all written out and try to set the basic namings in stone while making it possible to organize and call all the methods in many different ways.
+
+#### **Easier to Learn**
+Diet is a project aiming to create the most powerful node.js web application framework with the smallest learning curve.  A wide range of Examples and Tutorials are currently in progress.
 
 ## **Features**
 #### **Plugins** 
-Diet has a powerful modular middleware structure for it's router. Middlewares in diet allow a series of modules to work together by manipulating and passing data towards the `plugin chain`. 
+Diet has a very powerful modular middleware structure for it's `Router`. Middlewares in diet allow unlimited series of modules to work together by manipulating and passing data towards the `plugin chain`. 
 
-For example:
+**An example GET Route** 
+assuming `db`, `session` and `protected` is already defined:
 ```js
-// the first argument of a route is the path of the route. everything after the path is `plugin` middleware
-
-// `db` instruct this route to create a database connection
-// `session` grabs the account from the database with the session cookie
-// `protected` makes sure the user is logged in. if not redirects the user to `GET /accounts/login`
-
-//  if everything is ok. the last function terminates the request
-//  by sending back the `settings` html page.
 app.get('/settings', db, session, protected, function($){
     $.data.page = 'settings'
     $.html()
 })
 ```
+- `the first argument` of a route is the **Path**. Everything after the Path is *plugin middleware* that forms a *plugin chain*
+
+- `db` instruct this route to create a database connection 
+- `session` grabs the account from the database with the session cookie
+- `protected` makes sure the user is logged in. if not redirects the user to `GET /accounts/login`
+- `the last argument` terminates the request by sending back the *settings* html page.
 
 #### **URL Routing**
 Smart & easy to use sinatra like routing.
@@ -494,9 +501,9 @@ exports.onload = function(app, options){
 ```
 
 #### **3) Lesson 3: Create a Global Plugin for all routes:**
-Everyone who visits our site will be able to see and change it's value with the `deposit` and `withdraw` methods.
+Everyone who visits the app will be able to see and change the value of the vault with the `deposit` and `withdraw` methods.
 
-Let's extend our bank plugin with `this.global` inside `exports.onload`:
+Let's extend our bank plugin with a `global` function inside `exports.onload`:
 ```js
 // cd ~/yourProject/node_modules/bank
 // Note: `app` and `options` are stored in memory
@@ -518,7 +525,7 @@ exports.onload = function(app, options){
 	app.return(this)
 }
 ```
-Now that we created the plugin we can access the `$.bank` in all Routes of the application. Let's extend our `index.js` file with some `Routes` so visitors can `view` the vault and `withdraw`/ `deposit` coins;
+Now that we created the plugin we can access the `$.bank` in all Routes of the `app`. Let's extend our *index.js* file with some `Routes` so visitors can `see` the vault and `withdraw`/ `deposit` coins;
 ```js
 // cd ~/yourProject/index.js
 var server = require('diet')
@@ -557,7 +564,7 @@ app.get('/bank/withdraw/:amount', function($){
 	$.redirect('home')
 })
 ```
-And we're done! Now navigate to your project's folder in your terminal and run the application:
+And we're done! Navigate to your project's folder in your terminal and run the application:
 ```bash
 # bash screen 1
 cd ~/yourProject/
