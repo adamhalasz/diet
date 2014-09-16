@@ -477,7 +477,7 @@ You can register plugins with `app.plugin()`. Plugins are only initialized after
 // cd ~/yourProject
 var server = require('diet')
 var app = new server()
-app.domain('http://localhost:8000/');
+app.domain('http://localhost:8000/')
 
 // require the bank plugin from the node_modules folder
 app.plugin('bank', { name: 'John Doe', vault: 6 })
@@ -525,7 +525,7 @@ exports.onload = function(app, options){
 	app.return(this)
 }
 ```
-Now that we created the plugin we can access the `$.bank` in all Routes of the `app`. Let's extend our *index.js* file with some `Routes` so visitors can `see` the vault and `withdraw`/ `deposit` coins;
+Now that we created the plugin we can access the `$.bank` in all Routes of the `app`. Let's extend our *index.js* file with some `Routes` so visitors can `see` the vault and `withdraw`/ `deposit` coins.
 ```js
 // cd ~/yourProject/index.js
 var server = require('diet')
