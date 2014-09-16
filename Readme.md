@@ -139,11 +139,11 @@ The super handy signal object can be accessed in all your `routes` and `plugins`
 var server = require('diet')
 
 app = new server()
-app.plugin('plugin_name')
+app.plugin('yo')
 app.start('http://localhost:8000/')   
 
-app.get('/ ', function($){  // <-- the `$` sign is the signal argument
-    $.end('hello world')
+app.get('/ ', yo, function($){  // <-- `$` the dollar sign is the signal object
+    $.end($.yo.sender + ' says ' + $.yo.message) // -> John says Yo!
 })
 ```
 
