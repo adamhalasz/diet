@@ -303,20 +303,28 @@ Check if a request has a matching registered route from `app.get` or `app.post`.
 
 
 # **Routing**
-The global signal is a Function Object. As a function you can use it to setup your applications routes. 
+Routing is the method that we describe when we pre-register a response to an anticipated incoming request from a client like a web browser, mobile or desktop app. In other words Routing is the way to prepare your app for the battle.
+
+In this section I'm going to discuss the 2 supported `http methods`,  `get` and `post` and show examples of `simple routing` and `dynamic` routing using the `path` argument.
 
 ## **Simple Routing**
-Diet supports `get` and `post` methods.
+Diet supports the `get` and `post`  routing methods.
 ```js
-// examples
-app.get('/', ...)            // GET  http://example.com/
-app.get('/about', ...)       // GET  http://example.com/about
-app.get('/articles', ...)    // GET  http://example.com/articles
-app.post('/article', ...)      // POST http://example.com/article
+app.get('/', ...)            
+// curl http://example.com/
+
+app.get('/about', ...)       
+// curl  http://example.com/about
+
+app.get('/article/:id', ...)    
+// curl http://example.com/articles/89934
+
+app.post('/profile', ...)     
+// curl -X POST http://example.com/profile
 ```
 
 ## **Dynamic Routing**
-Diet supports Sinatra/Express like dynamic routing. Everything in the route path after `:` is passed to `$.params` with the name you provided.
+Diet supports Sinatra like dynamic routing. Everything in the route path after `:` is passed to `$.params` with the name you provided.
 
 ### **Get user by id**
 As you can see `:id` becomes `$.params.id` which holds the value from the URL.
@@ -358,8 +366,30 @@ app.get('/list/:view?', function($){
 // -> Display #Gallery View
 ```
 
+## **When to use GET or POST?**
+
+#### **The GET Method**
+HTTP GET promotes URI addressability so, designers should adopt it for safe operations such as simple queries. 
+
+- GET requests can be cached
+- GET requests remain in the browser history
+- GET requests can be bookmarked
+- GET requests should never be used when dealing with sensitive data
+- GET requests have length restrictions
+- GET requests should be used only to retrieve data
+
+#### **The POST Method**
+POST is appropriate for other types of applications where a user request has the potential to change the state of the resource (or of related resources).
+
+- POST requests are never cached
+- POST requests do not remain in the browser history
+- POST requests cannot be bookmarked
+- POST requests have no restrictions on data length
+
+Check out [W3C](http://www.w3.org/2001/tag/doc/whenToUseGet.html) for more details:
+
 # **Domains**
-In some cases you might want to serve multiple domains/sub-domains from the same node.js application. Diet handles this beautifully by calling a new instance of `App` and setting a domain upon starting it with `app.domain(yourDomain)`
+In some cases you might want to serve multiple domains with the same node.js application. Diet handles this beautifully. 
 
 
 ## **Simple Single Domain:**
