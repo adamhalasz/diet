@@ -13,6 +13,8 @@ var app = new server().start();
 app.get('/', function($){
 	$.end('Hello World!')
 });
+
+// curl http://localhost/ → Hello World!
 ```
 
 
