@@ -139,8 +139,9 @@ The super handy signal object can be accessed in all your `routes` and `plugins`
 var server = require('diet')
 
 app = new server()
+app.domain('http://localhost:8000/')
 app.plugin('yo')
-app.start('http://localhost:8000/')   
+app.start()   
 
 app.get('/ ', yo, function($){  // <-- `$` the dollar sign is the signal object
     $.end($.yo.sender + ' says ' + $.yo.message) // -> John says Yo!
