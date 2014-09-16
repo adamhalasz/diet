@@ -383,10 +383,6 @@ Each domain inherits these methods:
 app.plugin('plugin_name', configObject) // config is optional
 ```
 ```js
-// enable debug mode. `false` by default.
-app.debug = true
-```
-```js
 // path of your application. `process.cwd()` by default
 app.path
 ```
@@ -421,32 +417,109 @@ app.post('/path', pluginA, pluginB .., function($){ ... })
 ```
 
 # **Writing Diet Plugins**
-Plugins are middlewares that act as a bridge between modules and help write much more efficient Object Oriented code. Plugins are essentially regular node.js functions or modules that follow a standard mostly based on diet's `$` *(signal)* argument.
+Writing diet plugins are almost identical to writing node.js modules except plugins have a different require method and are directly connected to your routes.
 
-#### **The 3 Types of Plugins**
+
+
+#### **1) Requiring plugins:**
+```js
+// cd ~/yourProject
+var server = require('diet')
+var app = new server()
+
+// require the example plugin from the node_modules folder
+app.plugin('coins', { my: 'custom option' })
+```
+
+#### **2) Accessing the custom options from the plugin source code:**
+```js
+// cd ~/yourProject/node_modules/coins
+exports.onload = function(app, options){
+	console.log(options.my) // -> prints `custom option`
+	app.return() // <- you need to return plugins
+}
+```
+
+#### **3) Create a Global Plugin for all routes:**
+Let's extend our example plugin with `exports.global` inside `exports.onload`:
+```js
+// cd ~/yourProject/node_modules/example
+var vault = 6;
+exports.onload = function(app, options){
+	exports.global = function($){
+		this.owner = 'John Doe';
+		this.total = total_coins;
+		this.add = function(value){
+			vault += value
+		}
+		$.return(this) // <-- return values to namespace
+	}
+	app.return() // <- required
+}
+```
+And let's extend our `index.js` file with some routes
+```js
+// cd ~/yourProject
+var server = require('diet')
+var app = new server()
+app.domain('http://localhost:8000/')
+
+// use the coins plugin
+app.plugin('coins')
+
+// On GET / print "John Doe owns X coins"
+app.get('/', function($){
+	$.end($.coins.owner + ' owns ' + $.coins.total + ' coins.')
+});
+
+// on GET /add/10 add +10 more coins to the vault 
+app.get('/add/:value', function($){
+	$.coins.add($.params.value);
+	$.redirect('home');
+})
+```
+Now let's test it:
+```js
+curl "http://localhost:8000/"
+// John owns 6 coins.
+
+curl "http://localhost:8000/add/10"
+// John owns 16 coins.
+```
+....
+
+#### **There are 5 ways to write and use plugins**
+
+| Method | written as a | Description |
+| :------------ | :------------ | :------------  
+| **onload**     | module method        | in your module you can assign a function to `exports.onload` if you need configuration variables from the configOptions `app.plugin('yourPlugin', {..configOptions..})`
+
 Plugins may be all or at least one of these types:
 
-- **Onload** plugin
-- **Global** plugin
-- **Local** plugin
+- **Onload** module plugin
+- **Global** module plugin
+- **Custom** module plugin
+- **Local** module plugin
+- **Local ** stand alon function plugin
 	
 ## **Onload Plugins**
-Onload plugins *run code right away after the plugin was initialized*. The use cases of onload plugins are very handy when you want to configure your plugin, preprocess some data, load/update caches, schedule/execute background tasks etc.
+The onload 
 
 **An Example Plugin:**
 ```js  
-// project/example.js
-module.exports.onload = function($){ 
-    console.log('hello world!')
+// node_modules/example/index.js
+exports.onload = function($){ 
+    this.
     $.return()
 }
 ```
 ```js
 // project/index.js
 var server = require('diet')
-app = new server()
-app.plugin('example.js') // -> hello world!
-app.start('http://localhost:8000/')
+new server()
+ .domain('http://localhost:8000/')
+ .plugin('example')
+ .start()
 
 ```
 ## **Global Plugins**
