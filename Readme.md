@@ -98,16 +98,16 @@ var server = require('diet');
 var app = new server()
 
 // Set Domain
-.domain('http://localhost:8000/');
-// Load the HTML Template Engine
+app.domain('http://localhost:8000/');
 
-.plugin('diet-ect', { alias: 'html' });	
+// Load the HTML Template Engine
+app.plugin('diet-ect', { alias: 'html' });	
 
 // Start the App
-.start();
+app.start();
 
 // Listen on GET /
-.get('/', function($){
+app.get('/', function($){
 	$.data.page = 'home';
 	$.html();
 });
@@ -126,7 +126,13 @@ And write an HTML view in **/project/static/index.html**
 ```
 
 # **Signal ($)**
-The signal argument is used in the context of *Routes* and *Plugins*. It's an object containing important methods that help to serve requests. The signal argument also allows easy data transmission between plugins.
+With standard node.js you would have the `request` and `response` in your callback for `http.createServer()`. Diet combines these two into one object and adds and fixes some commonly used methods in a more meaningful way to make our everyday life easier.
+
+The signal (`$`) of each route is also extendable by `plugins`. Plugins work together beautifully in diet because the signal `$` object allows to pass data between plugins. This helps to write more object oriented modular node.js applications.
+
+This super handy signal comes comes out in your `routes` and `plugins` as the first argument as you can see on the examples.
+
+
 
 ## **Example**
 ```js
