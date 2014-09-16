@@ -292,12 +292,12 @@ Creates a plugin chain manually on the fly inside a route. This is useuful when 
 ```js
 app.get('/', function($){
 	var chain = new $.chain()
-	chain.plugin('db', app.db);
-	chain.plugin('session', app.session);
-	chain.plugin('notifications', app.alerts);
+	chain.plugin('db', app.db)
+	chain.plugin('session', app.session)
+	chain.plugin('notifications', app.alerts)
 	chain.load(function(){
-		$.end());
-	});
+		$.end())
+	})
 })
 ```
 
