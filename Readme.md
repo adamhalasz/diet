@@ -21,7 +21,7 @@ app.get('/', function($){
 
 ```js
 // 1 line server app
-require('diet').server().start().get('/', function($){ $.end('yo!'); })
+require('diet').server().start().get('/', function($){ $.end('yo!') })
 ```
 
 
@@ -92,25 +92,25 @@ https://github.com/adamhalasz/diet/wiki/Plugins
 Setup a new project in **/project/index.js**
 ```js
 // Require Diet
-var server = require('diet');
+var server = var server = require('diet')
 
 // Create an App
 var app = new server()
 
 // Set Domain
-app.domain('http://localhost:8000/');
+app.domain('http://localhost:8000/')
 
 // Load the HTML Template Engine
-app.plugin('diet-ect', { alias: 'html' });	
+app.plugin('diet-ect', { alias: 'html' })	
 
 // Start the App
-app.start();
+app.start()
 
 // Listen on GET /
 app.get('/', function($){
-	$.data.page = 'home';
-	$.html();
-});
+	$.data.page = 'home'
+	$.html()
+})
 ```
 And write an HTML view in **/project/static/index.html**
 ```html
@@ -136,15 +136,15 @@ This super handy signal comes comes out in your `routes` and `plugins` as the fi
 
 ## **Example**
 ```js
-require('diet');
+var server = require('diet')
 
-app = new App();
-app.plugin('plugin_name');
-app.start('http://localhost:8000/');   
+app = new server()
+app.plugin('plugin_name')
+app.start('http://localhost:8000/')   
 
 app.get('/ ', function($){  // <-- the `$` sign is the signal argument
-    $.end('hello world');
-});
+    $.end('hello world')
+})
 ```
 
 ## **Signal Methods**
@@ -174,34 +174,34 @@ $.url = {
     hostname: 'example.com',
     href: 'http://example.com/',
     pathname: '/',
-    path: '/' };
+    path: '/' }
 ```
 
 #### **$.query** - *object*
 JSON Parsed querystring
 ```js
 // http://example.com/?query=value
-$.query = { query: 'value' };
+$.query = { query: 'value' }
 ```
 
 #### **$.params** - *object*
 URL params from dynamic page routes like `/user/:id`
 ```js
 // GET http://example.com/user/eddie
-$.params = { id: 'eddie' };
+$.params = { id: 'eddie' }
 ```
 
 #### **$.data** - *object*
 an object used in html templates and `$.json()` responses
 ```js
-$.data = {};
+$.data = {}
 ```
 
 #### **$.body** - *object*
 JSON Parsed POST body data
 ```js
 // POST http://example.com/?message=hello
-$.body = { message: 'hello' };
+$.body = { message: 'hello' }
 ```
 
 #### **$.headers** - *object*
@@ -213,7 +213,7 @@ $.headers = { host: 'example.com',
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
   'accept-encoding': 'gzip,deflate,sdch',
   'accept-language': 'en-US,en;q=0.8,da;q=0.6,hu;q=0.4',
-  cookie: 'id=999' };
+  cookie: 'id=999' }
 ```
 
 #### **$.header** - *function*
@@ -227,30 +227,30 @@ $.header('content-type', 'text/html') // SET `content-type` to `text/html`
 Redirect the request to a different path. `path` is requried, `statusCode` is optional.
 ```js
 // api
-$.redirect(path, statusCode);
+$.redirect(path, statusCode)
 ```
 **Redirect to a Path**
 ```js
-$.redirect('/to/some/path');        // internal redirect 
-$.redirect('http://google.com/');   // external redirect
+$.redirect('/to/some/path')        // internal redirect 
+$.redirect('http://google.com/')   // external redirect
 ```
 **Redirect Home**
 ```js
 // redirect to home
-$.redirect('home');
+$.redirect('home')
 ```
 ```js
 // is the same as
-$.redirect('/');
+$.redirect('/')
 ```
 **Redirect Back**
 ```js
 // redirect back
-$.redirect('back');
+$.redirect('back')
 ```
 ```js
 // is the same as
-$.redirect($.request.headers.referer);
+$.redirect($.request.headers.referer)
 ```
 
 #### **$.method** - *string*
@@ -267,8 +267,8 @@ $.method // -> POST
 A function that ends the response and send back data to the requesting device.
 ```js
 app.get('/', function($){
-    $.end('end response');
-});
+    $.end('end response')
+})
 ```
 
 #### **$.multipart** - *boolean*
@@ -286,10 +286,10 @@ The global signal is a Function Object. As a function you can use it to setup yo
 Diet supports `get` and `post` methods.
 ```js
 // examples
-app.get('/', ...);            // GET  http://example.com/
-app.get('/about', ...);       // GET  http://example.com/about
-app.get('/articles', ...);    // GET  http://example.com/articles
-app.post('/article', ...);      // POST http://example.com/article
+app.get('/', ...)            // GET  http://example.com/
+app.get('/about', ...)       // GET  http://example.com/about
+app.get('/articles', ...)    // GET  http://example.com/articles
+app.post('/article', ...)      // POST http://example.com/article
 ```
 
 ## **Dynamic Routing**
@@ -299,8 +299,8 @@ Diet supports Sinatra/Express like dynamic routing. Everything in the route path
 As you can see `:id` becomes `$.params.id` which holds the value from the URL.
 ```js
 app.get('/user/:id', function($){
-    $.end('User is ' + $.params.id); 
-});
+    $.end('User is ' + $.params.id) 
+})
 // http://example.com/user/adam
 // -> User is adam
 ```
@@ -310,9 +310,9 @@ You can have **multiple params** in a route, each is assigned to the `$.params` 
 ```js
 // Calendar Date
 app.get('/calendar/:month/:day/:year', function($){
-    var message = $.params.month ',' + $.params.day + ',' + $.params.year;
-    $.end(message);
-});
+    var message = $.params.month ',' + $.params.day + ',' + $.params.year
+    $.end(message)
+})
 // http://example.com/calendar/05/10/2014
 // -> 05,10,2014
 ```
@@ -322,12 +322,12 @@ If you add `?` after the param such as `:view?` it becomes optional.
 ```js
 app.get('/list/:view?', function($){
     if($.params.view == 'gallery'){
-        $.end('Display #Gallery View'); 
+        $.end('Display #Gallery View') 
     } else {
-        $.end('Display #List View');
+        $.end('Display #List View')
     }
     
-});
+})
 // http://example.com/list
 // -> Display #List View
 
@@ -341,61 +341,61 @@ In some cases you might want to serve multiple domains/sub-domains from the same
 
 ## **Example Usage:**
 ```js
-var app = new App();
-app.domain('http://yourDomain.com/'); // <-- ! full url required
-app.start();
+var app = new server()
+app.domain('http://yourDomain.com/') // <-- ! full url required
+app.start()
 ```
 ## **More Examples:**
 ```js
 // Diet
-require('diet');
+var server = require('diet')
 
 // Main Domain
-var app = new App();
-app.domain('http://example.com/');
-app.start();
+var app = new server()
+app.domain('http://example.com/')
+app.start()
 app.get('/', function($){
-	$.end('hello world ');
-});
+	$.end('hello world ')
+})
 
 // Sub Domain
-var sub = new App();
-sub.domain('http://subdomain.example.com/');
-sub.start();
+var sub = new server()
+sub.domain('http://subdomain.example.com/')
+sub.start()
 sub.get('/', function($){
-	$.end('hello world at sub domain!');
-});
+	$.end('hello world at sub domain!')
+})
 
 // Other Domain
-var other = new App();
-other.domain('http://other.com/');
-other.start();
+var other = new server()
+other.domain('http://other.com/')
+other.start()
 other.get('/', function($){
-	$.end('hello world at other domain');
-});
+	$.end('hello world at other domain')
+})
 ```
 
 ## **Domain Methods**
 Each domain inherits these methods:
 ```js
 // include a plugin
-app.plugin('plugin_name', configObject); // config is optional
+app.plugin('plugin_name', configObject) // config is optional
 ```
 ```js
 // enable debug mode. `false` by default.
-app.debug = true; 
+app.debug = true
 ```
 ```js
 // path of your application. `process.cwd()` by default
-app.path;
+app.path
 ```
 ```js
 // Start App
-app.start(async_callback); // callback is optional
+app.start(async_callback) // callback is optional
 ```
 ```js
 // Set Domain
-app.domain(domainURL); 
+app.domain(domainURL) 
 
 // domainURL should be a full url containing the protocol http or https 
 // and the / at the end like "http://example.com/"
@@ -411,8 +411,8 @@ app.domain(domainURL);
 ```
 ```js
 // route http(s) requests
-app.get('/path', pluginA, pluginB .., function($){ ... });
-app.post('/path', pluginA, pluginB .., function($){ ... });
+app.get('/path', pluginA, pluginB .., function($){ ... })
+app.post('/path', pluginA, pluginB .., function($){ ... })
 
 // the first argument is the path. 
 // the last argument is your custom ending function
@@ -436,16 +436,16 @@ Onload plugins *run code right away after the plugin was initialized*. The use c
 ```js  
 // project/example.js
 module.exports.onload = function($){ 
-    console.log('hello world!');
-    $.return();
+    console.log('hello world!')
+    $.return()
 }
 ```
 ```js
 // project/index.js
-require('diet');
-app = new App();
-app.plugin('example.js'); // -> hello world!
-app.start('http://localhost:8000/');
+var server = require('diet')
+app = new server()
+app.plugin('example.js') // -> hello world!
+app.start('http://localhost:8000/')
 
 ```
 ## **Global Plugins**
@@ -454,27 +454,27 @@ Global plugins run on all incoming HTTP requests/routes. Global plugins can be h
 **Example Plugin:**
 ```js
 // project/example.js
-var path = require('path');
+var path = require('path')
 module.exports.global = function($){
-    this.extension = path.extname($.url.href);
-    $.return(this);
+    this.extension = path.extname($.url.href)
+    $.return(this)
 }
 ```
 ```js
 // project/index.js
-require('diet');
+var server = require('diet')
 
-app = new App();
-app.plugin('example.js');
-app.start('http://localhost:8000/');
+app = new server()
+app.plugin('example.js')
+app.start('http://localhost:8000/')
 
 app.get('/', function($){
-    $.end('Extension is ' + $.example.extension);
-});
+    $.end('Extension is ' + $.example.extension)
+})
 
 app.get('/image.jpg', function($){
-    $.end('Extension is ' + $.example.extension);
-});
+    $.end('Extension is ' + $.example.extension)
+})
 ```
 ```
 // terminal
@@ -492,48 +492,48 @@ Local plugins run on specified routes. Local plugins are handy for organizing yo
 ```js
 // project/example.js
 module.exports.local = function($){
-    this.name = 'Adam';
-    this.age = 20;
-    $.return(this);
+    this.name = 'Adam'
+    this.age = 20
+    $.return(this)
 }
 ```
 ```js
 // project/index.js
-require('diet');
-app = new App();
-var person = app.plugin('example.js');
-app.start('http://localhost:8000/');
+var server = require('diet')
+app = new server()
+var person = app.plugin('example.js')
+app.start('http://localhost:8000/')
 
 app.get('/', person, function($){
-    $.end('Hi I am ' + $.person.name + ', '  + $.person.age + ' old.');
+    $.end('Hi I am ' + $.person.name + ', '  + $.person.age + ' old.')
     // -> Hi I am Adam, 20 years old.
-});
+})
 ```
 
 **Example Local Plugin as a Function:**
 Local plugins can also be created as functions
 ```js
 // project/index.js
-require('diet');
+var server = require('diet')
 
 // Create New App
-app = new App();
+app = new server()
 
 // Start App
-app.start('http://localhost:8000/');
+app.start('http://localhost:8000/')
 
 // Define Local Plugin
 function person($){
-    this.name = 'Adam';
-    this.age = 20;
-    $.return(this);
+    this.name = 'Adam'
+    this.age = 20
+    $.return(this)
 }
 
 // Use person in GET / route
 app.get('/', person, function($){
-    $.end('Hi I am, ' + $.person.name + ', '  + $.person.age + ' old');
+    $.end('Hi I am, ' + $.person.name + ', '  + $.person.age + ' old')
     // -> Hi I am Adam, 20 years old.
-});
+})
 ```
 
 # **Todos**
