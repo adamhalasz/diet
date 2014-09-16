@@ -1,4 +1,4 @@
-[![Diet.js](http://imgur.com/2lvxTql.png)](https://dietjs.com/) 
+[![Diet.js](http://imgur.com/VRHT2eU.png)](https://dietjs.com/) 
 
 Fast, plugin based, easy to use web framework for [node][1]
 
