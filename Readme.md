@@ -7,8 +7,8 @@ Fast, plugin based, easy to learn web framework for [node][1]
 
 
 ```js
-var bot = require('diet')
-var app = new bot()
+var App = require('diet')
+var app = new App()
 
 app.domain('http://localhost:8000/').start()
 
