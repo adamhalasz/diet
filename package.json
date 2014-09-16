@@ -59,7 +59,7 @@
     "node": ">=0.8.0"
   },
   "scripts": {
-    "test": "sudo mocha tests",
+    "test": "mocha tests",
     "coveralls": "jscoverage tests tests-cov"
   }
 }
