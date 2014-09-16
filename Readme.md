@@ -133,11 +133,11 @@ And write an HTML view in **/project/static/index.html**
 ```
 
 # **Signal ($)**
-With the default node.js you would have the `request` and `response` in your callback when using `http.createServer()`. 
+With the default node.js you would have the `request` and `response` arguments in your callback when using `http.createServer()`. 
 
-Diet combines these two objects into one then adds and fixes some commonly used methods in a more meaningful way for everyday use.
+Diet combines these two objects into a single one then adds and fixes some commonly used methods in a more meaningful way for everyday use.
 
-The signal (`$`) of each route can also be extended with `Plugins`. Plugins work together seamlessly in diet because the signal (`$`) object allows to pass data between plugins while keeping plugin namespace references. When multiple plugins are assigned to a route they form a `plugin chain`. The plugin chain is the key to write much less code and still achieve complex tasks. 
+The signal (`$`) of each route can also be extended with `Plugins`. Plugins work together seamlessly in diet because the signal (`$`) object allows to pass data between plugins while keeping plugin namespaces in the signal (`$`) object. When multiple plugins are assigned to a route they form a `plugin chain`. The plugin chain is the key to write much less code and still achieve complex tasks. 
 
 The handy signal object can be accessed in all the  `Routes` and `Plugins` as the first argument as you can see on the examples.
 
