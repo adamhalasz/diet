@@ -449,7 +449,7 @@ exports.onload = function(app, options){
 }
 ```
 
-#### **3) Create a Global Plugin for all routes:**
+#### **3) Lesson 3: Create a Global Plugin for all routes:**
 Everyone who visits our site will be able to see and change it's value with the `deposit` and `withdraw` methods.
 
 Let's extend our example plugin with `exports.global` inside `exports.onload`:
@@ -536,9 +536,11 @@ curl "http://localhost:8000/bank/widthraw/9"
 // The "John Doe Bank" owns [7] coins.
 
 ```
-Sweet! I admit it's a pretty bumb bank, but at least I hope you've got the idea behind `global plugins`.
+Sweet! I admit it's a pretty bumb bank yet, but at least I hope you've got the idea behind `global plugins`.
 
-....
+#### **3) Lesson 4: Create a Local Plugin:**
+
+....UNDER CONSTRUCTION....
 
 #### **There are 5 ways to write and use plugins**
 
