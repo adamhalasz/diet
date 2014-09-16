@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.7.7",
+  "version": "0.7.8",
   "description": "Fast, plugin based, easy to learn web framework for node",
   "homepage": "http://dietjs.com/",
   "keywords": [

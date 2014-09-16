@@ -7,15 +7,14 @@ Fast, plugin based, easy to learn web framework for [node][1]
 
 
 ```js
-require('diet');
+var server = require('diet')
+var app = new server()
 
-var app = new App();
-app.domain('http://localhost:8000/');
-app.start();
+app.domain('http://localhost:8000/').start()
 
 app.get('/', function($){ 
-    $.end('Hello World!'); 
-});
+	$.end('Hello World!')
+})
 ```
 
 

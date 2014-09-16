@@ -1,11 +1,12 @@
-require('../');
+
 require('colors');
 require('sugar');
+var server = require('../');
 var assert = require('assert');
 var request = require('request');
 var subject = 'Test'.cyan+' → '.grey+ 'Router'.yellow + ': '.grey;
 
-var app = new App({debug: false});
+var app = new server({debug: false});
 app.domain('http://localhost:9000/');
 app.start(function(){	
 	describe(subject + 'Simple GET Path Request/Response', function(){	

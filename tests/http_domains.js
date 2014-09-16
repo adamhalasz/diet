@@ -1,16 +1,17 @@
-require('../');
+
 require('colors')
 require('sugar');
 
+var server = require('../');
 var assert = require('assert');
 var request = require('request');
 
 var subject = 'Test'.cyan+' → '.grey+ 'Domains (http)'.yellow + ': '.grey;
 
-describe(subject + 'Setup Domain with a String or a URL Object', function(){	
+describe(subject + 'Setup Domain with a String or a URL Object or Undefined', function(){	
 	it('should create an app and setup the domain with a `string` listening on http://localhost:9006/'.grey
 	, function(done){
-		var app = new App({debug: false});
+		var app = new server({debug: false});
 		app.domain('http://localhost:9006/');
 		app.start();
 		
@@ -30,7 +31,7 @@ describe(subject + 'Setup Domain with a String or a URL Object', function(){
 	
 	it('should create an app and setup the domain with a `string` listening on http://localhost:9007/'.grey
 	, function(done){
-		var app = new App({debug: false});
+		var app = new server({debug: false});
 		app.domain({ 
 			protocol: 'http:',
 			hostname: 'localhost',
@@ -51,12 +52,28 @@ describe(subject + 'Setup Domain with a String or a URL Object', function(){
 			done();
 		});
 	});
+	
+	it('should create an app and setup the domain with an undefined domain and return the message "Cannot read property \'hostname\' of undefined"'.grey
+	, function(done){
+		var app = new server();
+		assert.equal(app.domain(undefined), 'Error Domain was not specified.');
+		assert.equal(app.start(), 'Error can\'t start app without specifing a Domain.');
+		done();
+	});
+	
+	it('should create an app and setup the domain with an Integer domain and return the message "Error Domain must be a URL String or an URL Object."'.grey
+	, function(done){
+		var app = new server();
+		assert.equal(app.domain(9000), 'Error Domain must be a URL String or an URL Object.');
+		assert.equal(app.start(), 'Error can\'t start app without specifing a Domain.');
+		done();
+	});
 });
 
 describe(subject + 'Create Multiple Apps on Different HTTP Ports', function(){	
-	it('should create new App Instance listening on http://localhost:9001/'.grey
+	it('should create server Instance listening on http://localhost:9001/'.grey
 	, function(done){
-		var app = new App({debug: false});
+		var app = new server({debug: false});
 		app.domain('http://localhost:9001/');
 		app.start();
 		
@@ -74,9 +91,9 @@ describe(subject + 'Create Multiple Apps on Different HTTP Ports', function(){
 		});
 	});
 	
-	it('should create new App Instance listening on http://localhost:9002/'.grey
+	it('should create server Instance listening on http://localhost:9002/'.grey
 	, function(done){
-		var app = new App({debug: false});
+		var app = new server({debug: false});
 		app.domain('http://localhost:9002/');
 		app.start();
 		
@@ -95,9 +112,9 @@ describe(subject + 'Create Multiple Apps on Different HTTP Ports', function(){
 });
 
 describe(subject + 'Create Multiple Apps on the same HTTP port (9003) with Different Domains', function(){	
-	it('should create new App Instance listening on http://test.local.com:9003/'.grey
+	it('should create server Instance listening on http://test.local.com:9003/'.grey
 	, function(done){
-		var app = new App({debug: false});
+		var app = new server({debug: false});
 		app.domain('http://test.local.com:9003/');
 		app.start();
 		
@@ -114,9 +131,9 @@ describe(subject + 'Create Multiple Apps on the same HTTP port (9003) with Diffe
 		});
 	});
 	
-	it('should create new App Instance listening on http://test2.local.com:9003/'.grey
+	it('should create server Instance listening on http://test2.local.com:9003/'.grey
 	, function(done){
-		var app = new App({debug: false});
+		var app = new server({debug: false});
 		app.domain('http://test2.local.com:9003/');
 		app.start();
 		
