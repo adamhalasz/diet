@@ -6,15 +6,17 @@ Fast, plugin based, easy to learn web framework for [node][1]
 
 ```js
 var server = require('diet')
-var app = new server().start().get('/', function($){
+var app = new server()
+app.start()
+app.get('/', function($){
 	$.end('Hello World!')
 })
 
 // curl http://localhost/ → Hello World!
 ```
 
-```
-// hello world server in one line
+```js
+// 1 line server
 require('diet').server().start().get('/', function($){ $.end('yo!'); })
 ```
 
