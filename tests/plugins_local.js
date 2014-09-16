@@ -7,9 +7,7 @@ var request = require('request');
 
 var subject = 'Test'.cyan+' → '.grey+ 'Plugins (local)'.yellow + ': '.grey;
 
-var app = new server({debug: false})
-	.domain('http://localhost:9003')
-	.start();
+var app = new server({ debug: false }).domain('http://localhost:9003').start();
 
 describe(subject + 'Plain Local Plugin', function(){	
 	it('should create an empty plugin register it to the `/` path and test it'.grey

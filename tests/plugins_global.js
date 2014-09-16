@@ -1,0 +1,1 @@
+require('diet').server().start().get('/', function($){ $.end('hello world!') })

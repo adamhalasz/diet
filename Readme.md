@@ -4,17 +4,18 @@ Fast, plugin based, easy to learn web framework for [node][1]
 [![Build Status](http://img.shields.io/travis/adamhalasz/diet.svg?style=flat)](https://travis-ci.org/adamhalasz/diet) [![NPM](http://img.shields.io/npm/v/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Downloads](http://img.shields.io/npm/dm/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Coveralls](http://img.shields.io/coveralls/adamhalasz/diet.svg?style=flat)](https://coveralls.io/r/adamhalasz/diet)
 
 
-
-
 ```js
 var server = require('diet')
-var app = new server().start();
-
-app.get('/', function($){
+var app = new server().start().get('/', function($){
 	$.end('Hello World!')
-});
+})
 
 // curl http://localhost/ → Hello World!
+```
+
+```
+// hello world server in one line
+require('diet').server().start().get('/', function($){ $.end('yo!'); })
 ```
 
 
@@ -46,13 +47,14 @@ Smart express/sinatra like routing.
 ```js 
 app.get('/page/about' ...)
 app.get('/users/:id/'...)
+app.post('/upload'...)
 ```
 
 #### **Multiple Domain Support**
-Diet supports hosting multiple websites/domains from the same node.js server.
+Diet can host multiple websites/domains from the same node.js server.
 
 #### **Helpers**
-Includes **[Sugar.js][3]** that extends native objects with helpful methods.  
+Includes **[Sugar.js][3]** that extend native objects with helpful methods.  
 
 ## **Install**
 ```
@@ -87,19 +89,19 @@ Setup a new project in **/project/index.js**
 var server = require('diet');
 
 // Create an App
-var app = new server();
+var app = new server()
 
 // Set Domain
-app.domain('http://localhost:8000/');
-
+.domain('http://localhost:8000/');
 // Load the HTML Template Engine
-app.plugin('diet-ect', { alias: 'html' });
+
+.plugin('diet-ect', { alias: 'html' });	
 
 // Start the App
-app.start();
+.start();
 
 // Listen on GET /
-app.get('/', function($){
+.get('/', function($){
 	$.data.page = 'home';
 	$.html();
 });
