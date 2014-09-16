@@ -1,4 +1,4 @@
-[![Diet.js](http://imgur.com/VNkyvhI.png)](https://dietjs.com/) 
+[![Diet.js](http://imgur.com/2lvxTql.png)](https://dietjs.com/) 
 
 Fast, plugin based, easy to use web framework for [node][1]
 
@@ -60,7 +60,7 @@ app.post('/upload'...)
 Diet can host multiple websites/domains from the same node.js server.
 
 #### **Helpers**
-Includes **[Sugar.js][3]** that extend native objects with helpful methods.  
+Includes **[Sugar.js][3]** to extend native objects with helpful methods.  
 
 ## **Install**
 ```
@@ -143,6 +143,21 @@ app.get('/ ', function($){  // <-- the `$` sign is the signal argument
 
 ## **Signal Methods**
 
+| Method | Type | Description |
+| :------------ | :------------ | :------------  
+| **$.url**     | Object        | JSON Parsed `request.url`
+| **$.query**   | Object        | JSON Parsed querystring
+| **$.params**  | Object        | URL params from dynamic page routes like `/user/:id`
+| **$.data**    | Object       | used in `html templates` and `$.json()` responses
+| **$.body**    | Object        | JSON Parsed POST body data
+| **$.headers** | Object        | An object of all headers.
+| **$.header(get, set)**     | Function        | Get or Set Headers. The second argument is for SET, if left empty it's GET.
+| **$.redirect(path)**     | Function        | Redirect the request to a different path. `path` is requried, `statusCode` is optional.
+| **$.end(message)**     | Function        | End the response with an optional `message` 
+| **$.method**     | String        | The method of the request it's eiher GET or POST
+| **$.multipart**     | Boolean        | Check if a POST request's enctype is is multipart or not. The value is a boolean: `true` or `false`. 
+| **$.noRoute**     | Boolean        | Check if a request has a matching registered route from `app.get` or `app.post`. The value is a boolean: `true` or `false`.
+
 #### **$.url** - *object*
 JSON Parsed `request.url`
 ```js
@@ -184,7 +199,7 @@ $.body = { message: 'hello' };
 ```
 
 #### **$.headers** - *object*
-An array of all headers.
+An object of all headers.
 ```js
 $.headers = { host: 'example.com',
   connection: 'keep-alive',
