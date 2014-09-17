@@ -61,9 +61,9 @@ app.start(function(){
 				if(error) throw error;
 				done();
 			});
-		});
-		
+		});	
 	});
+	
 	describe(subject + 'signal.query types', function(){	
 		it('should check boolean query value'.grey
 		, function(done){
@@ -146,8 +146,37 @@ app.start(function(){
 				assert.equal(home_was_reached, true);
 				done();
 			});
+		});
+		
+		it('should redirect to /signal/redirect/qs/finish?value=yolo&yes=true&no=false&ten=10 and test if the type of query parameters are correct'.grey
+		, function(done){
 			
+			var reached = false;
 			
+			app.get('/signal/redirect/qs/start', function($){
+				$.redirect('/signal/redirect/qs/finish?value=yolo&yes=true&no=false&ten=10', 301);
+				assert.equal($.statusCode, 301);
+			});
+			
+			app.get('/signal/redirect/qs/finish', function($){
+				reached = true;
+				assert.equal($.query.value, 'yolo');
+				assert.equal($.query.ten, 10);
+				assert.equal(typeof $.query.ten, 'number');
+				assert.equal($.query.yes, true);
+				assert.equal(typeof $.query.yes, 'boolean');
+				assert.equal($.query.no, false);
+				assert.equal(typeof $.query.no, 'boolean');
+				$.end();
+			});
+			
+			request.get({
+				url: 'http://localhost:9010/signal/redirect/qs/start',
+				followRedirect: true
+			}, function(error, response, body){
+				assert.equal(reached, true);
+				done();
+			});
 		});
 		
 		
@@ -275,41 +304,57 @@ app.start(function(){
 				done();
 			});
 		});
-		
-		
-		/*
-		it('should redirect back'.grey
+
+	});
+	
+	describe(subject + 'signal responses', function(){	
+		it('should test signal.success'.grey
 		, function(done){
-			var redirect = false;
-			app.get('/signal/redirect/back/start', function($){
-				if(!redirect){
-					console.log('!redirect BACK BACK', $.header('location'))
-					$.redirect('back');
-					console.log('!redirect BACK BACK', $.header('location'))
-					redirect = true;
-				} else {
-					console.log('=redirect')
-					console.log(response.headers);
-					done();
-					$.end();
-				}
+			
+			app.get('/signal/responses/success', function($){
+				$.success();
 			});
 			
-			app.get('/signal/redirect/back/back', function($){
-				console.log('BACK BACK', $.headers)
-				$.redirect('back');
-				$.end();
+			request.get('http://localhost:9010/signal/responses/success', function(error, response, body){
+				if(error) throw error;
+				assert.equal(body, '{"passed":true}');
+				assert.equal(response.headers['content-type'], 'application/json');
+				done();
+			});
+		});
+		
+		it('should test signal.error'.grey
+		, function(done){
+			
+			app.get('/signal/responses/error', function($){
+				$.errors.test = 'testing';
+				$.error();
 			});
 			
-			request.get({
-				url: 'http://localhost:9010/signal/redirect/back/start',
-				followRedirect: true
-			}, function(error, response, body){
-				console.log('back/start RESPONDED')
-				console.log(response.headers);
+			request.get('http://localhost:9010/signal/responses/error', function(error, response, body){
+				if(error) throw error;
+				assert.equal(body, '{"passed":false,"errors":{"test":"testing"}}');
+				assert.equal(response.headers['content-type'], 'application/json');
+				done();
+			});
+		});
+		
+		it('should test signal.json'.grey
+		, function(done){
+			
+			app.get('/signal/responses/json', function($){
+				$.data.string = 'test';
+				$.data.number = 10;
+				$.data.boolean = true;
+				$.json();
 			});
 			
-			
-		});*/
+			request.get('http://localhost:9010/signal/responses/json', function(error, response, body){
+				if(error) throw error;
+				assert.equal(body, '{"string":"test","number":10,"boolean":true}');
+				assert.equal(response.headers['content-type'], 'application/json');
+				done();
+			});
+		});
 	});
 });

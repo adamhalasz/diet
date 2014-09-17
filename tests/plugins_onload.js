@@ -25,7 +25,7 @@ describe(subject + 'Plain Onload Plugin', function(){
 		app.domain('http://localhost:9009');
 		app.plugin('test_module');
 		app.start(function(){
-			assert.equal(app.test_module, 'ready');
+			assert.equal(app.test_module.ready, true);
 			done();
 		});
 	});
