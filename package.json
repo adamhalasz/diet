@@ -47,6 +47,7 @@
     "nextjs": ">=0.0.3",
     "path-to-regexp": ">=0.2.3",
     "request": ">=2.40.0",
+    "stacktrace-js": "^0.6.2",
     "sugar": "1.4.1"
   },
   "devDependencies": {

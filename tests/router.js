@@ -118,29 +118,6 @@ app.start(function(){
 				assert.equal(response.headers['content-type'], 'text/plain');
 				assert.equal(response.statusCode, 404);
 				done()
-				/*
-				
-				assert.equal(body, '404 Page not found.');
-				assert.equal(response.headers['content-type'], 'text/plain');
-				assert.equal(response.statusCode, 404);
-				done();
-				
-				describe(subject + 'GET 404 Page with Custom 404 Route SET', function(){	
-					it('should visit http://localhost:9000/NON_EXISTING_PAGE and receive content-type text/plain with 404 status code and the body should be "Hello this is a custom 404 page." '.grey
-					, function(done){
-						app.get('404', function($){
-							$.end('Hello this is a custom 404 page.');
-						});
-						request.get('http://localhost:9000/NON_EXISTING_PAGE', function(error, response, body){
-							if(error) throw error;
-							assert.equal(body, 'Hello this is a custom 404 page.');
-							assert.equal(response.headers['content-type'], 'text/plain');
-							assert.equal(response.statusCode, 404);
-							done();
-						});
-					});
-				});
-				*/
 			});
 		});
 	});

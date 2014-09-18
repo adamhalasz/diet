@@ -27,6 +27,44 @@ app.start(function(){
 		});
 	});
 	
+	describe(subject + 'signal.body', function(){	
+		it('should validate signal.body types'.grey
+		, function(done){
+			
+			app.post('/signal/body/types', function($){
+				console.log('BOOODYY', $.body);
+				assert.equal(typeof $.body.string, 'string');
+				assert.equal(typeof $.body.number, 'number');
+				assert.equal(typeof $.body.yes, 'boolean');
+				assert.equal(typeof $.body.no, 'boolean');
+				assert.equal(Array.isArray($.body.array), 'array');
+				
+				assert.equal($.body.string, 'hello');
+				assert.equal($.body.number, 10);
+				assert.equal($.body.yes, true);
+				assert.equal($.body.no, false);
+				assert.equal($.body.array, ['10', '20', '30', '40']);
+				
+				assert.equal($.header('content-type'), 'text/plain');
+				$.end('hey');
+			});
+			
+			request.post('http://localhost:9010/signal/body/types', {
+				form: { 
+					string: 'hello',
+					number: 10,
+					yes: true,
+					no: false,
+					array: ['one', 'two', 'three', 'four'],
+					array2: ['10', '20', '30', '40']
+				}
+			}, function(error, response, body){
+				if(error) throw error;
+				assert.equal(body, 'hey')
+				done();
+			});
+		});
+	});
 	describe(subject + 'signal.header', function(){	
 		it('should get a header and validate it'.grey
 		, function(done){

@@ -1,0 +1,103 @@
+## v0.8.x - 2014 September - **Major Release**
+- Unit Test Coverage 95%
+- Dropped `new App` now `require('diet')` returns a server object
+- Extended the `Signal` with `$.send` and `$.chain`
+- Better documentation
+
+## v0.7.x - 2014 August
+- Started Unit Testing
+- Fixed several bugs
+- Better documentation
+- Extended the `Signal $`	
+
+## v0.6.x - 2014 Summer
+- Changed `new Domain` to `new App`
+- Extended the `Signal $`
+- Fixed several bugs
+- Better documentation
+
+## v0.5.x - 2014 Spring - **Major Release**
+- **Rewrote diet completely from the ground up**
+- Introducing` Plugins`
+- Introducing the `new Domain` function
+- Introducing the `Signal $`
+- Introducing Sinatra like `Router`
+- MIT Licensed
+
+## v0.4.0 - 2013 Winter - 2014 Winter
+- Separated the code into several modules
+	- Upload into diet-upload
+	- Cookies into diet-cookies
+	- Accounts into diet-accounts
+	- Request into diet-request
+	- Comet into diet-comet
+	- Dictionary into diet-dictionary
+	- tasks	into diet-tasks
+	- MySQL into diet-mysql
+	- Use into diet-use
+	- Next into nextjs
+- Fixed Several Bugs
+
+## v0.3.x - v0.4.0 2013 Spring & Summer - **Major Release**
+- Fixed several bugs 
+
+## v0.2.5 - Started on 2013 Februray 20 - Winter
+- app.dictionary introduced
+- response.head introduced
+- response.html now includes arguments from response.head as a default
+- stand alone dictionary module
+- Improved html/form module with inside labels
+- comet.onExit introduced
+- cheerio introduced for html manipulation
+
+## v0.2.4 - Started on 2013 Junuary 23 - Winer
+- Cross file locals introduced inside the `html` module
+- Echo is now not part of the `html` module
+- Introduced app.notFound for 404 error routing
+- Introduced auto app.www 
+- Introduced app.denie_requests
+- Introduced app.domain_redirect
+- public folder now can have any name because .html is 
+	no longer requires "/public" as the public folder's name 
+	instead uses the custom one specified in app.options.public
+
+## v0.2.3 - Started on 2012 October 3 - Fall
+- MySQL data mapping
+- MySQL is now based on the mysql.js javascript module
+- MySQL API drastically changed
+- Better form handling logic with `check` module
+- Improved overall stability
+
+
+## v0.2.2 - Started on 2012 - Spring
+- Added subdomain support with app.subdomain()
+- Better cookie set
+
+
+## v0.2.1 - Started on 2011 - Winter
+- Extension Apps with app.extend();
+	for a site which requires additional embeddable systems to improve it's customer experience, for example a forum, feedback or blog system
+- Very Simple Image Processing API with ImageMagick
+
+
+## v0.2.0 - Started on 2011 October 31 - Fall - **Major Release**
+- Easy HTTP/HTTPS server creation
+- Advanced Route Handling 
+	- With Manual URL handling (ex: /home, /about, /work)
+	- With Dynamic URL Handling (ex: /posts/9874, /user/john)
+- Static File Handler
+- Advanced HTML with Node Module
+	- With automatic .html to html with node integration
+	- With Object Logger
+	- With Advanced Error Tracking
+- Included Mysql Manager
+- Included Cookie Manager
+- Included HTML Upload Module
+- Included Async Module 
+- Included Extension Modules ex: isset() 
+- Stand alone HTTP Router - dropped expressjs
+- - Stand alone HTML Parser - dropped jade
+
+## v0.1.0 - Started on 2011 June 1 - Summer
+- mysql support for express
+- based on express and jade 

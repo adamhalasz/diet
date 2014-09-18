@@ -3,7 +3,7 @@ var server = require('diet')
 var app = new server()
 
 // setup domain
-app.domain('http://localhost:8000/')
+app.domain('https://localhost:8000/')
 
 // use the bank plugin
 app.plugin('bank', { name: 'John Doe', vault: 6 })

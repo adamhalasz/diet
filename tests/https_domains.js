@@ -39,12 +39,11 @@ describe(subject + 'Try to use HTTPS without app.secure', function(){
 	it('should use HTTPS with app.secure and make sure the connection is working'.grey
 	, function(done){
 		var app = new server({debug: false});
-		app.domain('https://localhost:9015/');
-		app.secure = {
+		app.domain('https://localhost:9015/', {
 			key: app.path + '/secure/server.key',
 			cert: app.path + '/secure/server.crt',
 			ca: app.path + '/secure/ca.crt',
-		}
+		});
 		console.log(app.secure);
 		app.start();
 		
