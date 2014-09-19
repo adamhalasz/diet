@@ -7,8 +7,6 @@ var request = require('request');
 
 var subject = 'Test'.cyan+' → '.grey+ 'Plugins (global)'.yellow + ': '.grey;
 
-
-
 describe(subject + 'Present in Routes', function(){	
 	it('should attach the test_module as a global plugin and test if it is present in all the Routes'.grey
 	, function(done){
@@ -18,6 +16,7 @@ describe(subject + 'Present in Routes', function(){
 		app.start()
 		
 		app.get('/1', function($){
+			console.log($.test_module);
 			assert($.test_module.version, 'v1.0')
 			$.end('1:'+$.test_module.version)
 		});

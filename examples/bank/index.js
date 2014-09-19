@@ -3,10 +3,13 @@ var server = require('diet')
 var app = new server()
 
 // setup domain
-app.domain('https://localhost:8000/')
+app.domain('http://localhost:8000/')
 
 // use the bank plugin
 app.plugin('bank', { name: 'John Doe', vault: 6 })
+
+// use the convert plugin with a reference
+var convert = app.plugin('convert')
 
 // start the application
 app.start()
@@ -15,8 +18,7 @@ app.start()
 // print 'The "Y Bank" owns X coins'
 // upon visiting /
 app.get('/', function($){
-	$.end('The "'+ $.bank.name +' Bank" '
-	    + 'has ['+ $.bank.vault +'] coins.')
+	$.end('The "'+ $.bank.name +' Bank" ' + 'has $'+ $.bank.vault)
 })
 
 // instruct our app to
@@ -33,4 +35,12 @@ app.get('/bank/deposit/:amount', function($){
 app.get('/bank/withdraw/:amount', function($){
 	$.bank.withdraw($.params.amount)
 	$.redirect('home')
+})
+
+// instruct our app to
+// print 'The "Y Bank" owns X(symbol) Z.'
+// upon visiting /
+app.get('/convert/:currency', convert, function($){
+	$.end('The "'+ $.bank.name +' Bank" '
+	    + 'has '+ $.convert.symbol + $.convert.amount + '.')
 })

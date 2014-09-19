@@ -5,7 +5,12 @@
 - Added new signal method `$.send` to appending to the response message 
 - Added new signal method `$.chain` to allow adding plugins to the plugin chain on the fly.
 - Added chainable commands like `require('diet').server().start().get('/')`
-- Better documentation
+- Changed the Plugin framework
+	- Removed `module.exports.onload` listener
+	- Added `module.parent.return()` instead
+	- Added `module.parent.options` to access the plugin options
+	- Added `module.parent.app` to access the calling application
+- Extended documentation
 - Added `examples`
 - Fixed every known bug
 

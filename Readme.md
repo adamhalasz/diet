@@ -21,7 +21,7 @@ app.get('/', function($){
 
 ```js
 // 1 line http server
-require('diet').server().start().get('/', function($){ $.end('yo!') })
+node -p "require('diet').server(8000).start().get('/', function($){ $.end('yo') });"
 ```
 
 
@@ -471,7 +471,7 @@ Writing diet plugins are almost identical to writing node.js modules except plug
 To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 coins` when the application starts.
 
 
-#### **1) Lesson 1: Require Plugins:**
+#### **1) Part 1: Require Plugins:**
 You can register plugins with `app.plugin()`. Plugins are only initialized after `app.start()` was executed. 
 ```js
 // cd ~/yourProject
@@ -486,7 +486,7 @@ app.plugin('bank', { name: 'John Doe', vault: 6 })
 app.start()
 ```
 
-#### **2) Lesson 2: Accessing custom options from the source code of the plugin:**
+#### **2) Part 2: Accessing custom options from the source code of the plugin:**
 ```js
 // cd ~/yourProject/node_modules/bank
 exports.onload = function(app, options){
@@ -500,30 +500,31 @@ exports.onload = function(app, options){
 }
 ```
 
-#### **3) Lesson 3: Create a Global Plugin for all routes:**
+#### **3) Part 3: Create a Global Plugin for all routes:**
 Everyone who visits the app will be able to see and change the value of the vault with the `deposit` and `withdraw` methods.
 
 Let's extend our bank plugin with a `global` function inside `exports.onload`:
 ```js
 // cd ~/yourProject/node_modules/bank
-// Note: `app` and `options` are stored in memory
+// Note: `module.parent.app` and `module.parent.options` are stored in memory
+var options = module.parent.options;
 
-exports.onload = function(app, options){	
-	this.global = function($){
-		// this creates a new instance 
-		// of the $.bank in everyone visitors route
-		this.name = options.name
-		this.vault = options.vault
-		this.deposit = function(amount){
-			options.vault += parseInt(amount)
-		}
-		this.withdraw = function(amount){
-			options.vault -= parseInt(amount)
-		}
-		$.return(this)
+exports.global = function($){
+	// this creates a new instance 
+	// of the $.bank in visitors route
+	this.name = options.name
+	this.vault = options.vault
+	this.deposit = function(amount){
+		options.vault += parseInt(amount)
 	}
-	app.return(this)
+	this.withdraw = function(amount){
+		options.vault -= parseInt(amount)
+	}
+	$.return(this)
 }
+
+module.parent.return()
+
 ```
 Now that we created the plugin we can access the `$.bank` in all Routes of the `app`. Let's extend our *index.js* file with some `Routes` so visitors can `see` the vault and `withdraw`/ `deposit` coins.
 ```js
@@ -544,8 +545,7 @@ app.start()
 // print 'The "Y Bank" owns X coins'
 // upon visiting /
 app.get('/', function($){
-	$.end('The "'+ $.bank.name +' Bank" '
-	    + 'has ['+ $.bank.vault +'] coins.')
+	$.end('The "'+ $.bank.name +' Bank" ' + 'has $'+ $.bank.vault)
 })
 
 // instruct our app to
@@ -575,30 +575,76 @@ Now open another terminal screen and let's test the app:
 ```bash
 # bash screen 2
 curl "http://localhost:8000/"
-// The "John Doe Bank" owns [6] coins.
+// The "John Doe Bank" has $6
 
-curl -L "http://localhost:8000/bank/deposit/10"
-// The "John Doe Bank" owns [16] coins.
+curl -L "http://localhost:8000/bank/deposit/8"
+// The "John Doe Bank" has $14
 
-curl -L "http://localhost:8000/bank/widthraw/9"
-// The "John Doe Bank" owns [7] coins.
+curl -L "http://localhost:8000/bank/widthraw/4"
+// The "John Doe Bank" has $10
 
 ```
 Sweet! I admit it's a pretty retarded bank app, but hey I hope at least you've got some of the ideas behind the `global plugins`.
 
-#### **3) Lesson 4: Create a Local Plugin:**
+#### **3) Part 4: Create a Local Plugin:**
 
-....UNDER CONSTRUCTION....
+Local plugins are only used in specified routes. Let's create a `currency converter` plugin that we'll use in the  `/convert/:currency` route.
 
-#### **Plugin Types**
+This plugin will depend on the `bank` plugin as we'll be useing the balance of the vault from the bank.
 
-Plugins may be all or at least one of these types:
+```js
+// cd ~/yourProject/node_modules/convert
+exports.local = function($){
+	// The bank's balance is in USD
+	// I'll use today's (September 19, 2014)
+	// exchange rate 
+	if($.params.currency == 'EUR'){
+		this.amount = $.bank.vault * 0.77;
+		this.symbol = '€';
+		
+	} else if ($.params.currency == 'GBP'){
+		this.amount = $.bank.vault * 0.60;
+		this.symbol = '£'
+	}
+	$.return(this)
+}
 
-- **Onload** module plugin
-- **Global** module plugin
-- **Custom** module plugin
-- **Local** module plugin
-- **Local ** stand alon function plugin
+module.parent.return()
+
+```
+Now let's add the `convert` plugin and the route `/convert/:currency` to *index.js*
+```js
+// use the convert plugin with a reference
+var convert = app.plugin('convert')
+
+// instruct our app to
+// print 'The "Y Bank" owns X(symbol) Z.'
+// upon visiting /
+app.get('/convert/:currency', convert, function($){
+	$.end('The "'+ $.bank.name +' Bank" '
+	    + 'has '+ $.convert.symbol + $.convert.amount + '.')
+})
+```
+
+Voila! Let's test this. First run the app:
+```bash
+# bash screen 1
+cd ~/yourProject/
+node index.js
+```
+
+Then test the new Plugin & Route:
+```bash
+# bash screen 2
+curl "http://localhost:8000/convert/EUR"
+// The "John Doe Bank" has €7.7
+
+curl "http://localhost:8000/convert/GBP"
+// The "John Doe Bank" has £6
+
+```
+
+
 
 # **Todos**
 Upcoming updates and features:

@@ -476,7 +476,6 @@ app.start(function(){
 		request.get({
 			url: 'http://localhost:9010/signal/handleError'
 		}, function(error, response, body){
-			console.log(body);
 			assert.equal(response.statusCode, 500);
 			done();
 		});

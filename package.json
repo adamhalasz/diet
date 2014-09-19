@@ -42,12 +42,13 @@
   "dependencies": {
     "callsite": ">=1.0.0",
     "colors": ">=0.6.2",
+    "diet-qs": ">=0.1.0",
     "mocha": "~1.21.4",
     "mocha-lcov-reporter": "0.0.1",
     "nextjs": ">=0.0.3",
-    "diet-qs": ">=0.1.0",
     "path-to-regexp": ">=0.2.3",
     "request": ">=2.40.0",
+    "rewire": ">=2.1.0",
     "stacktrace-js": ">=0.6.2",
     "sugar": "1.4.1"
   },

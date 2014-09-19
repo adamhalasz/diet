@@ -1,3 +1,5 @@
-exports.onload = function(app, options){
-	app.return('Yo!');
+exports.message = 'Yo!'
+exports.local = function($){
+	$.return()
 }
+module.parent.return()

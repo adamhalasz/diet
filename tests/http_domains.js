@@ -82,12 +82,15 @@ describe(subject + 'Setup Domain with a String or a URL Object or Undefined', fu
 		done();
 	});
 	
-	it('should create an app and setup the domain with an Integer domain and return the message "Error Domain must be a URL String or an URL Object."'.grey
+	it('should create an app and setup the domain with an Integer domain and check if the app.location.port is 9000 and the app.location.host is localhost:9000."'.grey
 	, function(done){
 		var app = new server();
-		assert.equal(app.domain(9000), 'Error Domain must be a URL String or an URL Object.');
+		app.domain(9000)
+		assert.equal(app.location.port, 9000);
+		assert.equal(app.location.host, 'localhost:9000');
 		done();
 	});
+
 });
 
 describe(subject + 'Create Multiple Apps on Different HTTP Ports', function(){	
