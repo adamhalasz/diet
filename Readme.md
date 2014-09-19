@@ -80,7 +80,7 @@ npm install diet
 
 # **Plugin Directory**
 We have a list of plugins categorized by their purpose in the wiki: 
-https://github.com/adamhalasz/diet/wiki/Plugins
+https://github.com/adamhalasz/diet/wiki/Plugin-Directory
 
 ### **Officially Supported Diet Plugins**
 
