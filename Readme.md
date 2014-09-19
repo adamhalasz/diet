@@ -36,6 +36,10 @@ What is human readable and if it worths is controversial amongst many people. We
 #### **Easier to Learn**
 Diet is a project aiming to create the most powerful node.js web application framework with the smallest learning curve.  A wide range of Examples and Tutorials are currently in progress.
 
+## **Tutorials & Examples**
+Check out the wiki on github for an expanding list of helpful articles, tutorials and examples:
+https://github.com/adamhalasz/diet/wiki
+
 ## **Features**
 #### **Plugins** 
 Diet has a very powerful modular middleware structure for it's `Router`. Middlewares in diet allow unlimited series of modules to work together by manipulating and passing data towards the `plugin chain`. 
@@ -468,7 +472,7 @@ app.domain(url)
 # **Writing Diet Plugins**
 Writing diet plugins are almost identical to writing node.js modules except plugins have a different require method and are directly connected to Routes.
 
-To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 coins` when the application starts.
+To effectively demonstrate this we'll create a very simple bank application. The bank will have a `name` and a `vault`. We'll fill the vault with `6 money` when the application starts.
 
 
 #### **1) Part 1: Require Plugins:**
@@ -489,15 +493,16 @@ app.start()
 #### **2) Part 2: Accessing custom options from the source code of the plugin:**
 ```js
 // cd ~/yourProject/node_modules/bank
-exports.onload = function(app, options){
-    // let's see how much coins the bank has
-    console.log('   # The "'+ options.name +' Bank"'
-		          + ' has ['+ options.vault +'] coins.') 
+var options = module.parent.options;
+
+// let's see how much money the bank has
+// prints -> The "John Doe Bank" has $6
+console.log(' # The "'+ options.name +' Bank"'
+		    + ' has $'+ options.vault ) 
     
-    // prints -> The "John Doe Bank" has [6] coins.
-    // then we need to return the plugin
-    app.return() 
-}
+
+// then we need to return the plugin
+module.parent.return() 
 ```
 
 #### **3) Part 3: Create a Global Plugin for all routes:**
@@ -524,9 +529,8 @@ exports.global = function($){
 }
 
 module.parent.return()
-
 ```
-Now that we created the plugin we can access the `$.bank` in all Routes of the `app`. Let's extend our *index.js* file with some `Routes` so visitors can `see` the vault and `withdraw`/ `deposit` coins.
+Now that we created the plugin we can access the `$.bank` in all Routes of the `app`. Let's extend our *index.js* file with some `Routes` so visitors can `see` the vault and `withdraw`/ `deposit` virtual money.
 ```js
 // cd ~/yourProject/index.js
 var server = require('diet')
@@ -542,14 +546,14 @@ app.plugin('bank', { name: 'John Doe', vault: 6 })
 app.start()
 
 // instruct our app to
-// print 'The "Y Bank" owns X coins'
+// print 'The "Y Bank" owns $X'
 // upon visiting /
 app.get('/', function($){
 	$.end('The "'+ $.bank.name +' Bank" ' + 'has $'+ $.bank.vault)
 })
 
 // instruct our app to
-// deposit X amount coins into the vault 
+// deposit X amount of money into the vault 
 // upon visiting /banks/deposit/10 
 app.get('/bank/deposit/:amount', function($){
 	$.bank.deposit($.params.amount)
@@ -557,7 +561,7 @@ app.get('/bank/deposit/:amount', function($){
 })
 
 // instruct our app to
-// withdraw X amount coins from the vault
+// withdraw X amount of money from the vault
 // upon visiting /banks/withdraw/5  
 app.get('/bank/withdraw/:amount', function($){
 	$.bank.withdraw($.params.amount)
@@ -590,7 +594,7 @@ Sweet! I admit it's a pretty retarded bank app, but hey I hope at least you've g
 
 Local plugins are only used in specified routes. Let's create a `currency converter` plugin that we'll use in the  `/convert/:currency` route.
 
-This plugin will depend on the `bank` plugin as we'll be useing the balance of the vault from the bank.
+The converter plugin will use `$.bank.vault` from the `bank` plugin. We can do this because global plugins always load first, before the local plugins.
 
 ```js
 // cd ~/yourProject/node_modules/convert
@@ -622,7 +626,7 @@ var convert = app.plugin('convert')
 // upon visiting /
 app.get('/convert/:currency', convert, function($){
 	$.end('The "'+ $.bank.name +' Bank" '
-	    + 'has '+ $.convert.symbol + $.convert.amount + '.')
+	    + 'has '+ $.convert.symbol + $.convert.amount)
 })
 ```
 
