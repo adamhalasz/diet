@@ -48,7 +48,7 @@
     "diet-qs": ">=0.1.0",
     "path-to-regexp": ">=0.2.3",
     "request": ">=2.40.0",
-    "stacktrace-js": "^0.6.2",
+    "stacktrace-js": ">=0.6.2",
     "sugar": "1.4.1"
   },
   "devDependencies": {
