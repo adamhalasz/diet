@@ -16,7 +16,7 @@ app.get('/', function($){
 	$.end('Hello World!')
 })
 
-// curl http://localhost/ → Hello World!
+// curl http://localhost:8000/ → Hello World!
 ```
 
 ```js
