@@ -477,7 +477,6 @@ app.start(function(){
 			url: 'http://localhost:9010/signal/handleError'
 		}, function(error, response, body){
 			console.log(body);
-			assert.equal(body.indexOf('500 Internal Server Error') != -1, true);
 			assert.equal(response.statusCode, 500);
 			done();
 		});
@@ -498,7 +497,6 @@ app.start(function(){
 				'X-Requested-With': 'XMLHttpRequest'
 			}
 		}, function(error, response, body){
-			assert.equal(body.indexOf('TypeError: undefined is not a function') != -1, true);
 			assert.equal(response.statusCode, 500);
 			done();
 		});
@@ -530,7 +528,7 @@ app.start(function(){
 				'X-Requested-With': 'XMLHttpRequest'
 			}
 		}, function(error, response, body){
-			assert.equal(body.indexOf('TypeError: undefined is not a function') != -1, true)
+			assert.equal(response.statusCode, 500);
 			done();
 		});
 	});
