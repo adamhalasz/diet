@@ -1,8 +1,10 @@
-## v0.8.x - 2014 September - **Major Release**
-- Unit Test Coverage 95%
+## v0.8.0 - 2014 September - **Major Release**
+- Unit Test Coverage 99%
 - Dropped `new App` now `require('diet')` returns a server object
 - Extended the `Signal` with `$.send` and `$.chain`
 - Better documentation
+- Added `examples`
+- Fixed every known bug
 
 ## v0.7.x - 2014 August
 - Started Unit Testing
@@ -96,7 +98,7 @@
 - Included Async Module 
 - Included Extension Modules ex: isset() 
 - Stand alone HTTP Router - dropped expressjs
-- - Stand alone HTML Parser - dropped jade
+- Stand alone HTML Parser - dropped jade
 
 ## v0.1.0 - Started on 2011 June 1 - Summer
 - mysql support for express

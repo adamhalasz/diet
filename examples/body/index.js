@@ -8,7 +8,6 @@ app.get('/', function($){
 	$.header('content-type', 'text/html')
 	$.send('<!DOCTYPE html>')
 	$.send('<html>')
-	$.send('<head>')
 	$.send(		'<title>Diet: Body Example</title>')
 	$.send(		'<meta charset="UTF-8"/>')
 	$.send(		'<style>*{margin:0;padding:0;}body{ background:#eee; font-family:sans-serif} a{color:#01C;} h1{ font-size:41px; margin-bottom:10px; } a{  text-decoration:none; } a:hover{ text-decoration:underline;} input{ width:40px; text-align:center; border:1px solid #ccc; border-top:1px solid #aaa; padding: 7px 12px; font-size:14px; outline:none; margin-bottom:5px; } input[type="text"]:hover{ border:1px solid #999; } input[type="text"]:focus{ border:1px solid #36C;background:#36C; color:#FFF; } button{ background:#1D9469; color:#FFF; border:none; font-size:12px; font-weight:bold; padding:8px 15px; cursor:pointer; } button:hover{ background:#555; } form{ box-shadow: 3px 0px 3px rgba(0,0,0,0.1); text-align:right; float:left; display:inline; background:#fff; padding:60px; margin-right:60px;  } div{ display:inline; margin-left:40px;} div h3{ margin-top:60px; font-size:41px; font-weight:normal; color:#5E5E5E; } hr{ border:none; background:none; border-top:2px solid #ddd; } label{ color:#888; text-align:right; width: 120px; float:left; margin-right:15px; text-transform:uppercase; font-size:10px; font-weight:bold; margin-top: 11px; } .row{margin-top:4px;} code{ background:#1D9469; color:#FFF; font-size:14px; padding:40px; display:block; margin:20px 0; } p{ color:#999; font-size:10px; font-weight:bold; text-transform:uppercase; }</style>')

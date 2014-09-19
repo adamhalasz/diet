@@ -121,4 +121,20 @@ app.start(function(){
 			});
 		});
 	});
+	
+	describe(subject + 'No associated middlewares for a route', function(){	
+		it('app.get(\'/\', ..)'.white+' - should register the GET / Rout with no routes and send back "Error there are no associated middlewares for this route." upon visit'.grey
+		, function(done){
+			
+			app.get('/noMiddleware');
+			
+			request.get('http://localhost:9000/noMiddleware', function(error, response, body){
+				if(error) console.log('YELRRRORR', error);
+				assert.equal(body, '500 Route not configured.');
+				assert.equal(response.headers['content-type'], 'text/plain');
+				assert.equal(response.statusCode, 500);
+				done();
+			});
+		});
+	});
 });

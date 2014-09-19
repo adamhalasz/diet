@@ -44,7 +44,6 @@ describe(subject + 'Try to use HTTPS without app.secure', function(){
 			cert: app.path + '/secure/server.crt',
 			ca: app.path + '/secure/ca.crt',
 		});
-		console.log(app.secure);
 		app.start();
 		
 		app.get('/', function($){

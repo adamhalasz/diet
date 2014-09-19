@@ -29,6 +29,28 @@ describe(subject + 'Setup Domain with a String or a URL Object or Undefined', fu
 		});
 	});
 	
+	it('should create an app with multiple onload plugins'.grey
+	, function(done){
+		var app = new server({debug: false});
+		app.plugin('test_module');
+		app.plugin('test_module2', { alias: 'test2' });
+		app.domain('http://localhost:9020/');
+		app.start();
+		
+		app.get('/', function($){
+			$.end('hello from localhost:9020');
+		});
+		
+		request.get('http://localhost:9020/', function(error, response, body){
+			if(error) throw error;
+			assert.equal(body, 'hello from localhost:9020');
+			assert.equal(response.headers['content-type'], 'text/plain');
+			assert.equal(response.statusCode, 200);
+			
+			done();
+		});
+	});
+	
 	it('should create an app and setup the domain with a `string` listening on http://localhost:9007/'.grey
 	, function(done){
 		var app = new server({debug: false});

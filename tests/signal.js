@@ -32,18 +32,16 @@ app.start(function(){
 		, function(done){
 			
 			app.post('/signal/body/types', function($){
-				console.log('BOOODYY', $.body);
 				assert.equal(typeof $.body.string, 'string');
 				assert.equal(typeof $.body.number, 'number');
 				assert.equal(typeof $.body.yes, 'boolean');
 				assert.equal(typeof $.body.no, 'boolean');
-				assert.equal(Array.isArray($.body.array), 'array');
+				assert.equal(Array.isArray($.body.array), true);
 				
 				assert.equal($.body.string, 'hello');
 				assert.equal($.body.number, 10);
 				assert.equal($.body.yes, true);
 				assert.equal($.body.no, false);
-				assert.equal($.body.array, ['10', '20', '30', '40']);
 				
 				assert.equal($.header('content-type'), 'text/plain');
 				$.end('hey');
@@ -56,7 +54,7 @@ app.start(function(){
 					yes: true,
 					no: false,
 					array: ['one', 'two', 'three', 'four'],
-					array2: ['10', '20', '30', '40']
+					array2: [10, 20, 30, 40]
 				}
 			}, function(error, response, body){
 				if(error) throw error;
@@ -65,6 +63,47 @@ app.start(function(){
 			});
 		});
 	});
+	
+	describe(subject + 'signal.body with no content-type in request header', function(){	
+		it('should validate signal.body types with not content-type'.grey
+		, function(done){
+			
+			app.post('/signal/body/types/2', function($){
+				assert.equal(typeof $.body.string, 'string');
+				assert.equal(typeof $.body.number, 'number');
+				assert.equal(typeof $.body.yes, 'boolean');
+				assert.equal(typeof $.body.no, 'boolean');
+				assert.equal(Array.isArray($.body.array), true);
+				
+				assert.equal($.body.string, 'hello');
+				assert.equal($.body.number, 10);
+				assert.equal($.body.yes, true);
+				assert.equal($.body.no, false);
+				
+				assert.equal($.header('content-type'), 'text/plain');
+				$.end('hey');
+			});
+			
+			request.post('http://localhost:9010/signal/body/types/2', {
+				form: { 
+					string: 'hello',
+					number: 10,
+					yes: true,
+					no: false,
+					array: ['one', 'two', 'three', 'four'],
+					array2: [10, 20, 30, 40]
+				},
+				headers: {
+					'content-type': false
+				}
+			}, function(error, response, body){
+				if(error) throw error;
+				assert.equal(body, 'hey')
+				done();
+			});
+		});
+	});
+	
 	describe(subject + 'signal.header', function(){	
 		it('should get a header and validate it'.grey
 		, function(done){
@@ -377,6 +416,23 @@ app.start(function(){
 			});
 		});
 		
+		it('should test signal.send'.grey
+		, function(done){
+			
+			app.get('/signal/send', function($){
+				$.send('hello!');
+				$.end();
+			});
+			
+			request.get('http://localhost:9010/signal/send', function(error, response, body){
+				if(error) throw error;
+				assert.equal(body, 'hello!');
+				assert.equal(response.headers['content-type'], 'text/plain');
+				assert.equal(response.statusCode, 200);
+				done();
+			});
+		});
+		
 		it('should test signal.json'.grey
 		, function(done){
 			
@@ -394,5 +450,90 @@ app.start(function(){
 				done();
 			});
 		});
+		
+		it('should test signal.body with mutlipart form request', function(done){
+			app.post('/signal/responses/body/mutlipart', function($){
+				assert.equal($.multipart, true)
+				$.end();
+				done()
+			});
+			
+			var Request = request.post('http://localhost:9010/signal/responses/body/mutlipart');
+			var form = Request.form();
+			form.append('test', 'value')
+			form.append('my_buffer', new Buffer([1, 2, 3]))
+		})
 	});
+	
+	it('should handle error gracefully'.grey
+	, function(done){
+		  
+		app.get('/signal/handleError', function($){
+			$.fail();
+			$.end();
+		});
+		
+		request.get({
+			url: 'http://localhost:9010/signal/handleError'
+		}, function(error, response, body){
+			console.log(body);
+			assert.equal(body.indexOf('500 Internal Server Error') != -1, true);
+			assert.equal(response.statusCode, 500);
+			done();
+		});
+	});
+	
+	it('should handle XMLHttpRequest error gracefully '.grey
+	, function(done){
+		  
+		app.get('/signal/handleError/XMLHttpRequest', function($){
+			$.fail();
+			$.end();
+		});
+		
+		request.get({
+			url: 'http://localhost:9010/signal/handleError/XMLHttpRequest',
+			followRedirect: true,
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		}, function(error, response, body){
+			assert.equal(body.indexOf('TypeError: undefined is not a function') != -1, true);
+			assert.equal(response.statusCode, 500);
+			done();
+		});
+	});
+	
+	it('should handle error gracefully within a chain'.grey
+	, function(done){
+		  
+		  
+		function yo($){
+			this.sender = 'Adam';
+			this.message = 'Yo!';
+			$.fail();
+			$.return(this);
+		}
+		
+		app.get('/signal/handleError/chain', function($){
+			$.chain().plugin('yo', yo).load(function(){
+				$.end($.yo.message + ' It\'s ' + $.yo.sender + '!');
+			});
+		});
+		
+				
+		
+		request.get({
+			url: 'http://localhost:9010/signal/handleError/chain',
+			followRedirect: true,
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			}
+		}, function(error, response, body){
+			assert.equal(body.indexOf('TypeError: undefined is not a function') != -1, true)
+			done();
+		});
+	});
+	
 });
+

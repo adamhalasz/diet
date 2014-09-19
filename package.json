@@ -1,7 +1,7 @@
 {
   "name": "diet",
   "version": "0.8.0",
-  "description": "Fast, plugin based, easy to learn web framework for node",
+  "description": "Fast, plugin based, easy to use HTTP(s) framework for node",
   "homepage": "http://dietjs.com/",
   "keywords": [
     "diet",
@@ -26,7 +26,7 @@
     "diet.js"
   ],
   "bugs": {
-    "url": "http://github.com/adamhalasz/dietjs/issues",
+    "url": "http://github.com/adamhalasz/diet/issues",
     "email": "mail@adamhalasz.com"
   },
   "repository": {
@@ -45,6 +45,7 @@
     "mocha": "~1.21.4",
     "mocha-lcov-reporter": "0.0.1",
     "nextjs": ">=0.0.3",
+    "diet-qs": ">=0.1.0",
     "path-to-regexp": ">=0.2.3",
     "request": ">=2.40.0",
     "stacktrace-js": "^0.6.2",
