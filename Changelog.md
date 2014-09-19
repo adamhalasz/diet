@@ -1,7 +1,10 @@
 ## v0.8.0 - 2014 September - **Major Release**
 - Unit Test Coverage 99%
-- Dropped `new App` now `require('diet')` returns a server object
-- Extended the `Signal` with `$.send` and `$.chain`
+- Deprecated `new App` now `require('diet')` returns a server object
+- Replaced the `querystring` module with the new `diet-qs`
+- Added new signal method `$.send` to appending to the response message 
+- Added new signal method `$.chain` to allow adding plugins to the plugin chain on the fly.
+- Added chainable commands like `require('diet').server().start().get('/')`
 - Better documentation
 - Added `examples`
 - Fixed every known bug
