@@ -1,3 +1,7 @@
+## v0.8.1 - 2014 September
++ added `app.server`
++ cleaned up unnecessary `console.logs`
+- 
 ## v0.8.0 - 2014 September - **Major Release**
 - Unit Test Coverage 99%
 - Deprecated `new App` now `require('diet')` returns a server object
