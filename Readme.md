@@ -399,17 +399,16 @@ POST is appropriate for other types of applications where a user request has the
 
 Check out [W3C](http://www.w3.org/2001/tag/doc/whenToUseGet.html) for more details:
 
-# **Domains**
-In some cases you might want to serve multiple domains with the same node.js application. Diet handles this beautifully. 
+## **Domains with `new server()`**
 
-
-## **Simple Single Domain:**
+### **Single Domain:**
 ```js
 var app = new server()
 app.domain('http://yourDomain.com/') // <-- ! full url required
 app.start()
 ```
-## **Multiple Domains on the same and different Ports:**
+### **Multiple Domains on the same and different Ports:**
+In some cases you might want to serve multiple domains with the same node.js application. Diet handles this beautifully. 
 ```js
 // Diet
 var server = require('diet')
@@ -439,7 +438,7 @@ other.get('/', function($){
 })
 ```
 
-## **Domain Methods**
+## **Methods returned by `new server()`**
 
 | Method | Description |
 | :------------ | :------------  
@@ -682,4 +681,4 @@ THE SOFTWARE.
   [1]: http://nodejs.org/
   [2]: http://i.imgur.com/rTAMJF0.png
   [3]: http://sugarjs.com/
-  [4]: http://i.imgur.com/M8I3Dp0.png
+  [4]: http://i.imgur.com/I3yuz7F.png
