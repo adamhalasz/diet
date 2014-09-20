@@ -52,7 +52,7 @@ app.get('/settings', db, session, protected, function($){
     $.html()
 })
 ```
-- `the first argument` of a route is the **Path**. Everything after the Path is *plugin middleware* that forms a *plugin chain*
+- `the first argument` of a route is the **Path**. Everything after the Path is a *plugin middleware* that forms a *plugin chain*
 
 - `db` instruct this route to create a database connection 
 - `session` grabs the account from the database with the session cookie
@@ -449,6 +449,7 @@ other.get('/', function($){
 | **app.get(path, plugins...)**         | Register a GET Route
 | **app.post(path, plugins...)**         | Register a POST Route
 | **app.path**         | The system path to your application. It is `process.cwd()` by default
+| **app.server**         | The returne value of `http.createServer` and `https.createServer`
 
 
 **Example for app.domain()**
