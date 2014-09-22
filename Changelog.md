@@ -1,9 +1,18 @@
+## v0.8.3 - 2014 September
+- fixed a bug in the chain. when `signal.data.passed` is `false` and `$.end()` is called the chain stops and other listeners on the same route will not be called.
+- calling `$.error()` from now on sets `$.passed` to `false`
+
+## v0.8.2 - 2014 September
+- updated `readme`
+
+
 ## v0.8.1 - 2014 September
-+ added `app.server`
-+ cleaned up unnecessary `console.logs`
-- 
+- added `app.server`
+- cleaned up unnecessary `console.logs`
+
+
 ## v0.8.0 - 2014 September - **Major Release**
-- Unit Test Coverage 99%
+- Unit Test Coverage 100%
 - Deprecated `new App` now `require('diet')` returns a server object
 - Replaced the `querystring` module with the new `diet-qs`
 - Added new signal method `$.send` to appending to the response message 
