@@ -19,9 +19,9 @@ app.start(function(){
 			
 			request.get('http://localhost:9000/', function(error, response, body){
 				if(error) throw error;
-				assert.equal(response.headers['content-type'], 'text/plain');
-				assert.equal(response.statusCode, 200);
 				assert.equal(body, 'Hello World!');
+				assert.equal(response.statusCode, 200);
+				assert.equal(response.headers['content-type'], 'text/plain');
 				done();
 			});
 		});

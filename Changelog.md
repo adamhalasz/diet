@@ -1,3 +1,7 @@
+## v0.8.4 - 2014 September
+- support for safe asynchronous error handling. replaced try catch with domains
+- setting `signal.passed` to false also stops the plugin chain just as `signal.data.passed`
+
 ## v0.8.3 - 2014 September
 - fixed a bug in the chain. when `signal.data.passed` is `false` and `$.end()` is called the chain stops and other listeners on the same route will not be called.
 - calling `$.error()` from now on sets `$.passed` to `false`

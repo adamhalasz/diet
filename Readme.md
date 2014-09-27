@@ -27,14 +27,20 @@ node -p "require('diet').server(8000).start().get('/', function($){ $.end('yo') 
 
 ## **Why another framework?**
 
-#### **A framework exclusively for HTTP and HTTPS**
-Diet is solely focusing on being a framework for HTTP(s) to serve Requests with Responses. As such diet has `Plugins` a special module framework designed to reduce the complexity of building application infrastructure and logic by inter-connecting modules with `Plugins` trough the `Router`. **This is all what Diet does** regarding it's functionality.
+#### **Only for HTTP/HTTPS**
+Diet helps to building web server logic faster & eaiser, and nothing more. 
 
-#### **Standardized but still Expressive**
-What is human readable and if it worths is controversial amongst many people. We are drawing a fine line between keeping the method names all written out and try to set the basic namings in stone while making it possible to organize and call all the methods in many different ways.
+#### **Easy Configuration**
+Many common use cases are simplified as much as it was possible. For example, using HTTPS, hosting multiple domains, parsing headers, querystring, post body etc...
 
-#### **Easier to Learn**
-Diet is a project aiming to create the most powerful node.js web application framework with the smallest learning curve.  A wide range of Examples and Tutorials are currently in progress.
+#### **Standardized Middleware Structure**
+Diet has middlewares just like express.js, the difference is in how modules are connected and used in the Router. Diet allows easier module configuration and modules can be chained. Modules designed for diet are called  `Plugins`.
+
+#### **Easy to Learn**
+Diet has a simple API and a wide range of Examples and Tutorials are currently in progress.
+
+#### **Tiny & Fast**
+Diet's source code is only 554 lines.
 
 ## **Tutorials & Examples**
 Check out the wiki on github for an expanding list of helpful articles, tutorials and examples:
@@ -681,4 +687,4 @@ THE SOFTWARE.
   [1]: http://nodejs.org/
   [2]: http://i.imgur.com/rTAMJF0.png
   [3]: http://sugarjs.com/
-  [4]: http://i.imgur.com/I3yuz7F.png
+  [4]: http://i.imgur.com/GY90YJd.png
