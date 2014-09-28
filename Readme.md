@@ -28,7 +28,7 @@ node -p "require('diet').server(8000).start().get('/', function($){ $.end('yo') 
 ## **Why another framework?**
 
 #### **Only for HTTP/HTTPS**
-Diet helps to building web server logic faster & eaiser, and nothing more. 
+Diet helps to build web server logic faster & eaiser, and nothing more. 
 
 #### **Easy Configuration**
 Many common use cases are simplified as much as it was possible. For example, using HTTPS, hosting multiple domains, parsing headers, querystring, post body etc...
