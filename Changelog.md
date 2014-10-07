@@ -1,3 +1,9 @@
+## v0.8.6 - 2014 October
+- Fixed a bug that caused starting an HTTPS server in failure with port 80
+
+## v0.8.5 - 2014 September
+- Better Docs
+
 ## v0.8.4 - 2014 September
 - support for safe asynchronous error handling. replaced try catch with domains
 - setting `signal.passed` to false also stops the plugin chain just as `signal.data.passed`
