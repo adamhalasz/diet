@@ -1,3 +1,16 @@
+## v0.9.0 - 2014 December - Major Release
+- Completely rewritten source code
+- New website with better documentation
+- Dropped the `plugin system `
+- Introduced `middleware`
+- Introduced `app.error` for error handling
+- Introduced `app.missing` for not found pages
+- Introduced `app.header` for global middleware at the beginning of routes
+- Introduced `app.footer` for global middleware at the end of routes
+- `app.failure` replaced `app.error`
+- Changed app.error to record errors instead of ending the response
+- Fixed many bugs
+
 ## v0.8.6 - 2014 October
 - Fixed a bug that caused starting an HTTPS server in failure with port 80
 

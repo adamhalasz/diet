@@ -1,7 +1,7 @@
 {
   "name": "diet",
-  "version": "0.8.6",
-  "description": "Fast, plugin based, easy to use HTTP(s) framework for node",
+  "version": "0.9.0",
+  "description": "A tiny, fast and modular node.js web framework. Good for making fast & scalable apps and apis.",
   "homepage": "http://dietjs.com/",
   "keywords": [
     "diet",
@@ -40,17 +40,15 @@
     "url": "http://adamhalasz.com/"
   },
   "dependencies": {
-    "callsite": ">=1.0.0",
-    "colors": ">=0.6.2",
+    "callsite": "^1.0.0",
+    "colors": "^1.0.3",
     "diet-qs": ">=0.1.0",
-    "mocha": "~1.21.4",
-    "mocha-lcov-reporter": "0.0.1",
-    "nextjs": ">=0.0.3",
-    "path-to-regexp": ">=0.2.3",
-    "request": ">=2.40.0",
-    "rewire": ">=2.1.0",
-    "stacktrace-js": ">=0.6.2",
-    "sugar": "1.4.1"
+    "es6-iterator": "^0.1.1",
+    "etag": "^1.5.0",
+    "nextjs": "0.0.3",
+    "path-to-regexp": "^1.0.1",
+    "request": "^2.48.0",
+    "sugar": "^1.4.1"
   },
   "devDependencies": {
     "coveralls": ">=2.11.1",
