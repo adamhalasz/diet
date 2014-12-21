@@ -1,7 +1,12 @@
+## v0.9.1 - 2014 December - Security Patch
+- 100% Unit Test Coverage
+- Build coverage with TravisCI
+- Fixed a bug that didn't allow to create https server with other ports than 80
+
 ## v0.9.0 - 2014 December - Major Release
 - Completely rewritten source code
 - New website with better documentation
-- Dropped the `plugin system `
+- Dropped the `plugin system`
 - Introduced `middleware`
 - Introduced `app.error` for error handling
 - Introduced `app.missing` for not found pages

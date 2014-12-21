@@ -1,19 +1,19 @@
 require('sugar')
-var hosts 	= {}
+var hosts   = {}
 var servers = {}
-var Server 	= require('./models/server')
-var Router 	= require('./models/router')
+var Server  = require('./models/server')
+var Router  = require('./models/router')
 function App(path){
-	this.path 		= path
-	this.dir 		= this.path.match(/([^\/]*)\/*$/)[1]
-	this.hosts 		= hosts
-	this.listen 	= new Server(this, hosts, servers)
-	this.get 		= new Router('get', this)
-	this.post 		= new Router('post', this)
-	this.header 	= new Router('header', this)
-	this.footer 	= new Router('footer', this)
-	this.missing 	= new Router('missing', this)
-	this.error 		= new Router('error', this)
+	this.path       = path
+	this.dir        = this.path.match(/([^\/]*)\/*$/)[1]
+	this.hosts      = hosts
+	this.listen     = new Server(this, hosts, servers)
+	this.get        = new Router('get', this)
+	this.post       = new Router('post', this)
+	this.header     = new Router('header', this)
+	this.footer     = new Router('footer', this)
+	this.missing    = new Router('missing', this)
+	this.error      = new Router('error', this)
 	return this
 }
 module.exports = function(){

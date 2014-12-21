@@ -5,24 +5,23 @@ var status_codes = require('http').STATUS_CODES;
 module.exports = function(request, response, app, protocol, location, path, match_found, callback){
 	var signal = {
 		app: app,
-		url: location,													// pass parsed request url
-		qs: qs,															// pass query string parser
-		query: location.query ? qs.parse(location.query) : {} ,			// parse query string
-		response: response,												// original response
-		request: request,												// original request
-		method: request.method,											// GET or POST
-		multipart: false,												// is it a multipart request?
+		url: location,                                                  // pass parsed request url
+		qs: qs,                                                         // pass query string parser
+		query: location.query ? qs.parse(location.query) : {} ,         // parse query string
+		response: response,                                             // original response
+		request: request,                                               // original request
+		method: request.method,                                         // GET or POST
+		multipart: false,                                               // is it a multipart request?
 		params: {}, data: {}, route: {}, fail: {}, errors: {},          // containers
 		header : function(where, newValue){		
-			if(!newValue){													// not a set operation
-				return response.getHeader(where) || request.headers[where];	// get header
-			} else if(!response.headersSent){								// if headers are not yet sent
-				return response.setHeader(where, newValue);					// set header
+			if(!newValue){                                                  // not a set operation
+				return response.getHeader(where) || request.headers[where]; // get header
+			} else if(!response.headersSent){                               // if headers are not yet sent
+				return response.setHeader(where, newValue);                 // set header
 			}
 		},
-		headers: request.headers,
-		write: function(data)	 { response.write(data);	},				// send data chunk to client
-		send:  function(message) { response.write(message); },
+		headers: request.headers,	
+		send:  function(message) { response.write(message); },               // send data chunk to client
 		redirect: function(input, statusCode){
 			if(input.substring(0, 4) === 'back') { 
 				var path = request.headers.referer || '/';
@@ -62,7 +61,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			if(!signal.responded){
 				response.end(data)
 				signal.responded = true
-				signal.nextRoute()											// call next route
+				signal.nextRoute() // call next route
 			}
 		},
 		status : function(code, message){
@@ -74,7 +73,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			signal.passed = signal.data.passed = false
 			signal.errors[field] = error
 		},
-		success: function(input){										// respond with JSON success
+		success: function(input){                                       // respond with JSON success
 			signal.status(200);
 			signal.header('content-type', 'application/json');
 			var data = signal.data;
@@ -82,13 +81,13 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			data.passed = true;
 			signal.end(JSON.stringify(data));
 		},
-		failure: function(){											// respond with JSON errors
+		failure: function(){                                            // respond with JSON errors
 			signal.status(200);
 			signal.header('content-type', 'application/json');
 			if(signal.data.errors) singal.errors = Object.merge(signal.error, signal.data.errors)
 			signal.end(JSON.stringify({ passed: false, errors: signal.errors }));
 		},
-		json : function(input){											// respond with JSON data
+		json : function(input){                                          // respond with JSON data
 			var data = signal.data;
 			if(isset(input)) data = Object.merge(signal.data, input);
 			signal.status(200);
@@ -97,7 +96,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		}
 	}
 	
-	// signal.params
+    // signal.params
 	if(match_found){	
 		var path_keys_length = path[0].paramKeys.length;
 		for(var i = 0; i < path_keys_length; i++){
@@ -106,7 +105,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		}
 	}
 	
-	// signal.body
+    // signal.body
 	if(path && signal.method === 'POST'){
 		signal.body = ''
 		var multipart = request.headers['content-type'] && request.headers['content-type'].toString().indexOf('multipart/form-data');

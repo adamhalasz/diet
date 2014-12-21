@@ -5,9 +5,10 @@ var RouteIterator = require('./iterator')
 module.exports = function(hosts, protocol, location){
 	return function(request, response){
 		response.setHeader('X-Powered-By', 'Diet.js')               // set software information for stats
+		response.setHeader('Content-Type', 'text/plain')
 		var app = hosts[request.headers.host]                       // find host 
 		var method = request.method.toLowerCase()                   // get method
-		if(app && method === 'get' || method === 'post'){           // check if host exists
+		if(app && app.routes && app.routes[method]){                // check if host exists
 			var routes = app.routes[method]                         // method routes
 			var location = url.parse(request.url)                   // parse location
 			var path = routes[location.pathname]                    // static path
@@ -61,6 +62,7 @@ module.exports = function(hosts, protocol, location){
 			
 			
 		} else {
+		    response.statusCode = 404
 			response.end('404 host not found') // no host found
 		}	
 	}

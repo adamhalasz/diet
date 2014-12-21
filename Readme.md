@@ -1,7 +1,10 @@
 ![Diet Logo](http://i.imgur.com/Dasjkkp.png)
 
+[![Build Status](http://img.shields.io/travis/adamhalasz/diet.svg?style=flat)](https://travis-ci.org/adamhalasz/diet) [![NPM](http://img.shields.io/npm/v/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Downloads](http://img.shields.io/npm/dm/diet.svg?style=flat)](https://www.npmjs.org/package/diet) [![Coveralls](http://img.shields.io/coveralls/adamhalasz/diet.svg?style=flat)](https://coveralls.io/r/adamhalasz/diet)
+
+
 [Diet](http://dietjs.com) is a tiny, fast and modular node.js web framework. Good for making fast & scalable apps and apis.
-```javascript
+```
 var server = require('diet')
 
 var app = server()
@@ -12,13 +15,14 @@ app.get('/', function($){
 ```
 
 ## Features 
-- Easy Host Contoller (built in virtual host support)
-- Simple and Semantic Routing with app.get and app.post
-- Asynchronous Error Handling with app.error
-- 404 Not Found routes with app.missing
-- Middleware support for all routes
-- Header and footer routes for global middlewares
-- Very small, just 335 sloc
+- Built for [virtual hosting](http://dietjs.com/tutorials/host#) 
+- Request and Reponse combined into the [signal object ($)](http://dietjs.com/tutorials/signal#)
+- Simple and Semantic Routing with [app.get](http://dietjs.com/api/server#app.get) and [app.post](http://dietjs.com/api/server#app.post)
+- [Middleware](http://dietjs.com/tutorials/router#middleware) Support
+- [Header](http://dietjs.com/tutorials/router#header) and [footer](http://dietjs.com/tutorials/router#footer) routes for better global middleware structuring
+- Asynchronous [error handling](http://dietjs.com/tutorials/router#error) with [app.error](http://dietjs.com/api/server#app.error) routes
+- [404](http://dietjs.com/tutorials/router#missing) routing with [app.missing](http://dietjs.com/api/server#app.missing)
+- [Very small](http://dietjs.com/resources/comparison#sloc), just 335 sloc
 
 ## Install
 ```
