@@ -4,7 +4,7 @@
 
 
 [Diet](http://dietjs.com) is a tiny, fast and modular node.js web framework. Good for making fast & scalable apps and apis.
-```
+```javascript
 var server = require('diet')
 
 var app = server()
