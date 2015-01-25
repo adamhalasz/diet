@@ -54,13 +54,13 @@
     "etag": "^1.5.0",
     "nextjs": "0.0.3",
     "path-to-regexp": "^1.0.1",
-    "request": "^2.48.0",
     "sugar": "^1.4.1"
   },
   "devDependencies": {
     "coveralls": ">=2.11.2",
     "mocha-lcov-reporter": "0.0.1",
     "istanbul": "~0.3.2",
+    "request": "^2.48.0",
     "mocha": "~1.21.4"
   },
   "main": "index.js",
