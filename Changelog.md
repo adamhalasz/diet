@@ -1,3 +1,13 @@
+## v0.9.2 - 2015 February
+- Support for `put`, `head`, `patch`, `trace` and `delete` HTTP methods
+- Added `app.put`
+- Added `app.head`
+- Added `app.patch`
+- Added `app.delete`
+- Added `app.trace`
+- Fixed body parsing mechanism. Every route's body is parsed that has a Content-Type or Transfer-Encoding Header. According to rfc2616-sec4
+
+
 ## v0.9.1 - 2014 December - Security Patch
 - 100% Unit Test Coverage
 - Build coverage with TravisCI

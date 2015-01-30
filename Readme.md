@@ -52,6 +52,7 @@ npm install diet
 ## Resources
 - [Official Modules](http://dietjs.com/resources/modules)
 - [Tests & Benchmarks](http://dietjs.com/resources/comparison)
+- [Changelog](https://github.com/adamhalasz/diet/blob/master/Changelog.md)
 
 ## License
 (The MIT License)

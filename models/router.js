@@ -3,11 +3,11 @@ var Next = require('nextjs')
 var pathToRegexp = require('path-to-regexp')
 var Domain = require('domain')
 
-module.exports = function(method, app){
+module.exports = function(method, type, app){
 	return function(path){
 		var args = arguments
 		var argsLength = args.length
-		if((method === 'get' || method === 'post') && typeof path == 'string'){
+		if((type === 'method') && typeof path == 'string'){
 			var keys = [];
 			var regex = pathToRegexp(path, keys);
 		}	
@@ -58,8 +58,11 @@ module.exports = function(method, app){
 				})()
 			}
 		}
-		if(method === 'get' || method === 'post'){
+		if(!app.routes) app.routes = {}
+		if(!app.routes[method]) method = [];
+		if(type === 'method'){
 			var pathRegister = (!isNaN(path)) ? path+'_status' : path
+			
 			if(!app.routes[method][pathRegister]) app.routes[method][pathRegister] = [];
 			app.routes[method][pathRegister].push(route)
 		} else {

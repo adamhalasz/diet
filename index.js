@@ -8,12 +8,17 @@ function App(path){
 	this.dir        = this.path.match(/([^\/]*)\/*$/)[1]
 	this.hosts      = hosts
 	this.listen     = new Server(this, hosts, servers)
-	this.get        = new Router('get', this)
-	this.post       = new Router('post', this)
-	this.header     = new Router('header', this)
-	this.footer     = new Router('footer', this)
-	this.missing    = new Router('missing', this)
-	this.error      = new Router('error', this)
+	this.get        = new Router('get'     , 'method' , this)
+	this.post       = new Router('post'    , 'method' , this)  
+	this.head       = new Router('head'    , 'method' , this)  
+	this.put        = new Router('put'     , 'method' , this)  
+	this.delete     = new Router('delete'  , 'method' , this) 
+	this.patch      = new Router('patch'   , 'method' , this)
+	this.trace      = new Router('trace'   , 'method' , this)
+	this.header     = new Router('header'  , 'api'    , this)
+	this.footer     = new Router('footer'  , 'api'    , this) 
+	this.missing    = new Router('missing' , 'api'    , this) 
+	this.error      = new Router('error'   , 'api'    , this) 
 	return this
 }
 module.exports = function(){

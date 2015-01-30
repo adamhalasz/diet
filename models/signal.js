@@ -106,7 +106,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 	}
 	
     // signal.body
-	if(path && signal.method === 'POST'){
+	if(path && request.headers['content-type'] || request.headers['transfer-encoding']){
 		signal.body = ''
 		var multipart = request.headers['content-type'] && request.headers['content-type'].toString().indexOf('multipart/form-data');
 		if(multipart === -1){
