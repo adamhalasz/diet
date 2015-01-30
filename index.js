@@ -15,6 +15,7 @@ function App(path){
 	this.delete     = new Router('delete'  , 'method' , this) 
 	this.patch      = new Router('patch'   , 'method' , this)
 	this.trace      = new Router('trace'   , 'method' , this)
+	this.options    = new Router('options' , 'method' , this)
 	this.header     = new Router('header'  , 'api'    , this)
 	this.footer     = new Router('footer'  , 'api'    , this) 
 	this.missing    = new Router('missing' , 'api'    , this) 

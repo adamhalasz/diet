@@ -211,6 +211,47 @@ describe(subject + 'Dynamic TRACE Path Request/Response', function(){
 	});
 });
 
+// -------[ TRACE ] -------
+describe(subject + 'Simple OPTIONS Path Request/Response', function(){	
+	it('app.options(\'/\', ..)'.white+' - should receive "options!" when visiting OPTIONS /'.grey
+	, function(done){
+		
+		app.options('/', function($){
+			$.end('options!');
+		});
+		
+		request({
+		    'method': 'options',
+		    'uri': 'http://localhost:9000/'
+		}, function(error, response, body){
+			if(error) throw error;
+			assert.equal(body, 'options!');
+			assert.equal(response.statusCode, 200);
+			assert.equal(response.headers['content-type'], 'text/plain');
+			done();
+		});
+	});
+});
+
+describe(subject + 'Dynamic OPTIONS Path Request/Response', function(){
+	it('app.options(\'/object/:name\', ..)'.white+' - should listen and receive "Car options!" upon visiting OPTIONS /user/john'.grey, function(done){
+		app.options('/object/:name', function($){
+			$.end($.params.name.capitalize() + ' options!');
+		});
+		
+		request({
+		    'method': 'options',
+		    'uri': 'http://localhost:9000/object/car'
+		}, function(error, response, body){
+			if(error) throw error;
+		    assert.equal(body, 'Car options!');
+			assert.equal(response.statusCode, 200);
+			assert.equal(response.headers['content-type'], 'text/plain');
+			done();
+		});
+	});
+});
+
 // -------[ PATCH ] -------
 describe(subject + 'Simple PATCH Path Request/Response', function(){	
 	it('app.patch(\'/\', ..)'.white+' - should receive "Hello World!" when visiting PATCH /'.grey
