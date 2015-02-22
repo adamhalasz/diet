@@ -84,7 +84,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		failure: function(){                                            // respond with JSON errors
 			signal.status(200);
 			signal.header('content-type', 'application/json');
-			if(signal.data.errors) singal.errors = Object.merge(signal.error, signal.data.errors)
+			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
 			signal.end(JSON.stringify({ passed: false, errors: signal.errors }));
 		},
 		json : function(input){                                          // respond with JSON data
