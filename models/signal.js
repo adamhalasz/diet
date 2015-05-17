@@ -112,7 +112,16 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		if(multipart === -1){
 			signal.multipart = false;
 			request.on('data', function(data){ signal.body += data; });
-			request.on('end', function(){ signal.body = signal.qs.parse(signal.body); callback(signal); });
+			request.on('end', function(){ 
+				if(request.headers['content-type'] == "application/x-www-form-urlencoded"){
+					signal.body = signal.qs.parse(signal.body);
+				} else if(request.headers['content-type'] == "application/json") {
+					try {
+						signal.body = JSON.parse(signal.body); 
+					} catch (error) {}
+				}
+				callback(signal); 
+			});
 		} else {
 			signal.multipart = true;
 			callback(signal);

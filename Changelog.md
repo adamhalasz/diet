@@ -1,3 +1,6 @@
+## v0.9.3 - 2015 May
+- The body for POST and PUT methods now require the appropriate "Content-Type" header to be parsed. For URL encoded body "application/x-www-form-urlencoded" is required, for JSON requests "application/json". If no "Content-Type" is specified then $.body contains the raw body content.
+
 ## v0.9.2 - 2015 February
 - Support for `options`, `put`, `head`, `patch`, `trace` and `delete` HTTP methods
 - Added `app.put`
