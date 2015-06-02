@@ -1,3 +1,7 @@
+## v0.9.4 - 2015 June
+- Treat localhost addresses equally (127.0.0.1, 192.168.99.100, localhost)
+- Listen on multiple addresses without redirects or host configs
+
 ## v0.9.3 - 2015 May
 - The body for POST and PUT methods now require the appropriate "Content-Type" header to be parsed. For URL encoded body "application/x-www-form-urlencoded" is required, for JSON requests "application/json". If no "Content-Type" is specified then $.body contains the raw body content.
 

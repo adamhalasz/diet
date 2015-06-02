@@ -6,11 +6,16 @@ module.exports = function(hosts, protocol, location){
 	return function(request, response){
 		response.setHeader('X-Powered-By', 'Diet.js')               // set software information for stats
 		response.setHeader('Content-Type', 'text/plain')
-		var app = hosts[request.headers.host]                       // find host 
-		var method = request.method.toLowerCase()                   // get method
+		var method   = request.method.toLowerCase()                   // get method
+		var location = url.parse(request.url)                       // parse location
+		var port     = request.headers.host.split(':')[1];
+		var hostname = isset(port) ? request.headers.host : request.headers.host+':'+80 ;
+		//console.log('request.headers.host=', request.headers.host);
+		//console.log('port=', port);
+		//console.log('hostname=', hostname);
+		var app = hosts[hostname]                                   // find host
 		if(app && app.routes && app.routes[method]){                // check if host exists
 			var routes = app.routes[method]                         // method routes
-			var location = url.parse(request.url)                   // parse location
 			var path = routes[location.pathname]                    // static path
 			var match_found = false
 			

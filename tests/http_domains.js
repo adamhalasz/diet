@@ -71,12 +71,12 @@ describe(subject + 'Setup Domain with a String or a URL Object or Undefined', fu
 	});
 	
 	
-	it('should create an app and setup the domain with an Integer domain and check if the app.location.port is 9035 and the app.location.host is localhost:9035."'.grey
+	it('should create an app and setup the domain with an Integer domain and check if the app.location.port is 9035 and the app.location.host is app.address:9035."'.grey
 	, function(done){
 		var app = server();
 		app.listen(9035)
 		assert.equal(app.location.port, 9035);
-		assert.equal(app.location.host, 'localhost:9035');
+		assert.equal(app.location.host, app.address+':9035');
 		done();
 	});
 

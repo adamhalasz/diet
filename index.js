@@ -4,6 +4,7 @@ var servers = {}
 var Server  = require('./models/server')
 var Router  = require('./models/router')
 function App(path){
+    this.address    = require('ip').address()
 	this.path       = path
 	this.dir        = this.path.match(/([^\/]*)\/*$/)[1]
 	this.hosts      = hosts
