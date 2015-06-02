@@ -1,0 +1,10 @@
+npm-debug.log
+.coveralls.yml
+/node_modules
+/node_modules/*
+/examples
+/coverage
+covreporter.html
+.tests-cov
+.DS_Store
+npm-debug.log
