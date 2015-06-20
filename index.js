@@ -4,6 +4,7 @@ var hosts   = {}
 var servers = {}
 var Server  = require('./models/server')
 var Router  = require('./models/router')
+var dietHeader = false;
 function App(path, options){
     this.silent     = options.silent
     this.address    = require('ip').address()
@@ -27,6 +28,6 @@ function App(path, options){
 }
 module.exports = function(options){
     if(!options) options = {}
-    if(!options.silent){ process.stdout.write('\u001B[2J\u001B[0;0f'+' Diet '.inverse+(' ('+JSON.parse(require('fs').readFileSync(__dirname+'/package.json').toString()).version+') ☺\n http://dietjs.com/').dim+'\n\n') }
+    if(!options.silent && !dietHeader){ process.stdout.write('\u001B[2J\u001B[0;0f'+' Diet '.inverse+(' ('+JSON.parse(require('fs').readFileSync(__dirname+'/package.json').toString()).version+') ☺\n http://dietjs.com/').dim+'\n\n'); dietHeader = true; }
 	return new App(require('path').dirname(require('callsite')()[1].getFileName()), options)
 }
