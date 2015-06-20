@@ -29,7 +29,7 @@ module.exports = function(app, hosts, servers){
 		}
 		
 		// console inititalization message
-		if(!noMessage) console.log(' ➭ '.dim + app.location.protocol.split(':')[0].toUpperCase() + ' Server is listening on', location.underline)
+		if(!noMessage && !app.silent) console.log(' ... '.dim + app.location.protocol.split(':')[0].toUpperCase() + ' Server is listening on', location.underline)
 		
 		// return server
 		return app.server = server

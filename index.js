@@ -1,9 +1,11 @@
 require('sugar')
+require('colors')
 var hosts   = {}
 var servers = {}
 var Server  = require('./models/server')
 var Router  = require('./models/router')
-function App(path){
+function App(path, options){
+    this.silent     = options.silent
     this.address    = require('ip').address()
 	this.path       = path
 	this.dir        = this.path.match(/([^\/]*)\/*$/)[1]
@@ -23,7 +25,8 @@ function App(path){
 	this.error      = new Router('error'   , 'api'    , this) 
 	return this
 }
-module.exports = function(){
-	return new App(require('path').dirname(require('callsite')()[1].getFileName()))
+module.exports = function(options){
+    if(!options) options = {}
+    if(!options.silent){ process.stdout.write('\u001B[2J\u001B[0;0f'+' Diet '.inverse+(' ('+JSON.parse(require('fs').readFileSync(__dirname+'/package.json').toString()).version+') ☺\n http://dietjs.com/').dim+'\n\n') }
+	return new App(require('path').dirname(require('callsite')()[1].getFileName()), options)
 }
-require('colors'); process.stdout.write('\u001B[2J\u001B[0;0f'+' ➭ Diet '.inverse+(' ('+JSON.parse(require('fs').readFileSync(__dirname+'/package.json').toString()).version+') ☺\n http://dietjs.com/').dim+'\n\n')

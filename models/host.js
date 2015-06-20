@@ -5,14 +5,12 @@ var RouteIterator = require('./iterator')
 module.exports = function(hosts, protocol, location){
 	return function(request, response){
 		response.setHeader('X-Powered-By', 'Diet.js')               // set software information for stats
+		response.setHeader('Server', 'Diet.js')                     
 		response.setHeader('Content-Type', 'text/plain')
-		var method   = request.method.toLowerCase()                   // get method
+		var method   = request.method.toLowerCase()                 // get method
 		var location = url.parse(request.url)                       // parse location
 		var port     = request.headers.host.split(':')[1];
 		var hostname = isset(port) ? request.headers.host : request.headers.host+':'+80 ;
-		//console.log('request.headers.host=', request.headers.host);
-		//console.log('port=', port);
-		//console.log('hostname=', hostname);
 		var app = hosts[hostname]                                   // find host
 		if(app && app.routes && app.routes[method]){                // check if host exists
 			var routes = app.routes[method]                         // method routes
@@ -42,7 +40,6 @@ module.exports = function(hosts, protocol, location){
 			
 			// When Headers are Ready
 			function headersReady(signal){
-				//console.log('app.routes.footer', app.routes.footer)
 				if(path) { 
 					new RouteIterator(path, signal, function(signal){
 						new RouteIterator(app.routes.footer, signal, footersReady, 'footer')
@@ -56,7 +53,6 @@ module.exports = function(hosts, protocol, location){
 			function footersReady(signal){
 				if(!signal.responded){
 					signal.status(404)
-					//console.log(signal.url.pathname, 'FOOTER READY')
 					if (app.routes.missing.length){ 
 						new RouteIterator(app.routes.missing, signal, false, 'missing_body') 
 					} else { 

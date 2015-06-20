@@ -27,7 +27,6 @@ module.exports = function(method, type, app){
 					// console.log('\n## MIDDLEWARE', 'count=', count, '| argsLength=',argsLength)
 					if(count < argsLength){
 						var middleware = args[count]
-						//var current = iterator.next()
 						if(typeof middleware == 'function'){
 							// console.log(' --> MIDDLEWARE [ STARTED ]')
 							signal.return = function(){ 

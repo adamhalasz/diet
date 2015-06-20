@@ -22,7 +22,6 @@ function errorTemplate(signal, error){
 	+	((error.stack) ? parseStackTrace(error.stack.split('\n').splice(1)) : '')
 	+	'</div>'
 	+'</div>'	
-	
 }
 
 module.exports = function(error, signal, app){
