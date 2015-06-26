@@ -16,8 +16,8 @@ module.exports = function(app, hosts, servers){
 		if(!servers[port]){
 			var host = new Host(hosts, protocol, location)
 			var server = app.location.protocol === 'http:' 
-				? protocol.createServer(host).listen(port) 
-				: protocol.createServer(httpsOptions, host).listen(port) ;
+				? protocol.createServer(host).listen(port, app.host) 
+				: protocol.createServer(httpsOptions, host).listen(port, app.host) ;
 			servers[port] = server
 			
 			// listen on localhost addresses

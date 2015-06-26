@@ -24,6 +24,7 @@ function App(path, options){
 	this.footer     = new Router('footer'  , 'api'    , this) 
 	this.missing    = new Router('missing' , 'api'    , this) 
 	this.error      = new Router('error'   , 'api'    , this) 
+	this.host       = '0.0.0.0'
 	return this
 }
 module.exports = function(options){
