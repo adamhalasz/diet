@@ -6,7 +6,7 @@ module.exports = function(app, hosts, servers){
 		var location = isNaN(location) ? location : 'http://localhost:'+location ;
 		app.location = typeof location == 'object' ? location : require('url').parse(location) ;
 		app.routes = { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
-		hosts[app.location.hostname] = app
+		hosts[app.location.host] = app
 		
 		// get protocol and port
 		var protocol = app.location.protocol === 'http:' ? require('http') : require('https')
@@ -15,10 +15,9 @@ module.exports = function(app, hosts, servers){
 		// create server
 		if(!servers[port]){
 			var host = new Host(hosts, protocol, location)
-			var hostname = (app.location.hostname.match(/\./)) ? app.location.hostname : '0.0.0.0' ;
 			var server = app.location.protocol === 'http:' 
-				? protocol.createServer(host).listen(port, hostname) 
-				: protocol.createServer(httpsOptions, host).listen(port, hostname) ;
+				? protocol.createServer(host).listen(port) 
+				: protocol.createServer(httpsOptions, host).listen(port) ;
 			servers[port] = server
 			
 			// listen on localhost addresses
