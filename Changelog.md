@@ -1,3 +1,6 @@
+## v0.9.7 - 2015 June
+- Fixed a bug that didn't allow registering named addresses without a port
+
 ## v0.9.6 - 2015 June
 - Fixed a bug in server options that caused to display the diet header for every server instance
 

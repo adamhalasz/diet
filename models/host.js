@@ -9,9 +9,8 @@ module.exports = function(hosts, protocol, location){
 		response.setHeader('Content-Type', 'text/plain')
 		var method   = request.method.toLowerCase()                 // get method
 		var location = url.parse(request.url)                       // parse location
-		var port     = request.headers.host.split(':')[1];
-		var hostname = isset(port) ? request.headers.host : request.headers.host+':'+80 ;
-		var app = hosts[hostname]                                   // find host
+		var port     = request.headers.host ? request.headers.host.split(':')[1] : 80 ;
+		var app = hosts[request.headers.host]                       // find host
 		if(app && app.routes && app.routes[method]){                // check if host exists
 			var routes = app.routes[method]                         // method routes
 			var path = routes[location.pathname]                    // static path
