@@ -12,6 +12,7 @@ module.exports = function(hosts, protocol, location){
 		var port     = request.headers.host.split(':')[1];
 		var hostname = isset(port) ? request.headers.host : request.headers.host+':'+80 ;
 		var app = hosts[hostname]                                   // find host
+		if (!(app && app.routes && app.routes[method])) var app = hosts['localhost:80']; // defaults to local
 		if(app && app.routes && app.routes[method]){                // check if host exists
 			var routes = app.routes[method]                         // method routes
 			var path = routes[location.pathname]                    // static path
