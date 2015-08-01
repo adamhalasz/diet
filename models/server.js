@@ -4,6 +4,8 @@ module.exports = function(app, hosts, servers){
 	    
 		// get location and create route holder for app
 		var location = isNaN(location) ? location : 'http://localhost:'+location ;
+		if (!location.indexOf('://') > -1) var location = 'http://' + location ; // check if protocol else http
+		
 		app.location = typeof location == 'object' ? location : require('url').parse(location) ;
 		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
 		hosts[app.location.host] = app
@@ -21,6 +23,7 @@ module.exports = function(app, hosts, servers){
 			servers[port] = server
 			
 			// listen on localhost addresses
+			// Implament check if app.hosts['127.0.0.1:' + port] do nothing else
 			app.listen('http://127.0.0.1:'+port, httpsOptions, true);
 			app.listen('http://'+app.address+':'+port, httpsOptions, true);
 			
