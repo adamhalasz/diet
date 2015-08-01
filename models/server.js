@@ -3,16 +3,23 @@ module.exports = function(app, hosts, servers){
 	return function(location, httpsOptions, noMessage){
 	    
 		// get location and create route holder for app
-		var location = isNaN(location) ? location : 'http://localhost:'+location ;
-		if (location.indexOf('://') == -1) var location = 'http://' + location ; // check if protocol else http
+		var location = isNaN(location) ? location : 'http://localhost:'+location ; // if NaN 
+		if (typeof location == 'string') {
+			if (location.indexOf('://') == -1) var location = 'http://' + location ; // check if protocol else http
+		}
 		
-		app.location = typeof location == 'object' ? location : require('url').parse(location) ;
-		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
-		hosts[app.location.host] = app
+		app.location = typeof location == 'object' ? location : require('url').parse(location) ; // Make object if is not
 		
 		// get protocol and port
+		if (app.location.protocol.indexOf('http') > -1) {
 		var protocol = app.location.protocol === 'http:' ? require('http') : require('https')
 		var port = app.location.protocol === 'http:' ? (app.location.port || 80) : (app.location.port || 443) ;
+		
+		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
+		
+		hosts[app.location.host] = app
+		
+		
 		
 		// create server
 		if(!servers[port]){
@@ -36,5 +43,8 @@ module.exports = function(app, hosts, servers){
 		
 		// return server
 		return app.server = server
+		
+		// only return server if there was no fail in the listen line 			
+		} else { console.log('Fail in .listen(value)') }
 	}
 }
