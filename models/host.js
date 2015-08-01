@@ -4,8 +4,6 @@ var url = require('url')
 var RouteIterator = require('./iterator')
 module.exports = function(hosts, protocol, location){
 	return function(request, response){
-		response.setHeader('X-Powered-By', 'Diet.js')               // set software information for stats
-		response.setHeader('Server', 'Diet.js')                     
 		response.setHeader('Content-Type', 'text/plain')
 		var method   = request.method.toLowerCase()                 // get method
 		var location = url.parse(request.url)                       // parse location
@@ -14,6 +12,9 @@ module.exports = function(hosts, protocol, location){
 		var app = hosts[hostname]                                   // find host
 		if (!(app && app.routes && app.routes[method])) var app = hosts['localhost:80']; // defaults to local
 		if(app && app.routes && app.routes[method]){                // check if host exists
+			for(var key in app.res_setHeader) {
+   				response.setHeader(key, app.res_setHeader[key])
+			}
 			var routes = app.routes[method]                         // method routes
 			var path = routes[location.pathname]                    // static path
 			var match_found = false

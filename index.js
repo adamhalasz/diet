@@ -7,6 +7,8 @@ var Router  = require('./models/router')
 var dietHeader = false;
 function App(path, options){
     this.silent     = options.silent
+    // set software information for stats
+    this.res_setHeader = options.res_setHeader || { 'X-Powered-By': 'Diet.js', 'Server': 'Diet.js' }
     this.address    = require('ip').address()
 	this.path       = path
 	this.dir        = this.path.match(/([^\/]*)\/*$/)[1]
