@@ -8,9 +8,10 @@ var io = require('socket.io')(app.server) // <-- use app.server
 
 // Listen on websocket connection
 io.on('connection', function(socket){
-  console.log(' ... socket.io: A USER CONNECTED');
+    console.log(' ... socket.io: A USER CONNECTED');
 });
 
+// Route for "HTTP GET /"
 app.get('/', function($){
     $.header('content-type', 'text/html');
     $.end( '<!DOCTYPE html>'
@@ -23,6 +24,5 @@ app.get('/', function($){
         + '<body>'
         +     '<h1>check your console!</h1>'
         + '</body>'
-        + '</html>'
-    )
+        + '</html>');
 });

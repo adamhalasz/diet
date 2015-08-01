@@ -6,27 +6,26 @@ var Server  = require('./models/server')
 var Router  = require('./models/router')
 var dietHeader = false;
 function App(path, options){
-    this.silent     = options.silent
-    // set software information for stats
-    this.res_setHeader = options.res_setHeader || { 'X-Powered-By': 'Diet.js', 'Server': 'Diet.js' }
-    this.address    = require('ip').address()
-	this.path       = path
-	this.dir        = this.path.match(/([^\/]*)\/*$/)[1]
-	this.hosts      = hosts
-	this.listen     = new Server(this, hosts, servers)
-	this.get        = new Router('get'     , 'method' , this)
-	this.post       = new Router('post'    , 'method' , this)  
-	this.head       = new Router('head'    , 'method' , this)  
-	this.put        = new Router('put'     , 'method' , this)  
-	this.delete     = new Router('delete'  , 'method' , this) 
-	this.patch      = new Router('patch'   , 'method' , this)
-	this.trace      = new Router('trace'   , 'method' , this)
-	this.options    = new Router('options' , 'method' , this)
-	this.header     = new Router('header'  , 'api'    , this)
-	this.footer     = new Router('footer'  , 'api'    , this) 
-	this.missing    = new Router('missing' , 'api'    , this) 
-	this.error      = new Router('error'   , 'api'    , this) 
-	this.host       = '0.0.0.0'
+    this.silent         = options.silent
+    this.defaultHeaders = options.defaultHeaders || { 'X-Powered-By': 'Diet.js', 'Server': 'Diet.js' } // please help spread the word!
+    this.address        = require('ip').address()
+	this.path           = path
+	this.dir            = this.path.match(/([^\/]*)\/*$/)[1]
+	this.hosts          = hosts
+	this.listen         = new Server(this, hosts, servers)
+	this.get            = new Router('get'     , 'method' , this)
+	this.post           = new Router('post'    , 'method' , this)  
+	this.head           = new Router('head'    , 'method' , this)  
+	this.put            = new Router('put'     , 'method' , this)  
+	this.delete         = new Router('delete'  , 'method' , this) 
+	this.patch          = new Router('patch'   , 'method' , this)
+	this.trace          = new Router('trace'   , 'method' , this)
+	this.options        = new Router('options' , 'method' , this)
+	this.header         = new Router('header'  , 'api'    , this)
+	this.footer         = new Router('footer'  , 'api'    , this) 
+	this.missing        = new Router('missing' , 'api'    , this) 
+	this.error          = new Router('error'   , 'api'    , this) 
+	this.host           = '0.0.0.0'
 	return this
 }
 module.exports = function(options){

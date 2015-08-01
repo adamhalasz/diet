@@ -1,32 +1,40 @@
 var Host = require('./host')
+var url = require('url');
 module.exports = function(app, hosts, servers){
 	return function(location, httpsOptions, noMessage){
-	    
-		// get location and create route holder for app
-		var location = isNaN(location) ? location : 'http://localhost:'+location ; // if NaN 
-		if (typeof location == 'string') {
-			if (location.indexOf('://') == -1) var location = 'http://' + location ; // check if protocol else http
-		}
+	    // define location
+        if(typeof location == 'number') app.location = url.parse('http://localhost:'+location);
+        if(typeof location == 'string') app.location = url.parse(location)
+        if(typeof location == 'object') app.location = location;
+        if(!isset(location))            app.location = url.parse('http://localhost:80/');
+        
+        // define protocol
+		var protocol = app.location.protocol === 'http:' ? require('http') : require('https') ;
 		
-		app.location = typeof location == 'object' ? location : require('url').parse(location) ; // Make object if is not
-		
-		// get protocol and port
-		if (app.location.protocol.indexOf('http') > -1) {
-		var protocol = app.location.protocol === 'http:' ? require('http') : require('https')
+		// define port
 		var port = app.location.protocol === 'http:' ? (app.location.port || 80) : (app.location.port || 443) ;
 		
+		// create route containers
 		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
 		
+		// define host
+		app.location.host = app.location.host.split(':')[1] ? app.location.host : app.location.host + ':' + port;
+		
+		// save host to hosts
 		hosts[app.location.host] = app
 		
-		
-		
-		// create server
+		// create new server object
+		// if port is not found in servers
 		if(!servers[port]){
+		    // create new host object
 			var host = new Host(hosts, protocol, location)
+			
+			// define http or https server
 			var server = app.location.protocol === 'http:' 
 				? protocol.createServer(host).listen(port, app.host) 
 				: protocol.createServer(httpsOptions, host).listen(port, app.host) ;
+			
+			// save server to servers with it's port
 			servers[port] = server
 			
 			// listen on localhost addresses
@@ -34,17 +42,15 @@ module.exports = function(app, hosts, servers){
 			app.listen('http://127.0.0.1:'+port, httpsOptions, true);
 			app.listen('http://'+app.address+':'+port, httpsOptions, true);
 			
+		// otherwise reuse the server object
 		} else {
 			var server = servers[port]
 		}
 		
 		// console inititalization message
-		if(!noMessage && !app.silent) console.log(' ... '.dim + app.location.protocol.split(':')[0].toUpperCase() + ' Server is listening on', location.underline)
+		if(!noMessage && !app.silent) console.log(' ... '.dim + app.location.protocol.split(':')[0].toUpperCase() + ' Server is listening on', app.location.href.underline)
 		
 		// return server
 		return app.server = server
-		
-		// only return server if there was no fail in the listen line 			
-		} else { console.log('Fail in .listen(value)') }
 	}
 }

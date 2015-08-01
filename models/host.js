@@ -9,11 +9,11 @@ module.exports = function(hosts, protocol, location){
 		var location = url.parse(request.url)                       // parse location
 		var port     = request.headers.host.split(':')[1];
 		var hostname = isset(port) ? request.headers.host : request.headers.host+':'+80 ;
-		var app = hosts[hostname]                                   // find host
-		if (!(app && app.routes && app.routes[method])) var app = hosts['localhost:80']; // defaults to local
+		var app = hosts[hostname]    
+		//if (!(app && app.routes && app.routes[method])) var app = hosts['localhost:80']; // defaults to local
 		if(app && app.routes && app.routes[method]){                // check if host exists
-			for(var key in app.res_setHeader) {
-   				response.setHeader(key, app.res_setHeader[key])
+			for(var key in app.defaultHeaders) {
+   				response.setHeader(key, app.defaultHeaders[key])
 			}
 			var routes = app.routes[method]                         // method routes
 			var path = routes[location.pathname]                    // static path
