@@ -4,7 +4,7 @@ var url = require('url')
 var RouteIterator = require('./iterator')
 module.exports = function(hosts, protocol, location){
 	return function(request, response){
-		for(var key in hosts['localhost:80'].res_setHeader) { response.setHeader(key, app.res_setHeader[key]) }
+		if(hosts['localhost:80'].res_setHeader) for(var key in hosts['localhost:80'].res_setHeader) { response.setHeader(key, app.res_setHeader[key]) }
 		var method   = request.method.toLowerCase()                 // get method
 		var location = url.parse(request.url)                       // parse location
 		var port     = request.headers.host.split(':')[1];
