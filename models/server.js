@@ -3,10 +3,15 @@ var url = require('url');
 module.exports = function(app, hosts, servers){
 	return function(location, httpsOptions, noMessage){
 	    // define location
-        if(typeof location == 'number') app.location = url.parse('http://localhost:'+location);
-        if(typeof location == 'string') app.location = url.parse(location)
-        if(typeof location == 'object') app.location = location;
-        if(!isset(location))            app.location = url.parse('http://localhost:80/');
+        if(!isNaN(location)) {
+        	app.location = url.parse('http://localhost:'+location);
+        } else if(typeof location == 'string') {
+        	app.location = url.parse(location) 
+        } else if(typeof location == 'object') {
+        	app.location = location;
+        } else if(!isset(location)){
+        	app.location = url.parse('http://localhost:80/');
+        }            
         
         // define protocol
 		var protocol = app.location.protocol === 'http:' ? require('http') : require('https') ;
@@ -17,6 +22,7 @@ module.exports = function(app, hosts, servers){
 		// create route containers
 		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
 		
+		console.log(isNaN(location), location, typeof location, app.location);
 		// define host
 		app.location.host = app.location.host.split(':')[1] ? app.location.host : app.location.host + ':' + port;
 		
