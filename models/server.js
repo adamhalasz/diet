@@ -6,6 +6,7 @@ module.exports = function(app, hosts, servers){
         if(!isNaN(location)) {
         	app.location = url.parse('http://localhost:'+location);
         } else if(typeof location == 'string') {
+                var location = location.indexOf('://') == -1 ? 'http://' + location : location ;
         	app.location = url.parse(location) 
         } else if(typeof location == 'object') {
         	app.location = location;
