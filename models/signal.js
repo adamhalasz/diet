@@ -81,10 +81,11 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			data.passed = true;
 			signal.end(JSON.stringify(data));
 		},
-		failure: function(){                                            // respond with JSON errors
+		failure: function(input){                                            // respond with JSON errors
 			signal.status(200);
 			signal.header('content-type', 'application/json');
 			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
+			if(isset(input)) data = Object.merge(signal.errors, input);
 			signal.end(JSON.stringify({ passed: false, errors: signal.errors }));
 		},
 		json : function(input){                                          // respond with JSON data
@@ -113,7 +114,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			signal.multipart = false;
 			request.on('data', function(data){ signal.body += data; });
 			request.on('end', function(){ 
-				if(request.headers['content-type'] == "application/x-www-form-urlencoded"){
+				if(request.headers['content-type'].toString().indexOf('application/x-www-form-urlencoded') != -1){
 					signal.body = signal.qs.parse(signal.body);
 				} else if(request.headers['content-type'] == "application/json") {
 					try {

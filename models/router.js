@@ -37,6 +37,7 @@ module.exports = function(method, type, app){
 							}
 							var domain = Domain.create()
 							domain.on('error', function(error){ 
+							    console.log(error.stack);
 								signal.fail.route = route
 								signal.fail.error = error
 								signal.fail.middleware = middleware

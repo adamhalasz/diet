@@ -16,9 +16,10 @@ function parseStackTrace(stacktrace){
 }
 
 function errorTemplate(signal, error){
+    var message = error.message || '';
 	return 	'<div style="font-size:13px; line-height:18px;;">'
 	+		'<div style="font-family: monaco, monospace, \'Lucida Console\'; clear:both;">' 
-	+ 			'<h2 style="font-weight:normal;margin: 15px 0 13px 0;line-height: 14px;font-size: 14px;color: #E42616;"><span style="color: #FFFFFF;background: #EC5C50;padding: 2px 8px;border-radius: 3px;font-size: 12px;font-weight: bold;font-family: sans-serif;float: left;margin-top: -2px;margin-right: 9px;box-shadow: inset 0 0 1px rgba(0,0,0,.6);">'+ error.name +'</span> '+ error.message.replace(/\</gi, '&lt;').replace(/\>/gi, '&gt;') +'</h2>'
+	+ 			'<h2 style="font-weight:normal;margin: 15px 0 13px 0;line-height: 14px;font-size: 14px;color: #E42616;"><span style="color: #FFFFFF;background: #EC5C50;padding: 2px 8px;border-radius: 3px;font-size: 12px;font-weight: bold;font-family: sans-serif;float: left;margin-top: -2px;margin-right: 9px;box-shadow: inset 0 0 1px rgba(0,0,0,.6);">'+ error.name +'</span> '+ message.replace(/\</gi, '&lt;').replace(/\>/gi, '&gt;') +'</h2>'
 	+	((error.stack) ? parseStackTrace(error.stack.split('\n').splice(1)) : '')
 	+	'</div>'
 	+'</div>'	

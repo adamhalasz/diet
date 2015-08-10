@@ -23,7 +23,7 @@ module.exports = function(app, hosts, servers){
 		// create route containers
 		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
 		
-		console.log(isNaN(location), location, typeof location, app.location);
+		//console.log(isNaN(location), location, typeof location, app.location);
 		// define host
 		app.location.host = app.location.host.split(':')[1] ? app.location.host : app.location.host + ':' + port;
 		
