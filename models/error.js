@@ -36,10 +36,10 @@ module.exports = function(error, signal, app){
 	function displayErrorPage(error){
 		if(signal.header('x-requested-with') != 'XMLHttpRequest'){
 			signal.header('content-type', 'text/html; charset=UTF-8');
-			signal.end('<!doctype html/><html><head><title>'+signal.statusCode+' '+signal.statusMessage+'</title></head><body><div style="padding: 0 25px;">'+'<h1 style="font-family: monaco, monospace, \'Lucida Console\';font-weight:lighter;font-size: 18px;margin: 25px 0 10px 0;color: #BDBDBD;">'+signal.statusCode+' '+signal.statusMessage+'</h1>' + errorTemplate(signal, error)+'</div></body></html>');
+			signal.response.end('<!doctype html/><html><head><title>'+signal.statusCode+' '+signal.statusMessage+'</title></head><body><div style="padding: 0 25px;">'+'<h1 style="font-family: monaco, monospace, \'Lucida Console\';font-weight:lighter;font-size: 18px;margin: 25px 0 10px 0;color: #BDBDBD;">'+signal.statusCode+' '+signal.statusMessage+'</h1>' + errorTemplate(signal, error)+'</div></body></html>');
 		} else {
 			signal.header('content-type', 'text/plain');
-			signal.end(error.stack);
+			signal.response.end(error.stack);
 		}
 	}
 }

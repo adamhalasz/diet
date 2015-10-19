@@ -50,17 +50,29 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			signal.nextRoute()
 		},
 		env: process.env.NODE_ENV,
-		end : function(data){
-			if(!response.headersSent){
-				if(!signal.header('content-type')) signal.header('content-type', 'text/plain')
-				if(data){
-					var length = typeof data === 'string' ? Buffer.byteLength(data, 'utf8') : data.length ;
-					response.setHeader('content-length', length)
-				}
-			}
+		setFinalHeaders: function(data){
+		    if(!response.headersSent){
+		    	if(!signal.header('content-type')) signal.header('content-type', 'text/plain')
+		    	if(data){
+		    		var length = typeof data === 'string' ? Buffer.byteLength(data, 'utf8') : data.length ;
+		    		response.setHeader('content-length', length)
+		    	}
+		    }
+		},
+		end : function(input){
 			if(!signal.responded){
-				response.end(data)
-				signal.responded = true
+			    signal.responded = true
+			    if(typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
+			        var data = signal.jsonString(input); // json
+			        signal.setFinalHeaders(data); 
+			        response.end(data)                                                             
+			    } else if (app.html) {
+			        signal.html(input) // html                  
+			    } else {
+                    signal.setFinalHeaders(input); 
+                    response.end(input)  // default
+			    }      
+			    
 				signal.nextRoute() // call next route
 			}
 		},
@@ -74,26 +86,33 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			signal.errors[field] = error
 		},
 		success: function(input){                                       // respond with JSON success
-			signal.status(200);
-			signal.header('content-type', 'application/json');
-			var data = signal.data;
-			if(isset(input)) data = Object.merge(signal.data, input);
-			data.passed = true;
-			signal.end(JSON.stringify(data));
+			signal.status(200)
+			signal.header('content-type', 'application/json')
+			var data = signal.data
+			if(isset(input)) data = Object.merge(signal.data, input)
+			data.passed = true
+			signal.end(JSON.stringify(data))
 		},
 		failure: function(input){                                            // respond with JSON errors
-			signal.status(200);
-			signal.header('content-type', 'application/json');
+			signal.status(200)
+			signal.header('content-type', 'application/json')
 			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
-			if(isset(input)) data = Object.merge(signal.errors, input);
-			signal.end(JSON.stringify({ passed: false, errors: signal.errors }));
+			if(isset(input)) data = Object.merge(signal.errors, input)
+			signal.end(JSON.stringify({ passed: false, errors: signal.errors }))
 		},
-		json : function(input){                                          // respond with JSON data
-			var data = signal.data;
-			if(isset(input)) data = Object.merge(signal.data, input);
-			signal.status(200);
-			signal.header('content-type', 'application/json');
-			signal.end(JSON.stringify(signal.data));
+		jsonString: function(input){
+		    if(isset(input)) signal.data = Object.merge(signal.data, input)
+		    signal.status(200)
+		    signal.header('content-type', 'application/json')
+		    return JSON.stringify(signal.data);
+		},
+		json : function(input){                                    // respond with JSON data
+			signal.end(signal.jsonString(input))
+		},
+		html: function(input){
+		    signal.header('Content-Type', 'text/html; charset=UTF-8')
+		    signal.status(200)
+		    if(signal.htmlModule) { signal.htmlModule(input) } else { response.end(input) }
 		}
 	}
 	

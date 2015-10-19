@@ -11,12 +11,12 @@ var app = server();
 app.listen('http://localhost:9010/');
 
 describe(subject + 'signal.status', function(){	
-	it('should set statusMessage to "Something went wrong." if there is no second arguement for signal.status()'.grey
+	it('should set statusMessage to "OK" if the status code is 200 when there is no second arguement for signal.status()'.grey
 	, function(done){
 		
 		app.get('/signal/status', function($){
 			$.status(200);
-			assert.equal($.statusMessage, 'Something went wrong.')
+			assert.equal($.statusMessage, 'OK')
 			$.end();
 		});
 		
@@ -122,7 +122,7 @@ describe(subject + 'signal.header', function(){
 	it('should set a header and validate the updated header value'.grey
 	, function(done){
 		
-		app.get('/signal/header/get', function($){
+		app.get('/signal/header/get2', function($){
 			$.header('content-type', 'text/html');
 			assert.equal($.header('content-type'), 'text/html');
 			$.end('<!DOCTYPE html>'
@@ -134,7 +134,7 @@ describe(subject + 'signal.header', function(){
 				+	'</html>');
 		});
 		
-		request.get('http://localhost:9010/signal/header/get', function(error, response, body){
+		request.get('http://localhost:9010/signal/header/get2', function(error, response, body){
 			if(error) throw error;
 			done();
 		});
@@ -499,32 +499,93 @@ it('should handle XMLHttpRequest error gracefully '.grey
 	});
 });
 
-it('should handle error gracefully within a chain'.grey
+
+it('should send JSON response {"ajax":true} on requesting /signal/dynamicRespond with X-Requested-With=XMLHttpRequest header'.grey
 , function(done){
-	  
-	  
-	function yo($){
-		this.sender = 'Adam';
-		this.message = 'Yo!';
-		$.fail();
-		$.return(this);
-	}
-	
-	app.get('/signal/handleError/chain', function($){
-		$.chain().plugin('yo', yo).load(function(){
-			$.end($.yo.message + ' It\'s ' + $.yo.sender + '!');
-		});
+	app.get('/signal/dynamicRespond', function($){
+	    $.data.ajax = true;
+		$.end('non-ajax-response');
 	});
 	
 	request.get({
-		url: 'http://localhost:9010/signal/handleError/chain',
-		followRedirect: true,
+		url: 'http://localhost:9010/signal/dynamicRespond',
 		headers: {
 			'X-Requested-With': 'XMLHttpRequest'
 		}
 	}, function(error, response, body){
-		assert.equal(response.statusCode, 500);
+	    assert.equal(body, '{"ajax":true}');
+		assert.equal(response.statusCode, 200);
 		done();
 	});
 });
+
+it('should send JSON response {"ajax":true} on requesting /signal/dynamicRespond with Authorization header having a Bearer in it'.grey
+, function(done){
+	
+	request.get({
+		url: 'http://localhost:9010/signal/dynamicRespond',
+		headers: {
+			'Authorization': 'Bearer test='
+		}
+	}, function(error, response, body){
+	    assert.equal(body, '{"ajax":true}');
+		assert.equal(response.statusCode, 200);
+		done();
+	});
+});
+
+it('should send JSON response {"ajax":true} on requesting /signal/dynamicRespond with Authorization header having a Token in it'.grey
+, function(done){
+	request.get({
+		url: 'http://localhost:9010/signal/dynamicRespond',
+		headers: {
+			'Authorization': 'Token test='
+		}
+	}, function(error, response, body){
+	    assert.equal(body, '{"ajax":true}');
+		assert.equal(response.statusCode, 200);
+		done();
+	});
+});
+
+it('should send JSON response "non-ajax-response" on requesting /signal/dynamicRespond with Authorization header having a Basic in it'.grey
+, function(done){
+	request.get({
+		url: 'http://localhost:9010/signal/dynamicRespond',
+		headers: {
+			'Authorization': 'Basic test='
+		}
+	}, function(error, response, body){
+	    assert.equal(body, 'non-ajax-response');
+		assert.equal(response.statusCode, 200);
+		done();
+	});
+});
+
+it('should send PLAIN response "non-ajax-response" on requesting /signal/dynamicRespond with X-Requested-With=XMLHttpRequest header'.grey
+, function(done){
+	request.get({
+		url: 'http://localhost:9010/signal/dynamicRespond',
+	}, function(error, response, body){
+	    assert.equal(body, 'non-ajax-response');
+		assert.equal(response.statusCode, 200);
+		done();
+	});
+});
+
+it('should send HTML response "non-ajax-response" on requesting /signal/dynamicRespond with "app.html = true" settings'.grey
+, function(done){
+    app.html = true;
+	request.get({
+		url: 'http://localhost:9010/signal/dynamicRespond',
+	}, function(error, response, body){
+	    assert.equal(body, 'non-ajax-response');
+		assert.equal(response.statusCode, 200);
+		assert.equal(response.headers['content-type'], 'text/html; charset=UTF-8');
+		app.html = false;
+		done();
+	});
+});
+
+
 

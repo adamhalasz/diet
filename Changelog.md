@@ -1,3 +1,11 @@
+## v0.9.8 - **v0.9.15** - 2015 June - October
+- `$.end()` now serves JSON responses on requests where the `"x-requested-with"` == `"XMLHttpRequest"` or the `"Authorization"` header is set and contains `"Bearer"` or `"Token"` in it's value
+- `$.end()` now accepts JSON objects as a value and sends it as a JSON response
+- app.html now enables $.html as the default response when using $.end
+- Added `$.html()` - by default it just sets the content-header to html - to ovewrite it set a handler for `$.htmlModule (input)` in your diet header modules 
+- Bug Fixes
+- Added Unit Tests for the new `$.end()` function
+
 ## v0.9.7 - 2015 June
 - Fixed a bug that didn't allow registering named addresses without a port
 
