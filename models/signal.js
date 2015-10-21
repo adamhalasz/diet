@@ -65,15 +65,17 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			    if(typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
 			        var data = signal.jsonString(input); // json
 			        signal.setFinalHeaders(data); 
-			        response.end(data)                                                             
+			        response.end(data)      
+			        signal.nextRoute() // call next route                                                       
 			    } else if (app.html) {
 			        signal.html(input) // html                  
 			    } else {
                     signal.setFinalHeaders(input); 
                     response.end(input)  // default
+                    signal.nextRoute() // call next route
 			    }      
 			    
-				signal.nextRoute() // call next route
+				
 			}
 		},
 		status : function(code, message){
@@ -86,7 +88,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			signal.errors[field] = error
 		},
 		success: function(input){                                       // respond with JSON success
-			signal.status(200)
+			if(!signal.statusCode) signal.status(200)
 			signal.header('content-type', 'application/json')
 			var data = signal.data
 			if(isset(input)) data = Object.merge(signal.data, input)
@@ -94,7 +96,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			signal.end(JSON.stringify(data))
 		},
 		failure: function(input){                                            // respond with JSON errors
-			signal.status(200)
+			if(!signal.statusCode) signal.status(200)
 			signal.header('content-type', 'application/json')
 			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
 			if(isset(input)) data = Object.merge(signal.errors, input)
@@ -102,7 +104,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		},
 		jsonString: function(input){
 		    if(isset(input)) signal.data = Object.merge(signal.data, input)
-		    signal.status(200)
+		    if(!signal.statusCode) signal.status(200)
 		    signal.header('content-type', 'application/json')
 		    return JSON.stringify(signal.data);
 		},
@@ -112,7 +114,12 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		html: function(input){
 		    signal.header('Content-Type', 'text/html; charset=UTF-8')
 		    if(!signal.statusCode) signal.status(200)
-		    if(signal.htmlModule) { signal.htmlModule(input) } else { response.end(input) }
+		    if(signal.htmlModule) { 
+		        signal.htmlModule(input) 
+		    } else { 
+		        response.end(input) 
+		        signal.nextRoute() // call next route
+		    }
 		}
 	}
 	

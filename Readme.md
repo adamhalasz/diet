@@ -22,7 +22,7 @@ app.get('/', function($){
 - [Header](http://dietjs.com/tutorials/router#header) and [footer](http://dietjs.com/tutorials/router#footer) routes for better global middleware structuring
 - Asynchronous [error handling](http://dietjs.com/tutorials/router#error) with [app.error](http://dietjs.com/api/server#app.error) routes
 - [404](http://dietjs.com/tutorials/router#missing) routing with [app.missing](http://dietjs.com/api/server#app.missing)
-- [Very small](http://dietjs.com/resources/comparison#sloc), just 335 sloc
+- [Very small](http://dietjs.com/resources/comparison#sloc), just 400 sloc
 
 ## Install
 ```
