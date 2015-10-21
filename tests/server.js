@@ -13,4 +13,34 @@ describe(subject + 'Server Instance', function(){
 		var app = server();
 		done();
 	});
+	
+	it('server'.white+' - Should create a new Server Instance with a chain '.grey
+	, function(done){
+		
+		server()
+		    .listen(9033)
+		    .get('/', function($){ $.end('hello world'); })
+		    .get('/other', function($){ $.end('hello other world') });
+		
+		var i = 0;
+		function next(){ i++; if(i == 2) done(); }
+		
+		request.get('http://localhost:9033/', function(error, response, body){
+			if(error) throw error;
+			assert.equal(body, 'hello world');
+			assert.equal(response.headers['content-type'], 'text/plain');
+			assert.equal(response.statusCode, 200);
+            next();
+		});
+		
+		
+		request.get('http://localhost:9033/other', function(error, response, body){
+			if(error) throw error;
+			console.log(body);
+			assert.equal(body, 'hello other world');
+			assert.equal(response.headers['content-type'], 'text/plain');
+			assert.equal(response.statusCode, 200);
+			next();
+		});
+	});
 });

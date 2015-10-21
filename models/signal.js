@@ -111,7 +111,7 @@ module.exports = function(request, response, app, protocol, location, path, matc
 		},
 		html: function(input){
 		    signal.header('Content-Type', 'text/html; charset=UTF-8')
-		    signal.status(200)
+		    if(!signal.statusCode) signal.status(200)
 		    if(signal.htmlModule) { signal.htmlModule(input) } else { response.end(input) }
 		}
 	}

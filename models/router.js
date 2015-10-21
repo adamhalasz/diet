@@ -68,5 +68,7 @@ module.exports = function(method, type, app){
 		} else {
 			app.routes[method].push(route)
 		}
+		return app;
 	}
+	return app;
 }

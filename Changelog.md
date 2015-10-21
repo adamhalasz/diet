@@ -1,3 +1,14 @@
+## v0.9.16 - **v0.9.17** - 2015 October
+- Chainable Server Instance Creation, Listening and Routing. Now you can do stuff like:
+```
+server()
+	.listen(8000)
+	.get('/', function($){ $.end('hello world'); })
+	.get('/other', function($){ $.end('hello other world') });
+	.missing(function($){ $.end('404 :)') });
+```
+- Fixed bugs with `$.end`
+
 ## v0.9.8 - **v0.9.16** - 2015 June - October
 - `$.end()` now serves JSON responses on requests where the `"x-requested-with"` == `"XMLHttpRequest"` or the `"Authorization"` header is set and contains `"Bearer"` or `"Token"` in it's value
 - `$.end()` now accepts JSON objects as a value and sends it as a JSON response

@@ -58,6 +58,7 @@ module.exports = function(app, hosts, servers){
 		if(!noMessage && !app.silent) console.log(' ... '.dim + app.location.protocol.split(':')[0].toUpperCase() + ' Server is listening on', app.location.href.underline)
 		
 		// return server
-		return app.server = server
+		app.server = server;
+		return app;
 	}
 }
