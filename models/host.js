@@ -43,12 +43,15 @@ module.exports = function(hosts, protocol, location){
 			// When Headers are Ready
 			function headersReady(signal){
 				if(path) { 
-					new RouteIterator(path, signal, function(signal){
-						new RouteIterator(app.routes.footer, signal, footersReady, 'footer')
-					}, 'body') 
+					new RouteIterator(path, signal, bodyReady, 'body') 
 				} else {
-					new RouteIterator(app.routes.footer, signal, footersReady, 'footer_404')
+				    bodyReady(signal, 'footer_404');
 				}
+			}
+			
+			// When Bodies are ready
+			function bodyReady(signal, state){
+			    new RouteIterator(app.routes.footer, signal, footersReady, state || 'footer')
 			}
 			
 			// When Footers are Ready

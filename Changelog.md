@@ -1,3 +1,6 @@
+## v0.9.22** - 2015 October 24
+- Body/footer separation in host.js for clarity
+
 ## v0.9.21** - 2015 October 24
 - Don't JSON stringify `$.failure()` and `$.success()` responses because `$.end()` does it too
 
