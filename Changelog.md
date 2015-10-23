@@ -1,4 +1,7 @@
-## v0.9.19** - 2015 October
+## v0.9.21** - 2015 October 24
+- Don't JSON stringify `$.failure()` and `$.success()` responses because `$.end()` does it too
+
+## v0.9.19 - v0.9.20** - 2015 October 23
 - Fixed a https bug in host.js - if the port was undefined in the header it used 80. For https it should be 443. Now it's using the server's configuration to choose a default fallback protocol.
 
 ## v0.9.16 - **v0.9.18** - 2015 October

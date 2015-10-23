@@ -67,15 +67,15 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			        signal.setFinalHeaders(data); 
 			        response.end(data)      
 			        signal.nextRoute() // call next route                                                       
+			    
 			    } else if (app.html) {
 			        signal.html(input) // html                  
+			    
 			    } else {
                     signal.setFinalHeaders(input); 
                     response.end(input)  // default
                     signal.nextRoute() // call next route
-			    }      
-			    
-				
+			    }
 			}
 		},
 		status : function(code, message){
@@ -93,14 +93,14 @@ module.exports = function(request, response, app, protocol, location, path, matc
 			var data = signal.data
 			if(isset(input)) data = Object.merge(signal.data, input)
 			data.passed = true
-			signal.end(JSON.stringify(data))
+			signal.end(data)
 		},
 		failure: function(input){                                            // respond with JSON errors
 			if(!signal.statusCode) signal.status(200)
 			signal.header('content-type', 'application/json')
 			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
 			if(isset(input)) data = Object.merge(signal.errors, input)
-			signal.end(JSON.stringify({ passed: false, errors: signal.errors }))
+			signal.end({ passed: false, errors: signal.errors })
 		},
 		jsonString: function(input){
 		    if(isset(input)) signal.data = Object.merge(signal.data, input)
