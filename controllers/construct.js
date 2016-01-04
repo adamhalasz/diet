@@ -22,7 +22,6 @@ module.exports = function(constructName, constructRoot, app){
                 app.header(function($){
                     
                     $.htmlModule = function(pathname){
-                        console.log('pathname', pathname)
                         if(!pathname || (pathname && pathname.indexOf(/\n|\r/) != -1)){
                     		var path     = pathname ? pathname : 'index.html' 
                     		var context  = merge(clone($, false, 1), $.data)
