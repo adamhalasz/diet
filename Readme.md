@@ -10,7 +10,7 @@ var server = require('diet')
 var app = server()
 app.listen(8000)
 app.get('/', function($){
-	$.end('hello world')
+    $.end('hello world')
 })
 ```
 

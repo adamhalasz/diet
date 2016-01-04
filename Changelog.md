@@ -1,4 +1,4 @@
-## v0.9.23 ** - 2016 January 4
+## v0.9.23 - v0.9.26 ** - 2016 January 4
 - Introducing `app.model()`
 - Introducing `app.view()`
 - Introducing `app.controller()`
