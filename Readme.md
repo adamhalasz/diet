@@ -19,11 +19,11 @@ app.get('/', function($){
 - Request and Reponse combined into the [signal object ($)](http://dietjs.com/tutorials/signal#)
 - Simple and Semantic Routing with [app.get](http://dietjs.com/api/server#app.get) and [app.post](http://dietjs.com/api/server#app.post)
 - [Middleware](http://dietjs.com/tutorials/router#middleware) Support
-- [MVC](http://dietjs.com/tutorials/router#middleware) (model-view-controller) Support
+- [MVC](http://dietjs.com/tutorials/api/server#app.model) (model-view-controller) Support
 - [Header](http://dietjs.com/tutorials/router#header) and [footer](http://dietjs.com/tutorials/router#footer) routes for better global middleware structuring
 - Asynchronous [error handling](http://dietjs.com/tutorials/router#error) with [app.error](http://dietjs.com/api/server#app.error) routes
 - [404](http://dietjs.com/tutorials/router#missing) routing with [app.missing](http://dietjs.com/api/server#app.missing)
-- [Very small](http://dietjs.com/resources/comparison#sloc), just 400 sloc
+- [Very small](http://dietjs.com/resources/comparison#sloc), just 450 sloc
 
 ## Install
 ```
