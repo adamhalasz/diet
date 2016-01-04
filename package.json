@@ -55,7 +55,9 @@
     "ip": "^0.3.3",
     "nextjs": "0.0.3",
     "path-to-regexp": "^1.0.1",
-    "sugar": "^1.4.1"
+    "sugar": "^1.4.1",
+    "merge": "^1.2.0",
+    "clone": "^1.0.2"
   },
   "devDependencies": {
     "coveralls": ">=2.11.2",

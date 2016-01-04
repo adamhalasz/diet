@@ -1,3 +1,10 @@
+## v0.9.23 - v0.9.24 ** - 2016 January 4
+- Introducing `app.model()`
+- Introducing `app.view()`
+- Introducing `app.controller()`
+- Added support for `yo`
+- Support for node 4.2.4, 5.3.0
+
 ## v0.9.22** - 2015 October 24
 - Body/footer separation in host.js for clarity
 
