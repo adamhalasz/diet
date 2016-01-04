@@ -2,8 +2,9 @@ require('sugar')
 require('colors')
 var hosts   = {}
 var servers = {}
-var Server  = require('./models/server')
-var Router  = require('./models/router')
+var Server  = require('./controllers/server')
+var Router  = require('./controllers/router')
+var Construct = require('./controllers/construct')
 var dietHeader = false;
 function App(path, options){
     this.silent         = options.silent
@@ -24,7 +25,10 @@ function App(path, options){
 	this.header         = new Router('header'  , 'api'    , this)
 	this.footer         = new Router('footer'  , 'api'    , this) 
 	this.missing        = new Router('missing' , 'api'    , this) 
-	this.error          = new Router('error'   , 'api'    , this) 
+	this.error          = new Router('error'   , 'api'    , this)
+	this.model          = new Construct('model', 'models', this)
+	this.view           = new Construct('view', 'views', this)
+	this.controller     = new Construct('controller', 'controllers', this)
 	this.host           = '0.0.0.0'
 	return this
 }
