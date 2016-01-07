@@ -4,19 +4,32 @@ var url = require('url')
 var RouteIterator = require('./iterator')
 module.exports = function(hosts, protocol, location){
 	return function(request, response){
+	    // set default header
 		response.setHeader('Content-Type', 'text/plain')
-		var method   = request.method.toLowerCase()                 // get method
-		var location = url.parse(request.url)                       // parse location
-		var port     = request.headers.host.split(':')[1];
-		var hostname = isset(port) ? request.headers.host : request.headers.host + ':' + protocol.globalAgent.defaultPort ;
+		
+		// determine method, host, location, port and hostname
+		var method   = request.method ? request.method.toLowerCase() : '' ;      
+		var host     = request.headers.host ? request.headers.host : '' ; 
+		var location = request.url ? url.parse(request.url) : '' ;      
+		var port     = host.split(':')[1];
+		var hostname = isset(port) ? host : host + ':' + protocol.globalAgent.defaultPort ;
+		
+		// get app (host controller) handling this hostname
 		var app = hosts[hostname] 
-		//if (!(app && app.routes && app.routes[method])) var app = hosts['localhost:80']; // defaults to local
-		if(app && app.routes && app.routes[method]){                // check if host exists
+			
+		// if the app (host controller) exists and it has routes for this method
+		if(app && app.routes && app.routes[method]){ 
+		    
+		    // set default headers
 			for(var key in app.defaultHeaders) {
    				response.setHeader(key, app.defaultHeaders[key])
 			}
-			var routes = app.routes[method]                         // method routes
-			var path = routes[location.pathname]                    // static path
+			
+			// get routes for this method
+			var routes = app.routes[method] 
+			
+			// get path from routes
+			var path = routes[location.pathname]
 			var match_found = false
 			
 			if(!path){                                     // dynamic path
