@@ -17,13 +17,14 @@ app.get('/', function($){
 ## Features 
 - Built for [virtual hosting](http://dietjs.com/tutorials/host#) 
 - Request and Reponse combined into the [signal object ($)](http://dietjs.com/tutorials/signal#)
-- Simple and Semantic Routing with [app.get](http://dietjs.com/api/server#app.get) and [app.post](http://dietjs.com/api/server#app.post)
+- Simple and Semantic Routing with [app.get](http://dietjs.com/api/server#app.get) and [app.post](http://dietjs.com/api/server#app.post) and other methods.
 - [Middleware](http://dietjs.com/tutorials/router#middleware) Support
 - [MVC](http://dietjs.com/api/server#app.model) (model-view-controller) Support
 - [Header](http://dietjs.com/tutorials/router#header) and [footer](http://dietjs.com/tutorials/router#footer) routes for better global middleware structuring
+- Support for ES6 Generator Middlewares/Controllers (new since v0.10)
 - Asynchronous [error handling](http://dietjs.com/tutorials/router#error) with [app.error](http://dietjs.com/api/server#app.error) routes
 - [404](http://dietjs.com/tutorials/router#missing) routing with [app.missing](http://dietjs.com/api/server#app.missing)
-- [Very small](http://dietjs.com/resources/comparison#sloc), just 450 sloc
+- [Very small](http://dietjs.com/resources/comparison#sloc), just ~550 sloc
 
 ## Install
 ```

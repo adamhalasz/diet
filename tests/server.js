@@ -18,7 +18,7 @@ describe(subject + 'Server Instance', function(){
 	, function(done){
 		
 		server()
-		    .listen(9033)
+		    .listen('http://localhost:9033/')
 		    .get('/', function($){ $.end('hello world'); })
 		    .get('/other', function($){ $.end('hello other world') });
 		

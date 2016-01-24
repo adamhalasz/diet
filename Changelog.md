@@ -1,8 +1,43 @@
+## v0.10.0 ** - 2016 January 24 - Major Release
+- Middleware renamed to Controller
+- Introducing ES6 Generator Controllers (`yield` and `*`)
+- Introducing `app.controller` function method registering 
+    - can be called as a normal function
+    - creates a thunk around the controller for generators when called with yield
+- Introducing `app.protocol(name, handler)`
+- Introducing Server Event Handlers
+  - `server.on(event, handler)`
+  - `server.one(event, handler)`
+  - `server.onAll(event, handler)`
+  - `server.many(event, handler)`
+- Introducing App Event Handlers
+    - `server.on(event, handler)`
+    - `server.one(event, handler)`
+    - `server.onAll(event, handler)`
+    - `server.many(event, handler)`
+- Introducing Server Events
+    - init
+    - create (new app)
+- Introducing App Events
+    - listen
+    - route.attach
+    - route.start
+    - route.end
+    - route.controller.attach
+    - route.controller.start
+    - route.controller.iterate
+    - route.controller.end
+    - route.error
+    - protocol.attach
+- Add Examples for:
+    - Events
+    - Generators
+
 ## v0.9.23 - v0.9.26 ** - 2016 January 4
 - Introducing `app.model()`
 - Introducing `app.view()`
 - Introducing `app.controller()`
-- Added support for `yo`
+- Added support for `yo` (generator-diet)
 - Support for node 4.2.4, 5.3.0
 
 ## v0.9.22** - 2015 October 24
