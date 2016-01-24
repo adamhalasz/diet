@@ -1,4 +1,5 @@
 ## v0.10.0 ** - 2016 January 24 - Major Release
+- Drop support for Node versions below v4.2.4
 - Middleware renamed to Controller
 - Introducing ES6 Generator Controllers (`yield` and `*`)
 - Introducing `app.controller` function method registering 
