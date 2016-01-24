@@ -7,14 +7,18 @@
 - Introducing `app.protocol(name, handler)`
 - Introducing Server Event Handlers
   - `server.on(event, handler)`
+  - `server.off(event, handler)`
   - `server.one(event, handler)`
   - `server.onAll(event, handler)`
   - `server.many(event, handler)`
+  - `server.emit(event, handler)`
 - Introducing App Event Handlers
-    - `server.on(event, handler)`
-    - `server.one(event, handler)`
-    - `server.onAll(event, handler)`
-    - `server.many(event, handler)`
+    - `app.on(event, handler)`
+    - `app.off(event, handler)`
+    - `app.one(event, handler)`
+    - `app.onAll(event, handler)`
+    - `app.many(event, handler)`
+    - `app.emit(event, handler)`
 - Introducing Server Events
     - init
     - create (new app)

@@ -21,32 +21,11 @@
             app.controller.setTwo(2)
         ]
        
+        // Calling a Controller with a Callback 
         app.controller.getTitle('Hola', function(error, result){
             $.data.title2 = result;
-            $.return()
-        })
-        
-    }, function($){
-        $.json()
-    })
-    
-    app.get('/2', function *($){
-        // Linear Exection
-        $.data.title = yield app.controller.getTitle('Hello')
-        $.data.description = yield app.controller.getDescription();
-        
-        // Parallel Execution
-        $.data.counter = yield [
-            app.controller.setOne(1),
-            app.controller.setTwo(2)
-        ]
-       
-        app.controller.getTitle('Hola', function(error, result){
-            $.data.title2 = result;
-            console.log('$.return');
             $.json()
-        })
-        
+        })  
     })
     
 // ========================================================

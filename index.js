@@ -89,6 +89,11 @@
         	app.off = events.off;
         	app.emit = events.emit;
         	app.onAny = events.onAny;
+        
+        // -----------------------------------------------------------------------
+        //  Attach HTTP Protocol Handler by default
+        // -----------------------------------------------------------------------	
+        	app.protocol('http', httpProtocol)
     	
     	
     	// -----------------------------------------------------------------------
@@ -164,7 +169,6 @@
         	this.controller     = new Construct('controller', 'controllers', this)
         	this.protocol       = new Protocol(this)
         	this.listen         = new Listener(this, servers)
-        	this.protocol('http', httpProtocol)
     	
     	
     	// -----------------------------------------------------------------------
