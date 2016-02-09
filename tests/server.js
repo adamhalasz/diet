@@ -4,13 +4,14 @@ require('sugar');
 var assert 	= require('assert');
 var request = require('request');
 var server 	= require('../');
+var path = require('path').dirname(require('callsite')()[1].getFileName())
 
 var subject = 'Test'.cyan+' → '.grey+ 'server'.yellow + ': '.grey;
 
 describe(subject + 'Server Instance', function(){	
 	it('server'.white+' - Should create a new Server Instance'.grey
 	, function(done){
-		var app = server();
+		var app = server({ path: path });
 		done();
 	});
 	
