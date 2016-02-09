@@ -39,32 +39,30 @@
 // =========================================================================== 
 
     function Server(options){
-        
-        // -----------------------------------------------------------------------
-        //  Get project path
-        // -----------------------------------------------------------------------
-           
-            var path = require('path').dirname(require('callsite')()[1].getFileName());
-        
-        
-        // -----------------------------------------------------------------------
-        //  Event: app.create
-        // -----------------------------------------------------------------------
-            
-            module.exports.emit('init', { path: path, options: options })
-    
-    
+ 
         // -----------------------------------------------------------------------
         //  Default values
         // -----------------------------------------------------------------------
-           
+ 
             var options = options || {}
-        
-        
+
+        // -----------------------------------------------------------------------
+        //  Get project path
+        // -----------------------------------------------------------------------
+ 
+            var path = options.path || require('path').dirname(require('callsite')()[1].getFileName());
+ 
+        // -----------------------------------------------------------------------
+        //  Event: app.create
+        // -----------------------------------------------------------------------
+ 
+            module.exports.emit('init', { path: path, options: options })
+
+ 
         // -----------------------------------------------------------------------
         //  Print Diet Header to console (if not already initialized)
         // -----------------------------------------------------------------------
-           
+ 
             if(!options.silent && !initialized){ 
                 process.stdout.write('\u001B[2J\u001B[0;0f'+' Diet '.inverse+(' ('+JSON.parse(require('fs').readFileSync(__dirname+'/package.json').toString()).version+') ☺\n http://dietjs.com/').dim+'\n\n'); 
                 initialized = true; 
