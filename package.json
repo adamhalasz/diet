@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.10.0",
+  "version": "0.10.2",
   "description": "A tiny, fast and modular node.js web framework. Good for making fast & scalable apps and apis.",
   "homepage": "http://dietjs.com/",
   "keywords": [
@@ -66,7 +66,8 @@
     "mocha-lcov-reporter": "0.0.1",
     "istanbul": "~0.3.2",
     "mocha": "~1.21.4",
-    "request": "^2.48.0"
+    "request": "^2.48.0",
+    "should": "^8.2.2"
   },
   "main": "index.js",
   "engines": {

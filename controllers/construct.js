@@ -62,7 +62,7 @@
                                     args[args.length] = callback;
                                     //console.log('CONTROLLER CALL: ARGUMENTS -> ', args)
                                     //console.log('CONTROLLER CALL: CALLBACK -> ', callback)
-                                    //console.log('CONTROLLER CALL: HANDELR ->', originalFunction.toString());
+                                    //console.log('CONTROLLER CALL: HANDLER ->', originalFunction.toString());
                                     originalFunction.apply(this, args)
                                 }
                             }

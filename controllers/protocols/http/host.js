@@ -93,7 +93,7 @@
     				if(!signal.responded){
     				    
     					signal.status(404)
-    					if (app.routes.missing.length){ 
+    					if (app.routes && app.routes.missing && app.routes.missing.length){ 
     					    app.emit('route.missing');
     						new RouteIterator(app.routes.missing, signal, false, 'missing_body') 
     					} else { 

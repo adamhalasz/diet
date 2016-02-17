@@ -4,6 +4,7 @@ require('sugar');
 var server = require('../');
 var assert = require('assert');
 var request = require('request');
+var should = require('should');
 
 var subject = 'Test'.cyan+' → '.grey+ 'Signal'.yellow + ': '.grey;
 
@@ -587,6 +588,46 @@ app.listen('http://localhost:9010/', function(){
     		done();
     	});
     });
-    
 
 });
+
+
+    
+var app2 = server()
+app2.listen(9170, function(){
+    describe(subject + 'middleware control flow', function(){
+
+        it('should create a server on port 9170 and run only the first route\'s middleware '.grey
+        , function(done){
+            this.timeout(10000);
+            var one = false;
+            var two = false;
+            app2.get('/', function($){
+                $.end('hello world!', true); // <-- stop middleware chain
+            }, function($){
+                one = true;
+                $.return()
+            })
+            
+            app2.get('/', function($){
+                two = true;
+                $.return()
+            })
+            
+        	request.get({
+        		url: 'http://localhost:9170/',
+        	}, function(error, response, body){
+        	    setTimeout(function(){
+        	        assert.equal(one, false)
+        	        assert.equal(two, false)
+        		    done();
+        		}, 2000)
+        	});
+        });
+            
+    });
+})
+    
+    
+
+

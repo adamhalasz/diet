@@ -1,3 +1,13 @@
+## v0.10.2 ** - 2016 Feburary 17
+- add second argument `isLast` to **$.end(yourData, isLast)**, **$.json(yourData, isLast)**, **$.success(yourData, isLast)** and **$.failure(yourData, isLast)**. Setting `isLast` to true will stop the execution of the middleware chain completely
+```
+    // usage
+    $.end('hello world', true)
+```
+
+## v0.10.1 ** - 2016 January 25
+- Check existence of app.routes and routes in hosts.js and iterator.js
+
 ## v0.10.0 ** - 2016 January 24 - Major Release
 - Drop support for Node versions below v4.2.4
 - Middleware renamed to Controller
