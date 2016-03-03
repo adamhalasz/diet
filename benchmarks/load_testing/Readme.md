@@ -5,8 +5,8 @@
 ## The Environment
 
 - The tests were measured using the Apache Benchmark (AB) 
-- The tests was issued from a Retina 5K, 27-inch, Late 2015 iMac (3.2 GHz Intel Core i5, 8 GB 1867 MHz DDR3) from San Jose, CA.
-- The hosting server was hosted by digital ocean in San Francisco.
+- The AB tests were issued from a Retina 5K, 27-inch, Late 2015 iMac (3.2 GHz Intel Core i5, 8 GB 1867 MHz DDR3, Mac OS X 10.11.1) from San Jose, CA.
+- The hosting server was hosted by digital ocean in San Francisco. (CentOS 6.5 x64 / 512 MB Memory / 20 GB Disk / SFO1)
 - The node version was v5.7.0
 
 ## The AB Command:
