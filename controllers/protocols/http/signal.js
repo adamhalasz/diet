@@ -58,7 +58,9 @@
     				if(URI.hostname) 	path += URI.hostname;
     				if(URI.port) 		path += ':' + URI.port;
     				if(URI.pathname) 	path += URI.pathname;
-    				if(QUERY) 			path += QUERY;
+    				if(QUERY) {
+                        if (!path.indexOf(QUERY) < -1) path += QUERY;
+                    }
     			}
     			signal.status((!statusCode) ? 302 : statusCode)
     			signal.header('Location', path);
