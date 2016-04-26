@@ -70,7 +70,7 @@
     							var domain = Domain.create();
     							
     							domain.on('error', function(error){ 
-    							    console.error(error.stack);
+    							    if (error.stack) console.error(error.stack);
     								
     								signal.fail.route = route;
     								signal.fail.error = error;
