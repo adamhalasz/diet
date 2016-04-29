@@ -1,6 +1,7 @@
 ## v0.10.5 ** - 2016 April 29
 - `Error.stack` not always present on Error in controllers/router.js by @demarius
 - `initialized` is not constant in index.js (es6, strict mode fix)
+- Replaced Native Object.observe with `object.observe` module to support observe in Node >= v6.0.0
 
 ## v0.10.4 ** - 2016 March 10
 - Check if path contains query in Signal#redirect by @demarius

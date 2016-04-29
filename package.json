@@ -58,6 +58,7 @@
     "ip": "^0.3.3",
     "merge": "^1.2.0",
     "nextjs": "0.0.3",
+    "object.observe": "^0.2.6",
     "path-to-regexp": "^1.0.1",
     "sugar": "^1.4.1"
   },

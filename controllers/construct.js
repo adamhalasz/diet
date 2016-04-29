@@ -9,6 +9,7 @@
 
     var merge = require('merge')
     var clone = require('clone')
+    require('object.observe')
     
 // ===========================================================================
 //  Exports
