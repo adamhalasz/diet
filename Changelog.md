@@ -1,3 +1,13 @@
+## v0.10.5 ** - 2016 April 29
+- `Error.stack` not always present on Error in controllers/router.js by @demarius
+- `initialized` is not constant in index.js (es6, strict mode fix)
+
+## v0.10.4 ** - 2016 March 10
+- Check if path contains query in Signal#redirect by @demarius
+
+## v0.10.3 - v0.10.4 ** - 2016 March 3
+- AB Load Testing Comparison between Vanilla Node, Diet.js and Express.js
+
 ## v0.10.2 ** - 2016 Feburary 17
 - add second argument `isLast` to **$.end(yourData, isLast)**, **$.json(yourData, isLast)**, **$.success(yourData, isLast)** and **$.failure(yourData, isLast)**. Setting `isLast` to true will stop the execution of the middleware chain completely
 ```

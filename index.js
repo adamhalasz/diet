@@ -121,9 +121,9 @@
 //  Containers & Helpers
 // ===========================================================================
     
-    const hosts   = {}
-    const servers = {}
-    const initialized = false;
+    const hosts     = {}
+    const servers   = {}
+    var initialized = false;
 
 
 // ===========================================================================
