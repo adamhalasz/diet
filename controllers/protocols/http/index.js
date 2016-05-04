@@ -8,6 +8,7 @@ module.exports = function(app, options, callback){
     // create new host object
     var protocol = app.location.protocol === 'http:' ? require('http') : require('https') ;
     var host = new Host(app, protocol, app.location)
+    protocol.globalAgent.maxSockets = options.maxSockets    
     
     // define http or https server
     if(app.location.protocol === 'http:'){
