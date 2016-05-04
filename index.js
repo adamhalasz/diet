@@ -137,6 +137,7 @@
         // -----------------------------------------------------------------------
             
             this.silent         = options.silent
+            this.maxSockets     = options.maxSockets || 2000
             this.defaultHeaders = options.defaultHeaders || { 'X-Powered-By': 'Diet.js', 'Server': 'Diet.js' } // please help spread the word!
             this.address        = require('ip').address()
         	this.path           = path
