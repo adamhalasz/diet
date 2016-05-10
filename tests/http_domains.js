@@ -101,7 +101,6 @@ describe(subject + 'Setup Domain with Different String formats or a URL Object o
 		var app = server();
 		app.listen(9035)
 		assert.equal(app.location.port, 9035);
-		assert.equal(app.location.host, app.address+':9035');
 		done();
 	});
 

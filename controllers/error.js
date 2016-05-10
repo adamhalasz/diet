@@ -56,10 +56,8 @@
     		signal.fail.template = errorTemplate(signal, error)
     		app.emit('route.error', { error: error, signal: signal, app: app })
     		new RouteIterator(app.routes.error, signal, function(){ 
-    		    console.log('Error Routes Finished', signal.url.href);
-    		    if(!signal.responded) {
-    		        displayErrorPage(error) 
-    		    }
+    		    // console.log('Error Routes Finished', signal.url.href);
+    		    if(!signal.responded)  displayErrorPage(error) 
     		}, 'error')
     	} catch (error) {
     		displayErrorPage(error)

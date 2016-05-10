@@ -23,7 +23,7 @@
     	    
     	    // define location
             if(!isNaN(location)) {
-            	app.location = url.parse('http://localhost:'+location);
+            	app.location = url.parse('http://0.0.0.0:'+location);
             
             } else if(typeof location == 'string') {
                     var location = location.indexOf('://') == -1 ? 'http://' + location : location ;
@@ -33,7 +33,7 @@
             	app.location = location;
             	
             } else if(!isset(location)){
-            	app.location = url.parse('http://localhost:80/');
+            	app.location = url.parse('http://0.0.0.0:80/');
             }            
             
             // define protocol
@@ -68,8 +68,9 @@
     			
     			// listen on localhost addresses
     			// Implement check if app.hosts['127.0.0.1:' + port] do nothing else
-    			app.listen('http://127.0.0.1:'+app.port, options);
-    			app.listen('http://'+app.address+':'+app.port, options);
+    			//app.listen('http://localhost:'+app.port, options);
+    			//app.listen('http://127.0.0.1:'+app.port, options);
+    			//app.listen('http://'+app.address+':'+app.port, options);
     			
     		// otherwise reuse the server object
     		} else {

@@ -1,3 +1,6 @@
+## v0.10.6 ** - 2016 May 10
+- Ports are now wildcards for every hostname. Listening on a Port (`app.listen(8000)`) will accept any Hostname request within that Port. Listening on a Hostname (`app2.listen('http://test.com:8000/')`) within that Port will have priority.
+
 ## v0.10.5 ** - 2016 April 29
 - `Error.stack` not always present on Error in controllers/router.js by @demarius
 - `initialized` is not constant in index.js (es6, strict mode fix)
@@ -7,6 +10,12 @@
 - Check if path contains query in Signal#redirect by @demarius
 
 ## v0.10.3 - v0.10.4 ** - 2016 March 3
+=======
+## v0.10.4 ** - 2016 March 24
+- Check if path contains query in Signal#redirect. Thanks @demarius
+
+## v0.10.3 ** - 2016 March 24
+>>>>>>> Stashed changes
 - AB Load Testing Comparison between Vanilla Node, Diet.js and Express.js
 
 ## v0.10.2 ** - 2016 Feburary 17

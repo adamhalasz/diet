@@ -11,10 +11,10 @@ module.exports = function(app, options, callback){
     
     // define http or https server
     if(app.location.protocol === 'http:'){
-        var server = protocol.createServer( host).listen(app.port, app.location.host.split(':')[0], callback) ;
+        var server = protocol.createServer(host).listen(app.port, '0.0.0.0', callback) ;
     
     } else if (options) {
-        var server = protocol.createServer(options, host).listen(app.port, app.location.host.split(':')[0], callback)
+        var server = protocol.createServer(options, host).listen(app.port, '0.0.0.0', callback)
     
     } else {
         throw new Error('Cannot start a HTTPS server without Options');
