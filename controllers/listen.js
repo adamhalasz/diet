@@ -20,10 +20,11 @@
     	return function(location, options, callback){
     	    var callback = typeof options == 'function' ? options : callback ;
     	    var options = !options || typeof options == 'function' ? {} : options ;
+    	    var protocolName = (typeof options == 'object' && options.cert || options.key || options.ca) ? 'https' : 'http' ;
     	    
     	    // define location
             if(!isNaN(location)) {
-            	app.location = url.parse('http://0.0.0.0:'+location);
+            	app.location = url.parse(protocolName+'://0.0.0.0:'+location);
             
             } else if(typeof location == 'string') {
                     var location = location.indexOf('://') == -1 ? 'http://' + location : location ;
@@ -33,14 +34,14 @@
             	app.location = location;
             	
             } else if(!isset(location)){
-            	app.location = url.parse('http://0.0.0.0:80/');
+            	app.location = url.parse(protocolName+'://0.0.0.0:80/');
             }            
             
             // define protocol
     		//var protocol = app.location.protocol === 'http:' ? require('http') : require('https') ;
     		
     		// define port
-    		app.port = app.location.protocol === 'http:' ? (app.location.port || 80) : (app.location.port || 443) ;
+    		app.port = app.location.protocol === 'http:' && (!options.cert && !options.key) ? (app.location.port || 80) : (app.location.port || 443) ;
     		
     		// create route containers
     		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
@@ -85,4 +86,4 @@
     		return app;
     	}
     }
-    
+   
