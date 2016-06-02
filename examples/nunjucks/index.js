@@ -5,7 +5,7 @@ app.listen(3500)
 
 // Setup Nunjucks
 var nunjucks = require('nunjucks')
-    nunjucks.configure(__dirname+'/views');
+    nunjucks.configure(app.path+'/views', { autoescape: true, watch: true });
 
 // Enable HTML Template
 app.html = true;
