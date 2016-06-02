@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <h1>Hello World</h1> 
+        <b>{{ title }}</b>
+        
+        {% for item in items %}
+          <li>{{ item.title }}</li>
+        {% else %}
+          <li>This would display if the 'item' collection were empty</li>
+        {% endfor %}
+    </body>
+</html>

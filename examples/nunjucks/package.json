@@ -1,0 +1,15 @@
+{
+  "name": "diet-nunjucks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "diet": "^0.10.7",
+    "nunjucks": "^2.4.2"
+  }
+}
