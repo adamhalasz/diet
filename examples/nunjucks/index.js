@@ -8,7 +8,6 @@ var nunjucks = require('nunjucks')
     nunjucks.configure(app.path+'/views', { autoescape: true, watch: true });
 
 // Enable HTML Template
-app.html = true;
 app.view('html', nunjucks.render)
 
 // Route
