@@ -8,10 +8,11 @@
 //  Dependencies
 // ===========================================================================
 
-    const qs = require('diet-qs')
+    const qs = require('querystrings')
     const fs = require('fs')
     const url = require('url')
     const status_codes = require('http').STATUS_CODES;
+    const utils = require('../../utils')
 
 // ===========================================================================
 //  Exports
@@ -111,7 +112,7 @@
     			if(!signal.statusCode) signal.status(200)
     			signal.header('content-type', 'application/json')
     			var data = signal.data
-    			if(isset(input)) data = Object.merge(signal.data, input)
+    			if(utils.isset(input)) data = Object.merge(signal.data, input)
     			data.passed = true
     			signal.end(data, isLast)
     		},
@@ -119,11 +120,11 @@
     			if(!signal.statusCode) signal.status(200)
     			signal.header('content-type', 'application/json')
     			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
-    			if(isset(input)) data = Object.merge(signal.errors, input)
+    			if(utils.isset(input)) data = Object.merge(signal.errors, input)
     			signal.end({ passed: false, errors: signal.errors }, isLast)
     		},
     		jsonString: function(input){
-    		    if(isset(input)) signal.data = Object.merge(signal.data, input)
+    		    if(utils.isset(input)) signal.data = Object.merge(signal.data, input)
     		    if(!signal.statusCode) signal.status(200)
     		    signal.header('content-type', 'application/json')
     		    return JSON.stringify(signal.data);

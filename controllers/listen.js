@@ -10,7 +10,7 @@
     
     const url = require('url')
     const parent = module.parent.exports
-
+    const utils = require('./utils')
 // ===========================================================================
 //  Exports
 // ===========================================================================
@@ -33,7 +33,7 @@
             } else if(typeof location == 'object') {
             	app.location = location;
             	
-            } else if(!isset(location)){
+            } else if(!utils.isset(location)){
             	app.location = url.parse(protocolName+'://0.0.0.0:80/');
             }            
             

@@ -1,5 +1,7 @@
 ## v0.10.8 ** - 2016 June 13
 - Upgrade `diet-qs` with the new `querystrings` module that fixes nested Query String to Array conversions.
+- New Utils Controller
+- Moved isset() into the Util Controller
 
 ## v0.10.6 ** - 2016 May 10
 - Ports are now wildcards for every hostname. Listening on a Port (`app.listen(8000)`) will accept any Hostname request within that Port. Listening on a Hostname (`app2.listen('http://test.com:8000/')`) within that Port will have priority.
