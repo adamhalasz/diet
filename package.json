@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "description": "A tiny, fast and modular node.js web framework. Good for making fast & scalable apps and apis.",
   "homepage": "http://dietjs.com/",
   "keywords": [
@@ -51,7 +51,7 @@
     "callsite": "^1.0.0",
     "clone": "^1.0.2",
     "colors": "^1.0.3",
-    "diet-qs": ">=0.1.0",
+    "querystrings": ">=0.3.0",
     "es6-iterator": "^0.1.1",
     "etag": "^1.5.0",
     "eventemitter2": "^0.4.14",
