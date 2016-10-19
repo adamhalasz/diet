@@ -51,7 +51,6 @@
     "callsite": "^1.0.0",
     "clone": "^1.0.2",
     "colors": "^1.0.3",
-    "querystrings": ">=0.3.0",
     "es6-iterator": "^0.1.1",
     "etag": "^1.5.0",
     "eventemitter2": "^0.4.14",
@@ -60,13 +59,14 @@
     "nextjs": "0.0.3",
     "object.observe": "^0.2.6",
     "path-to-regexp": "^1.0.1",
+    "querystrings": ">=0.3.0",
     "sugar": "^1.4.1"
   },
   "devDependencies": {
     "coveralls": ">=2.11.2",
-    "mocha-lcov-reporter": "0.0.1",
-    "istanbul": "~0.3.2",
-    "mocha": "~1.21.4",
+    "istanbul": "^0.4.5",
+    "mocha": "3.1.2",
+    "mocha-lcov-reporter": "^1.2.0",
     "request": "^2.48.0",
     "should": "^8.2.2"
   },
@@ -77,5 +77,17 @@
   "scripts": {
     "test": "mocha tests",
     "coveralls": "jscoverage tests tests-cov"
+  },
+  "resolutions": {
+    "async": "1.5.2",
+    "es6-iterator": "2.0.0",
+    "sugar": "1.5.0",
+    "isarray": "1.0.0",
+    "minimist": "1.2.0",
+    "glob": "7.0.5",
+    "supports-color": "3.1.2",
+    "wordwrap": "1.0.0",
+    "source-map": "0.5.6",
+    "assert-plus": "1.0.0"
   }
 }
