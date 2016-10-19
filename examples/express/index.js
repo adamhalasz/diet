@@ -2,9 +2,8 @@ var server = require('../../')
 var app = server()
 app.listen('http://localhost:8086/')     // Listen on Localhost
 
-// Require the DIREKTSPEED Servers express-middelware module 
-// as dssrv is based on Diet.JS and configure it
-var myExpressApp = require('express-middelware')(require('./express.js'))
+// Require the diet-express module 
+var myExpressApp = require('diet-express')(require('./express.js'))
 
 // You can Modify your express app and access it
 // usefull if you use myExpressApp.attach $.eapp() later in process
