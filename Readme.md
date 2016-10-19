@@ -14,6 +14,27 @@ app.get('/', function($){
 })
 ```
 
+Express/Connect/http Compatible via Module
+```javascript
+var server = require('diet')
+var app = server()
+app.listen('http://localhost:8086/')  
+
+var myExpressApp = require('./express-app-middelware.js')
+app.get('/', attachExpress, function($){
+    $.eapp()
+}, useExpressApp
+, function($){
+    $.end('Diet.JS + ' + $.response.values) // -> Diet.JS + Express
+})
+
+
+
+
+```
+
+
+
 ## Features 
 - Built for [virtual hosting](http://dietjs.com/tutorials/host#) 
 - Request and Reponse combined into the [signal object ($)](http://dietjs.com/tutorials/signal#)
@@ -30,6 +51,17 @@ app.get('/', function($){
 ```
 npm install diet
 ```
+
+## Test
+
+```
+# Map Test Domains to Localhost
+echo 127.0.0.1 test.local.com test2.local.com test3.local.com local.com >> /etc/hosts
+npm test
+```
+
+
+
 
 ## Website & Community
 - **Website** : [http://dietjs.com](http://dietjs.com)
