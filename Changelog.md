@@ -1,49 +1,49 @@
-## v0.11.0 ** - March 2, 2017
-- Replaced object.observe() with the new ES6 Proxy
+## v0.11.0 - March 2, 2017
+- Replaced object.observe() with the new ES6 Proxy - Solves #42, #60, #72
 - Only Support Node Version >= 6.4.0
 - New MVC Test Suite
 
-## v0.10.9 ** - January 31, 2017
+## v0.10.9 - January 31, 2017
 - Bug Fix: User decoreURIComponent on the signal.body
 - New Example: Simple File Serving Example
 
 
-## v0.10.8 ** - June 13, 2016
+## v0.10.8 - June 13, 2016
 - Upgrade `diet-qs` with the new `querystrings` module that fixes nested Query String to Array conversions.
 - New Utils Controller
 - Moved isset() into the Util Controller
 
-## v0.10.6 ** - May 10, 2016 
+## v0.10.6 - May 10, 2016 
 - Ports are now wildcards for every hostname. Listening on a Port (`app.listen(8000)`) will accept any Hostname request within that Port. Listening on a Hostname (`app2.listen('http://test.com:8000/')`) within that Port will have priority.
 
-## v0.10.5 ** - April 29, 2016 
+## v0.10.5 - April 29, 2016 
 - `Error.stack` not always present on Error in controllers/router.js by @demarius
 - `initialized` is not constant in index.js (es6, strict mode fix)
 - Replaced Native Object.observe with `object.observe` module to support observe in Node >= v6.0.0
 
-## v0.10.4 ** - March 10, 2016 
+## v0.10.4 - March 10, 2016 
 - Check if path contains query in Signal#redirect by @demarius
 
-## v0.10.3 - v0.10.4 ** - 2016 March 3
+## v0.10.3 - v0.10.4 - 2016 March 3
 =======
-## v0.10.4 ** - March 24, 2016 
+## v0.10.4 - March 24, 2016 
 - Check if path contains query in Signal#redirect. Thanks @demarius
 
-## v0.10.3 ** - March 24, 2016 
+## v0.10.3 - March 24, 2016 
 >>>>>>> Stashed changes
 - AB Load Testing Comparison between Vanilla Node, Diet.js and Express.js
 
-## v0.10.2 ** - Feburary 17, 2016 
+## v0.10.2 - Feburary 17, 2016 
 - add second argument `isLast` to **$.end(yourData, isLast)**, **$.json(yourData, isLast)**, **$.success(yourData, isLast)** and **$.failure(yourData, isLast)**. Setting `isLast` to true will stop the execution of the middleware chain completely
 ```
     // usage
     $.end('hello world', true)
 ```
 
-## v0.10.1 ** - January 25, 2016 
+## v0.10.1 - January 25, 2016 
 - Check existence of app.routes and routes in hosts.js and iterator.js
 
-## v0.10.0 ** - January 24, 2016  - Major Release
+## v0.10.0 - January 24, 2016  - Major Release
 - Drop support for Node versions below v4.2.4
 - Middleware renamed to Controller
 - Introducing ES6 Generator Controllers (`yield` and `*`)
@@ -83,23 +83,23 @@
     - Events
     - Generators
 
-## v0.9.23 - v0.9.26 ** - January 4, 2016 
+## v0.9.23 - v0.9.26 - January 4, 2016 
 - Introducing `app.model()`
 - Introducing `app.view()`
 - Introducing `app.controller()`
 - Added support for `yo` (generator-diet)
 - Support for node 4.2.4, 5.3.0
 
-## v0.9.22** - October 24, 2015 
+## v0.9.22 - October 24, 2015 
 - Body/footer separation in host.js for clarity
 
-## v0.9.21** - October 24, 2015 
+## v0.9.21 - October 24, 2015 
 - Don't JSON stringify `$.failure()` and `$.success()` responses because `$.end()` does it too
 
-## v0.9.19 - v0.9.20** - October 23, 2015 
+## v0.9.19 - v0.9.20 - October 23, 2015 
 - Fixed a https bug in host.js - if the port was undefined in the header it used 80. For https it should be 443. Now it's using the server's configuration to choose a default fallback protocol.
 
-## v0.9.16 - **v0.9.18** - October, 2015 
+## v0.9.16 - v0.9.18 - October, 2015 
 - Chainable Server Instance Creation, Listening and Routing. Now you can do stuff like:
 ```
 server()
@@ -110,7 +110,7 @@ server()
 ```
 - Fixed bugs with `$.end`
 
-## v0.9.8 - **v0.9.16** - June - October, 2015 
+## v0.9.8 - v0.9.16 - June - October, 2015 
 - `$.end()` now serves JSON responses on requests where the `"x-requested-with"` == `"XMLHttpRequest"` or the `"Authorization"` header is set and contains `"Bearer"` or `"Token"` in it's value
 - `$.end()` now accepts JSON objects as a value and sends it as a JSON response
 - app.html now enables $.html as the default response when using $.end
@@ -187,7 +187,7 @@ server()
 - cleaned up unnecessary `console.logs`
 
 
-## v0.8.0 - September, 2014 - **Major Release**
+## v0.8.0 - September, 2014 - Major Release
 - Unit Test Coverage 100%
 - Deprecated `new App` now `require('diet')` returns a server object
 - Replaced the `querystring` module with the new `diet-qs`
@@ -215,8 +215,8 @@ server()
 - Fixed several bugs
 - Better documentation
 
-## v0.5.x - Spring, 2014 - **Major Release**
-- **Rewrote diet completely from the ground up**
+## v0.5.x - Spring, 2014 - Major Release
+- Rewrote diet completely from the ground up
 - Introducing` Plugins`
 - Introducing the `new Domain` function
 - Introducing the `Signal $`
@@ -279,7 +279,7 @@ server()
 - Very Simple Image Processing API with ImageMagick
 
 
-## v0.2.0 - Started on October 31, 2011 - Fall - **Major Release**
+## v0.2.0 - Started on October 31, 2011 - Fall - Major Release
 - Easy HTTP/HTTPS server creation
 - Advanced Route Handling 
 	- With Manual URL handling (ex: /home, /about, /work)
