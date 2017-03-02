@@ -14,3 +14,9 @@ app.get('/full', function($){
 	console.log('Sending file', app.path+'/image.png')
     $.sendFile(app.path+'/image.png')
 })
+
+// Register a route that sends the image with a specific path
+app.get('/html', function($){
+	console.log('Sending html file','./index.html')
+    $.sendFile('./index.html')
+})
