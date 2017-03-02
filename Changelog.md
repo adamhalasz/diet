@@ -1,3 +1,6 @@
+## v0.13.0 - March 3, 2017
+- Introducing the app.resource(path) class for grouping methods - inner functionality inspired by @luisvinicius167 's diet-group-router #32
+
 ## v0.12.0 - March 2, 2017
 - Introducing signal.setHeader(key, value) to set a response header #61
 - Introducing signal.getHeader(key) to return a response header #61

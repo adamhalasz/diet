@@ -18,6 +18,7 @@
     const Protocol     = require('./controllers/protocol')
     const Listener     = require('./controllers/listen')
     const Router       = require('./controllers/router')
+    const Resource     = require('./controllers/resource')
     const Construct    = require('./controllers/construct')
     const httpProtocol = require('./controllers/protocols/http')
 
@@ -162,6 +163,7 @@
         	this.footer         = new Router('footer'  , 'api'    , this) 
         	this.missing        = new Router('missing' , 'api'    , this) 
         	this.error          = new Router('error'   , 'api'    , this)
+        	this.resource		= new Resource(this)
         	this.model          = new Construct('model', 'models', this)
         	this.view           = new Construct('view', 'views', this)
         	this.controller     = new Construct('controller', 'controllers', this)
