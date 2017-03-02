@@ -1,3 +1,13 @@
+## v0.12.0 - March 2, 2017
+- Introducing signal.setHeader(key, value) to set a response header #61
+- Introducing signal.getHeader(key) to return a response header #61
+- Introducing signal.getRequestHeader(key) to return a request header #61
+- Introducing signal.error(key) to return an error with a key #61
+- Introducing signal.sendFile(path) to end a response with a file #69
+- Introducing $.error('message') and $.error('stack') to allow better Error Exceptions handling with app.error(callback) 
+- Added example for signal.error 
+- Added example for signal.sendFile 
+
 ## v0.11.0 - March 2, 2017
 - Replaced object.observe() with the new ES6 Proxy - Solves #42, #60, #72
 - Only Support Node Version >= 6.4.0

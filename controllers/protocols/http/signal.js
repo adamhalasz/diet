@@ -14,6 +14,7 @@
     const status_codes = require('http').STATUS_CODES;
     const utils = require('../../utils')
     const Path = require('path')
+    const mime = require('mime');
 
 // ===========================================================================
 //  Exports
@@ -39,8 +40,28 @@
     				return response.setHeader(where, newValue);                 // set header
     			}
     		},
+    		setHeader: function(key, value){ return response.setHeader(key, value); },
+    		removeHeader: function(key, value){ return response.removeHeader(key); },
+    		getHeader: function(key){ return response.getHeader(key); },
+    		getRequestHeader: function(key){ return request.headers[key] },
     		headers: request.headers,	
-    		send:  function(message) { response.write(message); },               // send data chunk to client
+    		send: function(message) { response.write(message); },               // send data chunk to client
+    		sendFile: function(path, encoding, callback){
+			    fs.stat(path, function(error, stat){
+			    	if(error){
+			    		throw error;
+			    	} else {
+					    response.writeHead(200, {
+					        'Content-Type': mime.lookup(path),
+					        'Content-Length': stat.size
+					    });
+					    var readStream = fs.createReadStream(path);
+					    readStream.pipe(response);
+					    signal.responded = true
+					    signal.end()
+				    }
+			    })
+    		},
     		redirect: function(input, statusCode, isLast){
     			if(input.substring(0, 4) === 'back') { 
     				var path = request.headers.referer || '/';
@@ -83,7 +104,7 @@
     		end : function(input, isLast){
     			if(!signal.responded && !signal.stopped){
     			    signal.responded = true
-    			    if(typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
+    			    if(input && typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
     			        let data = signal.jsonString(input); // json
     			        signal.setFinalHeaders(data); 
     			        response.end(data)      
@@ -106,8 +127,12 @@
     		},
     		passed: true,
     		error: function(field, error){
-    			signal.passed = signal.data.passed = false
-    			signal.errors[field] = error
+    			if(error){
+	    			signal.passed = signal.data.passed = false
+	    			signal.errors[field] = error
+    			} else if (field) {
+    				return signal.errors[field]
+    			}
     		},
     		success: function(input, isLast){ // respond with JSON success
     			if(!signal.statusCode) signal.status(200)
