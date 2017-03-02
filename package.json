@@ -64,9 +64,9 @@
   },
   "devDependencies": {
     "coveralls": ">=2.11.2",
-    "mocha-lcov-reporter": "0.0.1",
     "istanbul": "~0.3.2",
     "mocha": "~1.21.4",
+    "mocha-lcov-reporter": "0.0.1",
     "request": "^2.48.0",
     "should": "^8.2.2"
   },
