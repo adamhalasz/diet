@@ -13,6 +13,7 @@
     const url = require('url')
     const status_codes = require('http').STATUS_CODES;
     const utils = require('../../utils')
+    const Path = require('path')
 
 // ===========================================================================
 //  Exports
@@ -31,7 +32,7 @@
     		method: request.method,                                         // GET or POST
     		multipart: false,                                               // is it a multipart request?
     		params: {}, data: {}, route: {}, fail: {}, errors: {},          // containers
-    		header : function(where, newValue){		
+    		header : function(where, newValue){	
     			if(!newValue){                                                  // not a set operation
     				return response.getHeader(where) || request.headers[where]; // get header
     			} else if(!response.headersSent){                               // if headers are not yet sent
@@ -88,7 +89,7 @@
     			        response.end(data)      
     			        if(!isLast) signal.nextRoute() // call next route                                                       
     			    
-    			    } else if (app.html) {
+    			    } else if ((!input && app.html) || (input && !Path.extname(input) && app.html)) {
     			        signal.html(input) // html                  
     			    
     			    } else {
@@ -133,7 +134,7 @@
     			signal.end(signal.jsonString(input), isLast)
     		},
     		html: function(input, isLast){
-    		    signal.header('Content-Type', 'text/html; charset=UTF-8')
+    		    signal.header('content-type', 'text/html; charset=UTF-8')
     		    if(!signal.statusCode) signal.status(200)
     		    if(signal.htmlModule) { 
     		        signal.htmlModule(input) 

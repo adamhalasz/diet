@@ -588,11 +588,9 @@ app.listen('http://localhost:9010/', function(){
     		done();
     	});
     });
-
 });
 
 
-    
 var app2 = server()
 app2.listen(9170, function(){
     describe(subject + 'middleware control flow', function(){

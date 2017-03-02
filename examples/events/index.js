@@ -1,3 +1,4 @@
+var server = require('../../')
 var app = server()
     .listen(5000)
     .get('/')
