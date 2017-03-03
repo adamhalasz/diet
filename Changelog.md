@@ -1,3 +1,6 @@
+## v0.14.1 - March 3, 2017
+- Bugfix for `$.download` when calling `$.sendFile` send the proper encoding not the name. #67
+
 ## v0.14.0 - March 3, 2017
 - Introducing `$.download(path, filename)` #67
 - Download Test

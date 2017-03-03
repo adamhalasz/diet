@@ -65,7 +65,7 @@
     		download: function(path, name, encoding){
     			var filename = name ? name : Path.basename(path)
     			signal.setHeader('Content-Disposition', 'attachment; filename="'+filename+'"')
-    			signal.sendFile(path, name, encoding)
+    			signal.sendFile(path, encoding)
     		},
     		redirect: function(input, statusCode, isLast){
     			if(input.substring(0, 4) === 'back') { 
