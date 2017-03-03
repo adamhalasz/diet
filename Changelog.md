@@ -1,3 +1,9 @@
+## v0.14.0 - March 3, 2017
+- Introducing `$.download(path, filename)` #67
+- Download Test
+- Multipart Example
+- Download Example
+
 ## v0.13.0 - March 3, 2017
 - Introducing the app.resource(path) class for grouping methods - inner functionality inspired by @luisvinicius167 's diet-group-router #32
 
