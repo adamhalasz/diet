@@ -46,7 +46,7 @@
     		getRequestHeader: function(key){ return request.headers[key] },
     		headers: request.headers,	
     		send: function(message) { response.write(message); },               // send data chunk to client
-    		sendFile: function(path, encoding, callback){
+    		sendFile: function(path, encoding){
 			    fs.stat(path, function(error, stat){
 			    	if(error){
 			    		throw error;
@@ -61,6 +61,11 @@
 					    signal.end()
 				    }
 			    })
+    		},
+    		download: function(path, name, encoding){
+    			var filename = name ? name : Path.basename(path)
+    			signal.setHeader('Content-Disposition', 'attachment; filename="'+filename+'"')
+    			signal.sendFile(path, name, encoding)
     		},
     		redirect: function(input, statusCode, isLast){
     			if(input.substring(0, 4) === 'back') { 

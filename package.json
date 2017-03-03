@@ -1,6 +1,6 @@
 {
   "name": "diet",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "A tiny, fast and modular node.js web framework. Good for making fast & scalable apps and apis.",
   "homepage": "http://dietjs.com/",
   "keywords": [

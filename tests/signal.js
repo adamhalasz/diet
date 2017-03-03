@@ -623,6 +623,40 @@ app.listen('http://localhost:9010/', function(){
     	});
     });
     
+    it('should download a file with signal.download() with a filename'.grey
+    , function(done){
+        app.get('/signal/download', function($){
+        	$.download('./tests/image.png', 'diet_logo.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/download',
+    	}, function(error, response, body){
+    		var fileContents = fs.readFileSync(__dirname+'/image.png', 'utf8')
+    	    assert.equal(body, fileContents);
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'image/png');
+    		assert.equal(response.headers['content-disposition'], 'attachment; filename="diet_logo.png"');
+    		done();
+    	});
+    });
+    
+    it('should download a file with signal.download() without a filename'.grey
+    , function(done){
+        app.get('/signal/download/nofilename', function($){
+        	$.download('./tests/image.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/download/nofilename',
+    	}, function(error, response, body){
+    		var fileContents = fs.readFileSync(__dirname+'/image.png', 'utf8')
+    	    assert.equal(body, fileContents);
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'image/png');
+    		assert.equal(response.headers['content-disposition'], 'attachment; filename="image.png"');
+    		done();
+    	});
+    });
+    
     it('should send a file with signal.sendFile() with a relative path'.grey
     , function(done){
         app.get('/signal/sendFile/relative', function($){
