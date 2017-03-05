@@ -106,7 +106,7 @@
     		    	}
     		    }
     		},
-    		end : function(input, isLast){
+    		end: function(input, isLast){
     			if(!signal.responded && !signal.stopped){
     			    signal.responded = true
     			    if(input && typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
