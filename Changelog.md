@@ -1,3 +1,6 @@
+## v0.15.0 - March 5, 2017
+- Introducing `app.host(location)` to allow handling hostnames and ports without creating a new server instance. It's useful when the hostname and port is changed by a proxy server. #73
+
 ## v0.14.1 - March 3, 2017
 - Bugfix for `$.download` when calling `$.sendFile` send the proper encoding not the name. #67
 
