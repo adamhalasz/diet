@@ -5,6 +5,7 @@ var server = require('../');
 var assert = require('assert');
 var request = require('request');
 var should = require('should');
+var fs = require('fs');
 
 var subject = 'Test'.cyan+' → '.grey+ 'Signal'.yellow + ': '.grey;
 
@@ -416,6 +417,23 @@ app.listen('http://localhost:9010/', function(){
     		});
     	});
     	
+    	it('should set an with signal.error(key, value) and get it with signal.error(key) '.grey
+    	, function(done){
+    		
+    		app.get('/signal/error/get', function($){
+    			$.error('test', 'testing');
+    			assert.equal($.error('test'), 'testing');
+    			$.failure();
+    		});
+    		
+    		request.get('http://localhost:9010/signal/error/get', function(error, response, body){
+    			if(error) throw error;
+    			assert.equal(body, '{"passed":false,"errors":{"test":"testing"}}');
+    			assert.equal(response.headers['content-type'], 'application/json');
+    			done();
+    		});
+    	});
+    	
     	it('should test signal.send'.grey
     	, function(done){
     		
@@ -588,11 +606,151 @@ app.listen('http://localhost:9010/', function(){
     		done();
     	});
     });
-
+    
+    it('should send a file with signal.sendFile() with a specific path'.grey
+    , function(done){
+        app.get('/signal/sendFile/specific', function($){
+        	$.sendFile(app.path+'/image.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/sendFile/specific',
+    	}, function(error, response, body){
+    		var fileContents = fs.readFileSync(__dirname+'/image.png', 'utf8')
+    	    assert.equal(body, fileContents);
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'image/png');
+    		done();
+    	});
+    });
+    
+    it('should download a file with signal.download() with a filename'.grey
+    , function(done){
+        app.get('/signal/download', function($){
+        	$.download('./tests/image.png', 'diet_logo.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/download',
+    	}, function(error, response, body){
+    		var fileContents = fs.readFileSync(__dirname+'/image.png', 'utf8')
+    	    assert.equal(body, fileContents);
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'image/png');
+    		assert.equal(response.headers['content-disposition'], 'attachment; filename="diet_logo.png"');
+    		done();
+    	});
+    });
+    
+    it('should download a file with signal.download() without a filename'.grey
+    , function(done){
+        app.get('/signal/download/nofilename', function($){
+        	$.download('./tests/image.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/download/nofilename',
+    	}, function(error, response, body){
+    		var fileContents = fs.readFileSync(__dirname+'/image.png', 'utf8')
+    	    assert.equal(body, fileContents);
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'image/png');
+    		assert.equal(response.headers['content-disposition'], 'attachment; filename="image.png"');
+    		done();
+    	});
+    });
+    
+    it('should send a file with signal.sendFile() with a relative path'.grey
+    , function(done){
+        app.get('/signal/sendFile/relative', function($){
+        	$.sendFile('./tests/image.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/sendFile/relative',
+    	}, function(error, response, body){
+    		var fileContents = fs.readFileSync(__dirname+'/image.png', 'utf8')
+    	    assert.equal(body, fileContents);
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'image/png');
+    		done();
+    	});
+    });
+    
+    it('should send a an error calling signal.sendFile() with the wrong path'.grey
+    , function(done){
+        app.get('/signal/sendFile/wrong', function($){
+        	$.sendFile('./tests/undefined.png')
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/sendFile/wrong',
+    	}, function(error, response, body){
+    		assert.equal(response.statusCode, 500);
+    		assert.equal(response.headers['content-type'], 'text/html; charset=UTF-8');
+    		done();
+    	});
+    });
+    
+    it('should set a response header with signal.setHeader()'.grey
+    , function(done){
+        app.get('/signal/setHeader', function($){
+        	$.setHeader('content-type', 'application/custom')
+        	$.end()
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/setHeader',
+    	}, function(error, response, body){
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'application/custom');
+    		done();
+    	});
+    });
+    
+    it('should set a response header with signal.setHeader() then remove it with signal.removeHeader()'.grey
+    , function(done){
+        app.get('/signal/removeHeader', function($){
+        	$.setHeader('x-custom', 'x-value')
+        	$.removeHeader('x-custom')
+        	$.end()
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/removeHeader',
+    	}, function(error, response, body){
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['x-custom'], undefined);
+    		done();
+    	});
+    });
+    
+    it('should get a response header with signal.getHeader()'.grey
+    , function(done){
+        app.get('/signal/getHeader', function($){
+        	var contentType = $.getHeader('content-type')
+        	assert.equal('text/plain', contentType)
+        	$.end()
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/getHeader',
+    	}, function(error, response, body){
+    		assert.equal(response.statusCode, 200);
+    		assert.equal(response.headers['content-type'], 'text/plain');
+    		done();
+    	});
+    });
+    
+    it('should get a request header with signal.getRequestHeader()'.grey
+    , function(done){
+        app.get('/signal/getRequestHeader', function($){
+        	var host = $.getRequestHeader('host')
+        	assert.equal('localhost:9010', host)
+        	$.end()
+        })
+    	request.get({
+    		url: 'http://localhost:9010/signal/getRequestHeader',
+    	}, function(error, response, body){
+    		assert.equal(response.statusCode, 200);
+    		done();
+    	});
+    });
 });
 
 
-    
 var app2 = server()
 app2.listen(9170, function(){
     describe(subject + 'middleware control flow', function(){

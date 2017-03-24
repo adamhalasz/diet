@@ -13,6 +13,8 @@
     const url = require('url')
     const status_codes = require('http').STATUS_CODES;
     const utils = require('../../utils')
+    const Path = require('path')
+    const mime = require('mime');
 
 // ===========================================================================
 //  Exports
@@ -31,15 +33,40 @@
     		method: request.method,                                         // GET or POST
     		multipart: false,                                               // is it a multipart request?
     		params: {}, data: {}, route: {}, fail: {}, errors: {},          // containers
-    		header : function(where, newValue){		
+    		header : function(where, newValue){	
     			if(!newValue){                                                  // not a set operation
     				return response.getHeader(where) || request.headers[where]; // get header
     			} else if(!response.headersSent){                               // if headers are not yet sent
     				return response.setHeader(where, newValue);                 // set header
     			}
     		},
+    		setHeader: function(key, value){ return response.setHeader(key, value); },
+    		removeHeader: function(key, value){ return response.removeHeader(key); },
+    		getHeader: function(key){ return response.getHeader(key); },
+    		getRequestHeader: function(key){ return request.headers[key] },
     		headers: request.headers,	
-    		send:  function(message) { response.write(message); },               // send data chunk to client
+    		send: function(message) { response.write(message); },               // send data chunk to client
+    		sendFile: function(path, encoding){
+			    fs.stat(path, function(error, stat){
+			    	if(error){
+			    		throw error;
+			    	} else {
+					    response.writeHead(200, {
+					        'Content-Type': mime.lookup(path),
+					        'Content-Length': stat.size
+					    });
+					    var readStream = fs.createReadStream(path);
+					    readStream.pipe(response);
+					    signal.responded = true
+					    signal.end()
+				    }
+			    })
+    		},
+    		download: function(path, name, encoding){
+    			var filename = name ? name : Path.basename(path)
+    			signal.setHeader('Content-Disposition', 'attachment; filename="'+filename+'"')
+    			signal.sendFile(path, encoding)
+    		},
     		redirect: function(input, statusCode, isLast){
     			if(input.substring(0, 4) === 'back') { 
     				var path = request.headers.referer || '/';
@@ -79,16 +106,16 @@
     		    	}
     		    }
     		},
-    		end : function(input, isLast){
+    		end: function(input, isLast){
     			if(!signal.responded && !signal.stopped){
     			    signal.responded = true
-    			    if(typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
+    			    if(input && typeof input == 'object' || signal.header('x-requested-with') == 'XMLHttpRequest' || ( signal.header('authorization') && (signal.header('authorization').indexOf('Bearer') != -1 || signal.header('authorization').indexOf('Token') != -1 ))) { 
     			        let data = signal.jsonString(input); // json
     			        signal.setFinalHeaders(data); 
     			        response.end(data)      
     			        if(!isLast) signal.nextRoute() // call next route                                                       
     			    
-    			    } else if (app.html) {
+    			    } else if ((!input && app.html) || (input && !Path.extname(input) && app.html)) {
     			        signal.html(input) // html                  
     			    
     			    } else {
@@ -105,8 +132,12 @@
     		},
     		passed: true,
     		error: function(field, error){
-    			signal.passed = signal.data.passed = false
-    			signal.errors[field] = error
+    			if(error){
+	    			signal.passed = signal.data.passed = false
+	    			signal.errors[field] = error
+    			} else if (field) {
+    				return signal.errors[field]
+    			}
     		},
     		success: function(input, isLast){ // respond with JSON success
     			if(!signal.statusCode) signal.status(200)
@@ -133,7 +164,7 @@
     			signal.end(signal.jsonString(input), isLast)
     		},
     		html: function(input, isLast){
-    		    signal.header('Content-Type', 'text/html; charset=UTF-8')
+    		    signal.header('content-type', 'text/html; charset=UTF-8')
     		    if(!signal.statusCode) signal.status(200)
     		    if(signal.htmlModule) { 
     		        signal.htmlModule(input) 
@@ -166,7 +197,7 @@
     			request.on('data', function(data){ signal.body += data; });
     			request.on('end', function(){ 
     				if(request.headers['content-type'].toString().indexOf('application/x-www-form-urlencoded') != -1){
-    					signal.body = signal.qs.parse(signal.body);
+    					signal.body = signal.qs.parse(decodeURIComponent(signal.body));
     				} else if(request.headers['content-type'] == "application/json") {
     					try {
     						signal.body = JSON.parse(signal.body); 

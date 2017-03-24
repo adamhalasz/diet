@@ -11,23 +11,27 @@
     const url = require('url')
     const parent = module.parent.exports
     const utils = require('./utils')
+    
 // ===========================================================================
 //  Exports
 // ===========================================================================
-
+	
     module.exports = function(app, servers){
         
     	return function(location, options, callback){
     	    var callback = typeof options == 'function' ? options : callback ;
     	    var options = !options || typeof options == 'function' ? {} : options ;
-    	    var protocolName = (typeof options == 'object' && options.cert || options.key || options.ca) ? 'https' : 'http' ;
+    	    var host = utils.getHost(location, options)
+    	    app.location = host.location
+    	    app.port = host.port
     	    
+    	    /*
     	    // define location
             if(!isNaN(location)) {
             	app.location = url.parse(protocolName+'://0.0.0.0:'+location);
             
             } else if(typeof location == 'string') {
-                    var location = location.indexOf('://') == -1 ? 'http://' + location : location ;
+                var location = location.indexOf('://') == -1 ? 'http://' + location : location ;
             	app.location = url.parse(location) 
             
             } else if(typeof location == 'object') {
@@ -35,13 +39,13 @@
             	
             } else if(!utils.isset(location)){
             	app.location = url.parse(protocolName+'://0.0.0.0:80/');
-            }            
+            } */        
             
             // define protocol
     		//var protocol = app.location.protocol === 'http:' ? require('http') : require('https') ;
     		
     		// define port
-    		app.port = app.location.protocol === 'http:' && (!options.cert && !options.key) ? (app.location.port || 80) : (app.location.port || 443) ;
+    		
     		
     		// create route containers
     		app.routes = typeof app.routes != "undefined" ? app.routes : { get: [], post: [], options: [], put: [], patch: [], head: [], delete: [], trace: [], header: [], footer: [], missing: [], error: [] }
@@ -49,7 +53,7 @@
     		//console.log(isNaN(location), location, typeof location, app.location);
     		// define host
     		app.location.host = app.location.host.split(':')[1] ? app.location.host : app.location.host + ':' + app.port;
-    		app.host = app.location.host.split(':')[0];
+    		//app.host = app.location.host.split(':')[0];
     		
     		// save host to hosts
     		app.hosts[app.location.host] = app

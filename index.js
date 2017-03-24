@@ -1,5 +1,5 @@
 // ===========================================================================
-//                               Diet v0.10
+//                                   Diet
 // ===========================================================================
 
 // ===========================================================================
@@ -11,15 +11,19 @@
     const util = require('util');
     const EventEmitter = require('eventemitter2').EventEmitter2;
     
+    
 // ===========================================================================
 //  Internal Dependencies
 // ===========================================================================    
     
     const Protocol     = require('./controllers/protocol')
     const Listener     = require('./controllers/listen')
+    const Host         = require('./controllers/host')
     const Router       = require('./controllers/router')
+    const Resource     = require('./controllers/resource')
     const Construct    = require('./controllers/construct')
     const httpProtocol = require('./controllers/protocols/http')
+
 
 // ===========================================================================
 //  Exports
@@ -33,6 +37,7 @@
     module.exports.off = events.off;
     module.exports.emit = events.emit;
     module.exports.onAny = events.onAny;
+
 
 // ===========================================================================
 //  Server
@@ -88,22 +93,11 @@
         	app.emit = events.emit;
         	app.onAny = events.onAny;
         
+        
         // -----------------------------------------------------------------------
         //  Attach HTTP Protocol Handler by default
         // -----------------------------------------------------------------------	
         	app.protocol('http', httpProtocol)
-    	
-    	
-    	// -----------------------------------------------------------------------
-    	//  Observe Changes (coming soon...)
-    	// -----------------------------------------------------------------------
-        	/*
-        	Object.observe(app, function(changes){
-        	    changes.forEach(function(change){
-        	        //console.log('server', change.name)
-        	    })
-        	});*/
-        	
         	module.exports.emit('create', { path: path, options: options, app: app })
     	
     	
@@ -133,7 +127,7 @@
     function App(path, options){
     
         // -----------------------------------------------------------------------
-        // Variables
+        //  Variables
         // -----------------------------------------------------------------------
             
             this.silent         = options.silent
@@ -143,11 +137,11 @@
         	this.dir            = this.path.match(/([^\/]*)\/*$/)[1]
         	this.hosts          = hosts
         	this.protocols      = new Array();
-        	this.host           = '0.0.0.0'
+        	//this.host           = '0.0.0.0'
         	
     	
     	// -----------------------------------------------------------------------
-    	// Methods
+    	//  Methods
     	// -----------------------------------------------------------------------
         	
         	this.get            = new Router('get'     , 'method' , this)
@@ -162,11 +156,13 @@
         	this.footer         = new Router('footer'  , 'api'    , this) 
         	this.missing        = new Router('missing' , 'api'    , this) 
         	this.error          = new Router('error'   , 'api'    , this)
+        	this.resource       = new Resource(this)
         	this.model          = new Construct('model', 'models', this)
         	this.view           = new Construct('view', 'views', this)
         	this.controller     = new Construct('controller', 'controllers', this)
         	this.protocol       = new Protocol(this)
         	this.listen         = new Listener(this, servers)
+        	this.host           = new Host(this, servers)
     	
     	
     	// -----------------------------------------------------------------------
