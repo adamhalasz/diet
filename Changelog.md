@@ -1,19 +1,23 @@
-## v0.15.0 - March 5, 2017
+## v0.16.0 - May 5th, 2017
+- Bug Fix: In error.js set `signal.responded` to `false` to allow custom error routes to use `$.end()`
+- Bug Fix: In error.js check if `app.routes.error.length` is more than 0 to only iterate through custom error handlers if there are any. This allows passing the functionality to the default error handler page
+
+## v0.15.0 - March 5th, 2017
 - Introducing `app.host(location)` to allow handling hostnames and ports without creating a new server instance. It's useful when the hostname and port is changed by a proxy server. #73
 
-## v0.14.1 - March 3, 2017
+## v0.14.1 - March 3rd, 2017
 - Bugfix for `$.download` when calling `$.sendFile` send the proper encoding not the name. #67
 
-## v0.14.0 - March 3, 2017
+## v0.14.0 - March 3rd, 2017
 - Introducing `$.download(path, filename)` #67
 - Download Test
 - Multipart Example
 - Download Example
 
-## v0.13.0 - March 3, 2017
+## v0.13.0 - March 3rd, 2017
 - Introducing the app.resource(path) class for grouping methods - inner functionality inspired by @luisvinicius167 's diet-group-router #32
 
-## v0.12.0 - March 2, 2017
+## v0.12.0 - March 2rd, 2017
 - Introducing signal.setHeader(key, value) to set a response header #61
 - Introducing signal.getHeader(key) to return a response header #61
 - Introducing signal.getRequestHeader(key) to return a request header #61
@@ -23,52 +27,52 @@
 - Added example for signal.error 
 - Added example for signal.sendFile 
 
-## v0.11.0 - March 2, 2017
+## v0.11.0 - March 2rd, 2017
 - Replaced object.observe() with the new ES6 Proxy - Solves #42, #60, #72
 - Only Support Node Version >= 6.4.0
 - New MVC Test Suite
 
-## v0.10.9 - January 31, 2017
+## v0.10.9 - January 31th, 2017
 - Bug Fix: User decoreURIComponent on the signal.body
 - New Example: Simple File Serving Example
 
 
-## v0.10.8 - June 13, 2016
+## v0.10.8 - June 13th, 2016
 - Upgrade `diet-qs` with the new `querystrings` module that fixes nested Query String to Array conversions.
 - New Utils Controller
 - Moved isset() into the Util Controller
 
-## v0.10.6 - May 10, 2016 
+## v0.10.6 - May 10th, 2016 
 - Ports are now wildcards for every hostname. Listening on a Port (`app.listen(8000)`) will accept any Hostname request within that Port. Listening on a Hostname (`app2.listen('http://test.com:8000/')`) within that Port will have priority.
 
-## v0.10.5 - April 29, 2016 
+## v0.10.5 - April 29th, 2016 
 - `Error.stack` not always present on Error in controllers/router.js by @demarius
 - `initialized` is not constant in index.js (es6, strict mode fix)
 - Replaced Native Object.observe with `object.observe` module to support observe in Node >= v6.0.0
 
-## v0.10.4 - March 10, 2016 
+## v0.10.4 - March 10th, 2016 
 - Check if path contains query in Signal#redirect by @demarius
 
 ## v0.10.3 - v0.10.4 - 2016 March 3
-=======
-## v0.10.4 - March 24, 2016 
+
+## v0.10.4 - March 24th, 2016 
 - Check if path contains query in Signal#redirect. Thanks @demarius
 
-## v0.10.3 - March 24, 2016 
+## v0.10.3 - March 24th, 2016 
 >>>>>>> Stashed changes
 - AB Load Testing Comparison between Vanilla Node, Diet.js and Express.js
 
-## v0.10.2 - Feburary 17, 2016 
+## v0.10.2 - Feburary 17th, 2016 
 - add second argument `isLast` to **$.end(yourData, isLast)**, **$.json(yourData, isLast)**, **$.success(yourData, isLast)** and **$.failure(yourData, isLast)**. Setting `isLast` to true will stop the execution of the middleware chain completely
 ```
     // usage
     $.end('hello world', true)
 ```
 
-## v0.10.1 - January 25, 2016 
+## v0.10.1 - January 25th, 2016 
 - Check existence of app.routes and routes in hosts.js and iterator.js
 
-## v0.10.0 - January 24, 2016  - Major Release
+## v0.10.0 - January 24th, 2016  - Major Release
 - Drop support for Node versions below v4.2.4
 - Middleware renamed to Controller
 - Introducing ES6 Generator Controllers (`yield` and `*`)
@@ -108,17 +112,17 @@
     - Events
     - Generators
 
-## v0.9.23 - v0.9.26 - January 4, 2016 
+## v0.9.23 - v0.9.26 - January 4th, 2016 
 - Introducing `app.model()`
 - Introducing `app.view()`
 - Introducing `app.controller()`
 - Added support for `yo` (generator-diet)
 - Support for node 4.2.4, 5.3.0
 
-## v0.9.22 - October 24, 2015 
+## v0.9.22 - October 24th, 2015 
 - Body/footer separation in host.js for clarity
 
-## v0.9.21 - October 24, 2015 
+## v0.9.21 - October 24th, 2015 
 - Don't JSON stringify `$.failure()` and `$.success()` responses because `$.end()` does it too
 
 ## v0.9.19 - v0.9.20 - October 23, 2015 

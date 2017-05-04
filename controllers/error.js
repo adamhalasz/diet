@@ -53,14 +53,18 @@
 // ===========================================================================
 
     module.exports = function(error, signal, app){
-    	signal.status(500)
+    	signal.status(500, 'Internal Server Error')
     	try {
+    		signal.responded = false;
     		signal.fail.template = errorTemplate(signal, error)
     		app.emit('route.error', { error: error, signal: signal, app: app })
-    		new RouteIterator(app.routes.error, signal, function(){ 
-    		    // console.log('Error Routes Finished', signal.url.href);
-    		    if(!signal.responded)  displayErrorPage(error) 
-    		}, 'error')
+    		if(app.routes.error.length){
+	    		new RouteIterator(app.routes.error, signal, function(){ 
+	    		    if(!signal.responded)  displayErrorPage(error) 
+	    		}, 'error')
+    		} else {
+    			displayErrorPage(error)
+    		}
     	} catch (error) {
     		displayErrorPage(error)
     	}
