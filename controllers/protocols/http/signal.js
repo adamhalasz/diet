@@ -143,19 +143,19 @@
     			if(!signal.statusCode) signal.status(200)
     			signal.header('content-type', 'application/json')
     			var data = signal.data
-    			if(utils.isset(input)) data = Object.merge(signal.data, input)
+    			if(utils.isset(input)) data = Object.assign(signal.data, input)
     			data.passed = true
     			signal.end(data, isLast)
     		},
     		failure: function(input, isLast){ // respond with JSON errors
     			if(!signal.statusCode) signal.status(200)
     			signal.header('content-type', 'application/json')
-    			if(signal.data.errors) signal.errors = Object.merge(signal.error, signal.data.errors)
-    			if(utils.isset(input)) data = Object.merge(signal.errors, input)
+    			if(signal.data.errors) signal.errors = Object.assign(signal.error, signal.data.errors)
+    			if(utils.isset(input)) Object.assign(signal.errors, input)
     			signal.end({ passed: false, errors: signal.errors }, isLast)
     		},
     		jsonString: function(input){
-    		    if(utils.isset(input)) signal.data = Object.merge(signal.data, input)
+    		    if(utils.isset(input)) signal.data = Object.assign(signal.data, input)
     		    if(!signal.statusCode) signal.status(200)
     		    signal.header('content-type', 'application/json')
     		    return JSON.stringify(signal.data);
