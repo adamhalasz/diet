@@ -195,10 +195,13 @@
     		if(multipart === -1){
     			signal.multipart = false;
     			request.on('data', function(data){ signal.body += data; });
-    			request.on('end', function(){ 
-    				if(request.headers['content-type'].toString().indexOf('application/x-www-form-urlencoded') != -1){
+    			request.on('end', function(){
+    				let type = request.headers['content-type']
+    					.split(";")[0].trim(); // Exclude parameters such as charset=utf-8
+
+    				if(type.toString().indexOf('application/x-www-form-urlencoded') != -1){
     					signal.body = signal.qs.parse(decodeURIComponent(signal.body));
-    				} else if(request.headers['content-type'] == "application/json") {
+    				} else if(type == "application/json") {
     					try {
     						signal.body = JSON.parse(signal.body); 
     					} catch (error) { /*...*/ }
